@@ -10,8 +10,9 @@ public class Item implements Serializable {
 	private Set<String> alias;
 	private Boolean pushed, opened;
 	private Set<CommandType> commands;
+	private CommandHandler handler;
 
-	public Item(String name, String description) {
+	public Item(String name, String description, CommandHandler handler) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -19,6 +20,7 @@ public class Item implements Serializable {
 		istances++;
 		pushed=false;
 		opened=false;
+		this.handler = handler;
 	}
 
 	public String getName() {
@@ -69,6 +71,12 @@ public class Item implements Serializable {
 		this.commands = commands;
 	}
 
+	public CommandHandler getHandler() {
+		return handler;
+	}
 
+	public void setHandler(CommandHandler handler) {
+		this.handler = handler;
+	}
 
 }
