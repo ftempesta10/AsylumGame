@@ -1,33 +1,36 @@
 package engine;
 
 public class Gateway {
+	private Integer lockedBy = null;
+
+	private Boolean locked = false;
 	
-	private final int id;
-
-	private boolean locked = false;
+	private Direction dir;
 	
-	private Gateway south = null;
-
-	private Gateway north = null;
-
-	private Gateway east = null;
-
-	private Gateway west = null;
-	
-	public Gateway(int id) {
-	        this.id = id;
+	public Gateway(Direction dir, Integer idKey, Boolean locked) {
+	        lockedBy = idKey;
+		this.locked = locked;
+		this.dir = dir;
 	}
 	
-	public int getId() {
-		return id;
+	public Gateway(Direction dir){
+		this.dir = dir;
+	}
+	
+	public Integer getLockedBy() {
+		return lockedBy;
+	}
+	
+	public void setLockedBy(Integer idKey){
+		lockedBy = idKey;
 	}
 
-	public void setLocked(boolean locked) {
+	public void setLocked(Boolean locked) {
 	        this.locked = locked;
 	}
 
-	public boolean isLocked() {
-    return locked;
+	public Boolean isLocked() {
+    		return locked;
 	}
 	
 	public void unlock() {
@@ -37,36 +40,12 @@ public class Gateway {
 	public void lock() {
 		locked = true;
 	}
-
-	public Gateway getNorth() {
-	return north;
+	
+	public Direction getDirection(){
+		return direction;
 	}
-
-	public void setNorth(Gateway north) {
-	this.north = north;
-	}
-
-	public Gateway getEast() {
-	return east;
-	}
-
-	public void setEast(Gateway east) {
-	this.east = east;
-	}
-
-	public Gateway getWest() {
-	return west;
-	}
-
-	public void setWest(Gateway west) {
-	this.west = west;
-	}
-
-	public Gateway getSouth() {
-	return south;
-	}
-
-	public void setSouth(Gateway south) {
-	this.south = south;
+	
+	public void setDirection(Direction dir) {
+		this.dir = dir;
 	}
 }
