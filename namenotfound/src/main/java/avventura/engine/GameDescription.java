@@ -6,13 +6,17 @@ import java.util.List;
 
 import hashedGraph.WeightedHashedGraph;
 
-public abstract class GameDescription<T, W> {
+public abstract class GameDescription {
 
     private Room currentRoom;
 
-    private WeightedHashedGraph<T, W> map;
+    private WeightedHashedGraph<Room, Gateway> map;
      
-    private final List<Item> inventory = new ArrayList<Item>();
+    private List<Item> inventory = new ArrayList<Item>();
+    
+    private Item commandTarget;
+    
+    private List<Command> commands = new ArrayList<Command>();
 
     public Room getCurrentRoom() {
         return currentRoom;
@@ -24,6 +28,22 @@ public abstract class GameDescription<T, W> {
 
     public List<Item> getInventory() {
         return inventory;
+    }
+    
+    public List<Command> getCommands(){
+        return commands;
+    }
+    
+    public void setCommands(List<Command> commands){
+        this.commands = commands;
+    }
+    
+    public Item getCommandTarget(){
+        return commandTarget;
+    }
+    
+    public void setCommandTarget(Item target){
+        commandTarget = target;
     }
 
     public abstract void init() throws Exception;
