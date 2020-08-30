@@ -1,25 +1,25 @@
-package avventura.engine;
+package engine;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
 	
-    private List<AdvObject> list = new ArrayList<>();
+    private List<Item> list = new ArrayList<Item>();
 
-    public List<AdvObject> getList() {
+    public List<Item> getList() {
         return list;
     }
 
-    public void setList(List<AdvObject> list) {
+    public void setList(List<Item> list) {
         this.list = list;
     }
 
-    public void add(AdvObject o) {
+    public void add(Item o) {
         list.add(o);
     }
 
-    public void remove(AdvObject o) {
+    public void remove(Item o) {
         list.remove(o);
     }
 }

@@ -1,25 +1,18 @@
-package avventura.engine;
-
-import avventura.engine.AdvObject;
-import avventura.engine.Command;
-
 public class ParserOutput {
 
     private Command command;
+    private Item object;
+    private Item target;
 
-    private AdvObject object;
-    
-    private AdvObject invObject;
-
-    public ParserOutput(Command command, AdvObject object) {
+    public ParserOutput(Command command, Item object) {
         this.command = command;
         this.object = object;
     }
 
-    public ParserOutput(Command command, AdvObject object, AdvObject invObejct) {
+    public ParserOutput(Command command, Item object, Item target) {
         this.command = command;
         this.object = object;
-        this.invObject = invObejct;
+        this.target= target;
     }
 
     public Command getCommand() {
@@ -30,20 +23,21 @@ public class ParserOutput {
         this.command = command;
     }
 
-    public AdvObject getObject() {
+    public Item getObject() {
         return object;
     }
 
-    public void setObject(AdvObject object) {
+    public void setObject(Item object) {
         this.object = object;
     }
 
-    public AdvObject getInvObject() {
-        return invObject;
+    public Item getTarget() {
+        return target;
     }
 
-    public void setInvObject(AdvObject invObject) {
-        this.invObject = invObject;
+    public void setTarget(Item target) {
+        this.target = target;
     }
 
 }
+
