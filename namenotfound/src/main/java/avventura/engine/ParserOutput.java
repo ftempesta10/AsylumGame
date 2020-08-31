@@ -1,14 +1,26 @@
+package engine;
+
 public class ParserOutput {
 
     private Command command;
-    private Item object;
-    private Item target;
+    private Item object = null;
+    private Item target = null;
+    private AdventureCharacter enemy = null; 
 
     public ParserOutput(Command command, Item object) {
         this.command = command;
         this.object = object;
     }
 
+    public ParserOutput(Command command, AdventureCharacter enemy) {
+        this.command = command;
+        this.setEnemy(enemy);
+    }
+    
+    public ParserOutput(Command command) {
+        this.command = command;
+    }
+    
     public ParserOutput(Command command, Item object, Item target) {
         this.command = command;
         this.object = object;
@@ -38,6 +50,14 @@ public class ParserOutput {
     public void setTarget(Item target) {
         this.target = target;
     }
+
+	public AdventureCharacter getEnemy() {
+		return enemy;
+	}
+
+	public void setEnemy(AdventureCharacter enemy) {
+		this.enemy = enemy;
+	}
 
 }
 
