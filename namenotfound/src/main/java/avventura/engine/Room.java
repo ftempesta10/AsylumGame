@@ -6,6 +6,7 @@ public class Room {
 	private Boolean visible;
 	private Integer id;
 	private EventHandler trap;
+	private Boolean visited = false;
 
 	public Room(String description, String look, String name, Boolean visible) {
 		super();
@@ -104,4 +105,14 @@ public class Room {
 			hasTrap = true;
 		return hasTrap;
 	}
+
+	public Boolean isVisited() {
+		return visited;
+	}
+
+	public void setVisited(Boolean visited) {
+		this.visited = visited;
+	}
+
+
 }
