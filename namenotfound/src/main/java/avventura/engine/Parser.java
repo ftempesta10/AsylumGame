@@ -36,7 +36,7 @@ public class Parser {
     }
     
     public ParserOutput parse(String command,List<Command> commands, List<Item> objects, Inventory inv,
-    								List<String> articles, List<String> prepositions) throws Exception {
+    								List<AdventureCharacter> enemies) throws Exception {
 		// TODO Auto-generated method stub
 		String cmd = command.toLowerCase().trim();
         String[] tokens = cmd.split("\\s+");
@@ -44,28 +44,41 @@ public class Parser {
         case 1 :
         	//verbo
         	int ic = checkForCommand(tokens[0], commands);
-        	if(ic > -1) return new ParserOutput(commands.get(ic), null, null); 
+        	if(ic > -1) return new ParserOutput(commands.get(ic)); 
         	else throw new InvalidCommandException();
         	
         case 2 : 
-        	//verbo oggetto
+        	//verbo oggetto o verbo nemico
         	int com2 = checkForCommand(tokens[0], commands);
         	if(com2 > -1) {
             	int obj2 = checkForObject(tokens[1], objects);
             	if(obj2 > -1 && inv.getList().contains(objects.get(obj2))) {
             		return new ParserOutput(commands.get(com2), objects.get(obj2));
-            	} else throw new InvalidCommandException(); 
+            	} else {
+            		for(AdventureCharacter a : enemies) {
+            			if(a.getName().equals(tokens[1])) {
+            				return new ParserOutput(commands.get(com2), a);
+            			}
+            		}
+            		throw new InvalidCommandException();
+            	} 
         	} else throw new InvalidCommandException();
-        	
         case 3 : 
-        	//verbo articolo oggetto
+        	//verbo articolo oggetto o verbo articolo nemico
         	int com3 = checkForCommand(tokens[0], commands);
         	if(com3 > -1) {
-        		if(checkInDictionary(tokens[1], articles)) {
+        		if(articles.contains(tokens[1])) {
         			int obj3 = checkForObject(tokens[2], objects);
                 	if(obj3 > -1 && inv.getList().contains(objects.get(obj3))) {
                 		return new ParserOutput(commands.get(com3), objects.get(obj3));
-                	} else throw new InvalidCommandException();
+                	} else {
+                		for(AdventureCharacter a : enemies) {
+                			if(a.getName().equals(tokens[2])) {
+                				return new ParserOutput(commands.get(com3), a);
+                			}
+                		}
+                		throw new InvalidCommandException();
+                	} 
         		} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
         	
@@ -75,7 +88,7 @@ public class Parser {
         	if(com4 > -1) {
             	int obj4 = checkForObject(tokens[1], objects);
             	if(obj4 > -1 && inv.getList().contains(objects.get(obj4))) {
-            		if(checkInDictionary(tokens[2], prepositions)) {
+            		if(prepositions.contains(tokens[2])) {
             			int obje4 = checkForObject(tokens[3], objects);
                     	if(obje4 > -1 && inv.getList().contains(objects.get(obje4))) {
                     		return new ParserOutput(commands.get(com4), objects.get(obj4), objects.get(obje4));
@@ -88,11 +101,11 @@ public class Parser {
         	//verbo articolo oggetto preposizione oggetto
         	int com5 = checkForCommand(tokens[0], commands);
         	if(com5 > -1) {
-        		if(checkInDictionary(tokens[1], articles)) {
+        		if(articles.contains(tokens[1])) {
         			int obj5 = checkForObject(tokens[2], objects);
                 	if(obj5 > -1 && inv.getList().contains(objects.get(obj5))) {
-                		if(checkInDictionary(tokens[2], prepositions)) {
-                			int obje5 = checkForObject(tokens[3], objects);
+                		if(prepositions.contains(tokens[3])) {
+                			int obje5 = checkForObject(tokens[4], objects);
                         	if(obje5 > -1 && inv.getList().contains(objects.get(obje5))) {
                         		return new ParserOutput(commands.get(com5), objects.get(obj5), objects.get(obje5));
                         	} else throw new InvalidCommandException();
