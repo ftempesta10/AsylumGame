@@ -34,6 +34,7 @@
           				</excludes>
           				<includes>
           					<include>**/game/*</include>
+          					<include>**/Asylum_*</include>
           				</includes>
           				<archive>
 							<manifest>
@@ -55,7 +56,10 @@
             					<exclude>**/game/*</exclude>
           					</excludes>
           					<includes>
-          						<include>**/*</include>
+          						<include>**/LauncherGUI_*</include>
+          						<include>**/engine/*</include>
+          						<include>**/engine/launcher/*</include>
+          						<include>**/hashedGraph/*</include>
           					</includes>
           					<archive>
 								<manifest>
