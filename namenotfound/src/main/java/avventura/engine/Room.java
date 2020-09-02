@@ -1,18 +1,26 @@
 package engine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room {
 	private static Integer istances = 0;
 	private String description, look, name;
 	private Boolean visible;
 	private Integer id;
 	private EventHandler trap;
+	private List<AdventureCharacter> enemies = new ArrayList<AdventureCharacter>();
+	private List<Item> objects = new ArrayList<Item>();
 
-	public Room(String description, String look, String name, Boolean visible) {
+	public Room(String description, String look, String name, Boolean visible,
+					List<AdventureCharacter> enemies, List<Item> objects) {
 		super();
 		this.description = description;
 		this.look = look;
 		this.name = name;
 		this.visible = visible;
+		this.enemies.addAll(enemies);
+		this.objects.addAll(objects);
 		id = istances;
 		istances++;
 		trap = null;
@@ -103,5 +111,21 @@ public class Room {
 		if(trap!=null)
 			hasTrap = true;
 		return hasTrap;
+	}
+	
+	public List<AdventureCharacter> getEnemies() {
+		return enemies;
+	}
+
+	public void setEnemies(List<AdventureCharacter> enemies) {
+		this.enemies = enemies;
+	}
+
+	public List<Item> getObjects() {
+		return objects;
+	}
+
+	public void setObjects(List<Item> objects) {
+		this.objects = objects;
 	}
 }

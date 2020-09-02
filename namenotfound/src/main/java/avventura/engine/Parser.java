@@ -29,7 +29,7 @@ public class Parser {
         return -1;
     }
     
-    public ParserOutput parse(String command,List<Command> commands, List<Item> objects, Inventory inv,
+    public ParserOutput parse(String command, List<Command> commands, List<Item> objects, List<Item> inv,
     								List<AdventureCharacter> enemies) throws Exception {
 		// TODO Auto-generated method stub
 		String cmd = command.toLowerCase().trim();
@@ -46,7 +46,7 @@ public class Parser {
         	int com2 = checkForCommand(tokens[0], commands);
         	if(com2 > -1) {
             	int obj2 = checkForObject(tokens[1], objects);
-            	if(obj2 > -1 && inv.getList().contains(objects.get(obj2))) {
+            	if(obj2 > -1 && (inv.contains(objects.get(obj2)))) {
             		return new ParserOutput(commands.get(com2), objects.get(obj2));
             	} else {
             		for(AdventureCharacter a : enemies) {
@@ -63,7 +63,7 @@ public class Parser {
         	if(com3 > -1) {
         		if(articles.contains(tokens[1])) {
         			int obj3 = checkForObject(tokens[2], objects);
-                	if(obj3 > -1 && inv.getList().contains(objects.get(obj3))) {
+                	if(obj3 > -1 && inv.contains(objects.get(obj3))) {
                 		return new ParserOutput(commands.get(com3), objects.get(obj3));
                 	} else {
                 		for(AdventureCharacter a : enemies) {
@@ -81,10 +81,10 @@ public class Parser {
         	int com4 = checkForCommand(tokens[0], commands);
         	if(com4 > -1) {
             	int obj4 = checkForObject(tokens[1], objects);
-            	if(obj4 > -1 && inv.getList().contains(objects.get(obj4))) {
+            	if(obj4 > -1 && inv.contains(objects.get(obj4))) {
             		if(prepositions.contains(tokens[2])) {
             			int obje4 = checkForObject(tokens[3], objects);
-                    	if(obje4 > -1 && inv.getList().contains(objects.get(obje4))) {
+                    	if(obje4 > -1 && inv.contains(objects.get(obje4))) {
                     		return new ParserOutput(commands.get(com4), objects.get(obj4), objects.get(obje4));
                     	} else throw new InvalidCommandException();
             		} else throw new InvalidCommandException();	
@@ -97,10 +97,10 @@ public class Parser {
         	if(com5 > -1) {
         		if(articles.contains(tokens[1])) {
         			int obj5 = checkForObject(tokens[2], objects);
-                	if(obj5 > -1 && inv.getList().contains(objects.get(obj5))) {
+                	if(obj5 > -1 && inv.contains(objects.get(obj5))) {
                 		if(prepositions.contains(tokens[3])) {
                 			int obje5 = checkForObject(tokens[4], objects);
-                        	if(obje5 > -1 && inv.getList().contains(objects.get(obje5))) {
+                        	if(obje5 > -1 && inv.contains(objects.get(obje5))) {
                         		return new ParserOutput(commands.get(com5), objects.get(obj5), objects.get(obje5));
                         	} else throw new InvalidCommandException();
                 		} else throw new InvalidCommandException();
