@@ -1,25 +1,33 @@
 package engine;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Engine {
 	
 	private final GameDescription game;
-	private Locale locale = Locale.getDefault();
+	private static Locale locale = Locale.getDefault();
 	private final Parser parser;
 	 
     public Engine(GameDescription game, Locale locale) {
         this.game = game;
-        this.setLocale(locale);
+        Engine.locale = locale;
         try {
             this.game.init();
             
         } catch (Exception ex) {
             System.err.println(ex);
         }
-        if(locale == Locale.ITALIAN) parser = new Parser();
-        else parser = new Parser();
+        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        if() parser = new Parser(this.loadDictionary("./resources/articoli.txt"), 
+        							this.loadDictionary("./resources/preposizioni.txt"));
+        else parser = new Parser(this.loadDictionary("./resources/articles.txt"),
+        							this.loadDictionary("./resources/preposition.txt"));
     }
 
     public void run() throws Exception {
@@ -32,8 +40,10 @@ public class Engine {
             ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(),
             		game.getInventory(), game.getCurrentRoom().getEnemies());
             if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
-            	if(locale == Locale.ITALIAN) System.out.println("Fine del gioco");
-                else System.out.println("End of the game");
+            	//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            	if(locale == Locale.ITALIAN) System.out.println("Addio");
+                else System.out.println("Goodbye");
+            	scanner.close();
                 break;
             } else {
                 game.nextMove(p, System.out);
@@ -41,13 +51,22 @@ public class Engine {
             }
         }
     }
-
-	public Locale getLocale() {
-		return locale;
-	}
-
-	public void setLocale(Locale locale) {
-		this.locale = locale;
-	}
- 
+    
+    private List<String> loadDictionary(String filename) throws FileNotFoundException{
+    	List<String> dictionary = new ArrayList<String>();
+		// TODO Auto-generated method stub
+		Scanner s = null;
+		String in;
+		boolean find = false;
+    	try {
+    		s = new Scanner(new BufferedReader(new FileReader(filename)));
+    		while(s.hasNext() && find == false) {
+    		in = s.nextLine();
+    		dictionary.add(in);
+    		}
+    	} finally {
+    			s.close();
+    	}
+    	return dictionary;
+    }
 }
