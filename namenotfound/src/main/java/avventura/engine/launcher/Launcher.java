@@ -5,7 +5,11 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.swing.DefaultListModel;
@@ -23,11 +27,16 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import engine.Engine;
+import engine.GameDescription;
+
 public class Launcher extends JFrame {
 
 	private JPanel contentPane;
 	static Locale locale = Locale.getDefault();
 	private JList<String> list;
+	private Map<String, File> games = new HashMap<String, File>();
+	ResourceBundle bundle;
 
 	/**
 	 * Launch the application.
@@ -49,11 +58,12 @@ public class Launcher extends JFrame {
 	 * Create the frame.
 	 */
 	public Launcher() {
+		initGames();
 		setTitle("Launcher");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 
-		ResourceBundle bundle = ResourceBundle.getBundle("LauncherGUI", locale);
+		bundle = ResourceBundle.getBundle("LauncherGUI", locale);
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -96,16 +106,55 @@ public class Launcher extends JFrame {
 		JButton launchButton = new JButton(bundle.getString("launcher.launchButton.text")); //$NON-NLS-1$
 		launchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//System.out.println(list.getSelectedValue());
+				try {
+					launchButtonActionPerformed();
+				}catch (LoaderException ex) {
+					ErrorDialog err = new ErrorDialog(ex.getMessage());
+					err.setVisible(true);
+				}catch (Exception ex ) {
+					ErrorDialog err = new ErrorDialog(ex.getMessage());
+					err.setVisible(true);
+				}
 			}
 		});
 		contentPane.add(launchButton, BorderLayout.SOUTH);
-		File games = new File("./games");
+		//File games = new File("./games");
 		DefaultListModel<String> m = (DefaultListModel) list.getModel();
+		for(String g : this.games.keySet()) {
+			m.addElement(g);
+		}
+		/*
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(null, "jar");
 		for(File g : games.listFiles()) {
-			if(filter.accept(g))
+			if(filter.accept(g)) {
 				m.addElement(g.getName());
+			}
+		}*/
+	}
+
+	private void initGames() {
+		File games = new File("./games");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(null, "jar");
+		for(File g : games.listFiles()) {
+			if(filter.accept(g)) {
+				this.games.put(g.getName().substring(0, g.getName().indexOf(".jar")), g);
+			}
+		}
+	}
+
+	private void launchButtonActionPerformed() throws LoaderException, Exception {
+		String selected = list.getSelectedValue();
+		URLClassLoader loader = URLClassLoader.newInstance(new URL[] {games.get(selected).toURI().toURL()});
+		try {
+			Class c = loader.loadClass("game."+selected);
+			if(!c.getGenericSuperclass().equals(GameDescription.class)) {
+				throw new LoaderException(bundle.getString("nogamefound"));
+			}
+			GameDescription g = (GameDescription) c.getConstructor().newInstance();
+			Engine engine = new Engine(g);
+			engine.run();
+		}catch (ClassNotFoundException e) {
+			throw new LoaderException(bundle.getString("nogamefound"));
 		}
 	}
 
