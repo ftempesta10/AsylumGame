@@ -12,12 +12,6 @@ public class Parser {
 		this.prepositions.addAll(prepositions);
 	}
 	
-	public boolean checkInDictionary(String token, List<String> dictionary) throws Exception {
-		// TODO Auto-generated method stub
-		if(dictionary.contains(token)) return true;
-		else return false;
-	} 
-	
 	private int checkForCommand(String token, List<Command> commands) {
 	        for (int i = 0; i < commands.size(); i++) {
 	            if (commands.get(i).getName().equals(token) || commands.get(i).getAlias().contains(token)) {
@@ -42,7 +36,7 @@ public class Parser {
         String[] tokens = cmd.split("\\s+");
         switch(tokens.length) {
         case 1 :
-        	//verbo
+        	//verbo 
         	int ic = checkForCommand(tokens[0], commands);
         	if(ic > -1) return new ParserOutput(commands.get(ic)); 
         	else throw new InvalidCommandException();
