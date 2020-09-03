@@ -1,4 +1,4 @@
-package avventura.engine;
+package engine;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,7 +37,7 @@ public class Command {
     }
 
     public void setAlias(String[] alias) {
-        this.alias = new HashSet<>(Arrays.asList(alias));
+        this.alias = new HashSet<String>(Arrays.asList(alias));
     }
 
     public CommandType getType() {
