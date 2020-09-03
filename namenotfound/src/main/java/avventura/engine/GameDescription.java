@@ -11,11 +11,11 @@ public abstract class GameDescription {
     private Room currentRoom;
 
     private WeightedHashedGraph<Room, Gateway> map;
-     
-    private List<Item> inventory = new ArrayList<Item>();
-    
+
+    private Inventory inventory;
+
     private Item commandTarget;
-    
+
     private List<Command> commands = new ArrayList<Command>();
 
     public Room getCurrentRoom() {
@@ -26,22 +26,22 @@ public abstract class GameDescription {
         this.currentRoom = currentRoom;
     }
 
-    public List<Item> getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
-    
+
     public List<Command> getCommands(){
         return commands;
     }
-    
+
     public void setCommands(List<Command> commands){
         this.commands = commands;
     }
-    
+
     public Item getCommandTarget(){
         return commandTarget;
     }
-    
+
     public void setCommandTarget(Item target){
         commandTarget = target;
     }

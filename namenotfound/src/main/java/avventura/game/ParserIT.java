@@ -3,6 +3,7 @@ package game;
 import java.util.List;
 
 import engine.AdventureCharacter;
+import engine.Command;
 import engine.InvalidCommandException;
 import engine.Inventory;
 import engine.Item;
@@ -15,13 +16,13 @@ public class ParserIT implements Parser{
 		this.loadArticles();
 		this.loadPrepositions();
 	}
-	
+
 	public boolean checkInDictionary(String token, List<String> dictionary) throws Exception {
 		// TODO Auto-generated method stub
 		if(dictionary.contains(token)) return true;
 		else return false;
-	} 
-	
+	}
+
 	public int checkForCommand(String token, List<Command> commands) {
 	        for (int i = 0; i < commands.size(); i++) {
 	            if (commands.get(i).getName().equals(token) || commands.get(i).getAlias().contains(token)) {
@@ -48,10 +49,10 @@ public class ParserIT implements Parser{
         case 1 :
         	//verbo
         	int ic = checkForCommand(tokens[0], commands);
-        	if(ic > -1) return new ParserOutput(commands.get(ic)); 
+        	if(ic > -1) return new ParserOutput(commands.get(ic));
         	else throw new InvalidCommandException();
-        	
-        case 2 : 
+
+        case 2 :
         	//verbo oggetto o verbo nemico
         	int com2 = checkForCommand(tokens[0], commands);
         	if(com2 > -1) {
@@ -65,9 +66,9 @@ public class ParserIT implements Parser{
             			}
             		}
             		throw new InvalidCommandException();
-            	} 
+            	}
         	} else throw new InvalidCommandException();
-        case 3 : 
+        case 3 :
         	//verbo articolo oggetto o verbo articolo nemico
         	int com3 = checkForCommand(tokens[0], commands);
         	if(com3 > -1) {
@@ -82,10 +83,10 @@ public class ParserIT implements Parser{
                 			}
                 		}
                 		throw new InvalidCommandException();
-                	} 
+                	}
         		} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
-        	
+
         case 4 :
         	//verbo oggetto preposizione oggetto
         	int com4 = checkForCommand(tokens[0], commands);
@@ -97,11 +98,11 @@ public class ParserIT implements Parser{
                     	if(obje4 > -1 && inv.getList().contains(objects.get(obje4))) {
                     		return new ParserOutput(commands.get(com4), objects.get(obj4), objects.get(obje4));
                     	} else throw new InvalidCommandException();
-            		} else throw new InvalidCommandException();	
-            	} else throw new InvalidCommandException(); 
+            		} else throw new InvalidCommandException();
+            	} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
-        	
-        case 5 : 
+
+        case 5 :
         	//verbo articolo oggetto preposizione oggetto
         	int com5 = checkForCommand(tokens[0], commands);
         	if(com5 > -1) {
@@ -117,7 +118,7 @@ public class ParserIT implements Parser{
                 	} else throw new InvalidCommandException();
         		} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
-        	
+
         default:
         	throw new InvalidCommandException();
         }
@@ -125,7 +126,7 @@ public class ParserIT implements Parser{
 
 	public void loadArticles() {
 		// TODO Auto-generated method stub
-		articles.add("il");	
+		articles.add("il");
 		articles.add("lo");
 		articles.add("la");
 		articles.add("i");
@@ -145,7 +146,7 @@ public class ParserIT implements Parser{
 		prepositions.add("per");
 		prepositions.add("tra");
 		prepositions.add("fra");
-		//preposition composte	
+		//preposition composte
 		prepositions.add("coi");
 		prepositions.add("degli");
 		prepositions.add("dal");
@@ -158,16 +159,16 @@ public class ParserIT implements Parser{
 		prepositions.add("nei");
 		prepositions.add("degli");
 		prepositions.add("con");
-		
-		
-		
-		
+
+
+
+
 		prepositions.add("del");
 		prepositions.add("al");
 		prepositions.add("dal");
 		prepositions.add("nel");
 		prepositions.add("col");
-		prepositions.add("sul");		
+		prepositions.add("sul");
 	}
-	
+
 }

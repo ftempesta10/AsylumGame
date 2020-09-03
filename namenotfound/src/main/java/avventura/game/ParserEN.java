@@ -3,6 +3,7 @@ package game;
 import java.util.List;
 
 import engine.AdventureCharacter;
+import engine.Command;
 import engine.InvalidCommandException;
 import engine.Inventory;
 import engine.Item;
@@ -15,14 +16,14 @@ public class ParserEN implements Parser{
 		this.loadArticles();
 		this.loadPrepositions();
 	}
-	
-	
+
+
 	public boolean checkInDictionary(String token, List<String> dictionary) throws Exception {
 		// TODO Auto-generated method stub
 		if(dictionary.contains(token)) return true;
 		else return false;
-	} 
-	
+	}
+
 	public int checkForCommand(String token, List<Command> commands) {
 	        for (int i = 0; i < commands.size(); i++) {
 	            if (commands.get(i).getName().equals(token) || commands.get(i).getAlias().contains(token)) {
@@ -49,10 +50,10 @@ public class ParserEN implements Parser{
         case 1 :
         	//Verb
         	int ic = checkForCommand(tokens[0], commands);
-        	if(ic > -1) return new ParserOutput(commands.get(ic)); 
+        	if(ic > -1) return new ParserOutput(commands.get(ic));
         	else throw new InvalidCommandException();
-        	
-        case 2 : 
+
+        case 2 :
         	//Verb object or verb enemy
         	int com2 = checkForCommand(tokens[0], commands);
         	if(com2 > -1) {
@@ -66,9 +67,9 @@ public class ParserEN implements Parser{
             			}
             		}
             		throw new InvalidCommandException();
-            	} 
+            	}
         	} else throw new InvalidCommandException();
-        case 3 : 
+        case 3 :
         	//verb article object o verb article enemy
         	int com3 = checkForCommand(tokens[0], commands);
         	if(com3 > -1) {
@@ -83,10 +84,10 @@ public class ParserEN implements Parser{
                 			}
                 		}
                 		throw new InvalidCommandException();
-                	} 
+                	}
         		} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
-        	
+
         case 4 :
         	//verb object preposition object
         	int com4 = checkForCommand(tokens[0], commands);
@@ -98,11 +99,11 @@ public class ParserEN implements Parser{
                     	if(obje4 > -1 && inv.getList().contains(objects.get(obje4))) {
                     		return new ParserOutput(commands.get(com4), objects.get(obj4), objects.get(obje4));
                     	} else throw new InvalidCommandException();
-            		} else throw new InvalidCommandException();	
-            	} else throw new InvalidCommandException(); 
+            		} else throw new InvalidCommandException();
+            	} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
-        	
-        case 5 : 
+
+        case 5 :
         	//verb object compound preposition object
         	//verb article object preposition object
         	int com5 = checkForCommand(tokens[0], commands);
@@ -125,11 +126,11 @@ public class ParserEN implements Parser{
                         	if(obje5 > -1 && inv.getList().contains(objects.get(obje5))) {
                         		return new ParserOutput(commands.get(com5), objects.get(obj5), objects.get(obje5));
                         	} else throw new InvalidCommandException();
-                		} else throw new InvalidCommandException();	
+                		} else throw new InvalidCommandException();
                 	} else throw new InvalidCommandException();
                 }
         	} else throw new InvalidCommandException();
-        	
+
         case 6:
         	//verb article object compound preposition object
         	int com6 = checkForCommand(tokens[0], commands);
@@ -146,10 +147,10 @@ public class ParserEN implements Parser{
                 	} else throw new InvalidCommandException();
         		} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
-        	
-        	
-        	
-        	
+
+
+
+
         default:
         	throw new InvalidCommandException();
         }
@@ -158,7 +159,7 @@ public class ParserEN implements Parser{
 
 	public void loadArticles() {
 		// TODO Auto-generated method stub
-		articles.add("the");	
+		articles.add("the");
 	}
 
 
@@ -176,6 +177,6 @@ public class ParserEN implements Parser{
 		prepositions.add("for the");
 		prepositions.add("to the");
 		prepositions.add("of the");
-		prepositions.add("from the");		
+		prepositions.add("from the");
 	}
 }
