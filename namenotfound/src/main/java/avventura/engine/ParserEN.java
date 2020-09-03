@@ -4,6 +4,12 @@ import java.util.List;
 
 public class ParserEN implements Parser{
 
+	public ParserEN() {
+		this.loadArticles();
+		this.loadPrepositions();
+	}
+	
+	
 	public boolean checkInDictionary(String token, List<String> dictionary) throws Exception {
 		// TODO Auto-generated method stub
 		if(dictionary.contains(token)) return true;
@@ -140,5 +146,29 @@ public class ParserEN implements Parser{
         default:
         	throw new InvalidCommandException();
         }
+	}
+
+
+	public void loadArticles() {
+		// TODO Auto-generated method stub
+		articles.add("the");	
+	}
+
+
+	public void loadPrepositions() {
+		// TODO Auto-generated method stub
+		prepositions.add("with");
+		prepositions.add("about");
+		prepositions.add("for");
+		prepositions.add("to");
+		prepositions.add("of");
+		prepositions.add("from");
+		//preposition compose
+		prepositions.add("with the");
+		prepositions.add("about the");
+		prepositions.add("for the");
+		prepositions.add("to the");
+		prepositions.add("of the");
+		prepositions.add("from the");		
 	}
 }

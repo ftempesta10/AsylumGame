@@ -4,6 +4,11 @@ import java.util.List;
 
 public class ParserIT implements Parser{
 
+	public ParserIT() {
+		this.loadArticles();
+		this.loadPrepositions();
+	}
+	
 	public boolean checkInDictionary(String token, List<String> dictionary) throws Exception {
 		// TODO Auto-generated method stub
 		if(dictionary.contains(token)) return true;
@@ -109,6 +114,53 @@ public class ParserIT implements Parser{
         default:
         	throw new InvalidCommandException();
         }
+	}
+
+	public void loadArticles() {
+		// TODO Auto-generated method stub
+		articles.add("il");	
+		articles.add("lo");
+		articles.add("la");
+		articles.add("i");
+		articles.add("gli");
+		articles.add("gle");
+	}
+
+
+	public void loadPrepositions() {
+		// TODO Auto-generated method stub
+		prepositions.add("di");
+		prepositions.add("a");
+		prepositions.add("da");
+		prepositions.add("in");
+		prepositions.add("con");
+		prepositions.add("su");
+		prepositions.add("per");
+		prepositions.add("tra");
+		prepositions.add("fra");
+		//preposition composte	
+		prepositions.add("coi");
+		prepositions.add("degli");
+		prepositions.add("dal");
+		prepositions.add("nel");
+		prepositions.add("col");
+		prepositions.add("sul");
+		prepositions.add("alla");
+		prepositions.add("dei");
+		prepositions.add("dai");
+		prepositions.add("nei");
+		prepositions.add("degli");
+		prepositions.add("con");
+		
+		
+		
+		
+		prepositions.add("del");
+		prepositions.add("al");
+		prepositions.add("dal");
+		prepositions.add("nel");
+		prepositions.add("col");
+		prepositions.add("sul");		
 	}
 	
 }
