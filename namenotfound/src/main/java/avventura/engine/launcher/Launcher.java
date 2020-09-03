@@ -10,6 +10,7 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.swing.DefaultListModel;
@@ -33,7 +34,7 @@ import engine.GameDescription;
 public class Launcher extends JFrame {
 
 	private JPanel contentPane;
-	static Locale locale = Locale.getDefault();
+	public static Locale locale = Locale.getDefault();
 	private JList<String> list;
 	private Map<String, File> games = new HashMap<String, File>();
 	ResourceBundle bundle;
@@ -62,8 +63,13 @@ public class Launcher extends JFrame {
 		setTitle("Launcher");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-
-		bundle = ResourceBundle.getBundle("LauncherGUI", locale);
+		
+		try {
+			bundle = ResourceBundle.getBundle("LauncherGUI", locale);
+		}catch (MissingResourceException e) {
+			bundle = ResourceBundle.getBundle("LauncherGUI", Locale.ENGLISH);
+		}
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -118,18 +124,10 @@ public class Launcher extends JFrame {
 			}
 		});
 		contentPane.add(launchButton, BorderLayout.SOUTH);
-		//File games = new File("./games");
 		DefaultListModel<String> m = (DefaultListModel) list.getModel();
 		for(String g : this.games.keySet()) {
 			m.addElement(g);
 		}
-		/*
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(null, "jar");
-		for(File g : games.listFiles()) {
-			if(filter.accept(g)) {
-				m.addElement(g.getName());
-			}
-		}*/
 	}
 
 	private void initGames() {

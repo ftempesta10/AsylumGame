@@ -8,26 +8,29 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import engine.launcher.Launcher;
+
 public class Engine {
-	
+
 	private final GameDescription game;
-	private static Locale locale = Locale.getDefault();
+	static Locale locale = Locale.getDefault();
 	private final Parser parser;
-	 
-    public Engine(GameDescription game, Locale locale) {
+
+    public Engine(GameDescription game) {
+    	locale = Launcher.locale;
         this.game = game;
-        Engine.locale = locale;
         try {
             this.game.init();
-            
+
         } catch (Exception ex) {
             System.err.println(ex);
         }
-        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        if() parser = new Parser(this.loadDictionary("./resources/articoli.txt"), 
+        parser = null;
+        /*
+        if() parser = new Parser(this.loadDictionary("./resources/articoli.txt"),
         							this.loadDictionary("./resources/preposizioni.txt"));
         else parser = new Parser(this.loadDictionary("./resources/articles.txt"),
-        							this.loadDictionary("./resources/preposition.txt"));
+        							this.loadDictionary("./resources/preposition.txt"));*/
     }
 
     public void run() throws Exception {
@@ -51,7 +54,7 @@ public class Engine {
             }
         }
     }
-    
+
     private List<String> loadDictionary(String filename) throws FileNotFoundException{
     	List<String> dictionary = new ArrayList<String>();
 		// TODO Auto-generated method stub
