@@ -1,6 +1,13 @@
-package engine;
+package game;
 
 import java.util.List;
+
+import engine.AdventureCharacter;
+import engine.InvalidCommandException;
+import engine.Inventory;
+import engine.Item;
+import engine.Parser;
+import engine.ParserOutput;
 
 public class ParserIT implements Parser{
 
