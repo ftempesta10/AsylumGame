@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import engine.launcher.Launcher;
@@ -15,9 +16,11 @@ public class Engine {
 	private final GameDescription game;
 	static Locale locale = Locale.getDefault();
 	private final Parser parser;
+	private ResourceBundle bundle;
 
     public Engine(GameDescription game) {
     	locale = Launcher.locale;
+    	bundle = ResourceBundle.getBundle("engine", locale);
         this.game = game;
         try {
             this.game.init();
@@ -43,9 +46,7 @@ public class Engine {
             ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(),
             		game.getInventory(), game.getCurrentRoom().getEnemies());
             if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
-            	//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-            	if(locale == Locale.ITALIAN) System.out.println("Addio");
-                else System.out.println("Goodbye");
+            	System.out.println(bundle.getString("end"));
             	scanner.close();
                 break;
             } else {
