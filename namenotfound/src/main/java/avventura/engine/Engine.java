@@ -55,22 +55,4 @@ public class Engine {
             }
         }
     }
-
-    private List<String> loadDictionary(String filename) throws FileNotFoundException{
-    	List<String> dictionary = new ArrayList<String>();
-		// TODO Auto-generated method stub
-		Scanner s = null;
-		String in;
-		boolean find = false;
-    	try {
-    		s = new Scanner(new BufferedReader(new FileReader(filename)));
-    		while(s.hasNext() && find == false) {
-    		in = s.nextLine();
-    		dictionary.add(in);
-    		}
-    	} finally {
-    			s.close();
-    	}
-    	return dictionary;
-    }
 }

@@ -1,8 +1,11 @@
 package game;
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.BoxLayout;
 import javax.swing.AbstractAction;
@@ -49,16 +52,52 @@ public class Saves extends JPanel {
 			putValue(SHORT_DESCRIPTION, "Start a new game");
 		}
 		public void actionPerformed(ActionEvent e) {
+			JFrame frame;
+			JTextField textField;
+			final Action action = new Start();
+			/**
+			 * Initialize the contents of the frame.
+			 */
+			frame = new JFrame();
+			frame.setBounds(100, 100, 450, 300);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.getContentPane().setLayout(null);
+			JLabel label = new JLabel("Name");
+			label.setBounds(78, 102, 67, 47);
+			frame.getContentPane().add(label);
+			textField = new JTextField();
+			textField.setBounds(145, 115, 155, 20);
+			frame.getContentPane().add(textField);
+			textField.setColumns(10);
+			JButton btnNewButton = new JButton("Start");
+			btnNewButton.setAction(action);
+			btnNewButton.setBounds(145, 146, 89, 23);
+			frame.getContentPane().add(btnNewButton);
+			frame.setVisible(true);
 		}
 	}
+	
+	//usata nel button new game
+	private class Start extends AbstractAction {
+		public Start() {
+			putValue(NAME, "Start");
+			putValue(SHORT_DESCRIPTION, "Start the game");
+		}
+		public void actionPerformed(ActionEvent e) {
+			//INIZIA GIOCO
+		}
+	}
+	
 	private class Load extends AbstractAction {
 		public Load() {
 			putValue(NAME, "Load");
 			putValue(SHORT_DESCRIPTION, "Loading a save");
 		}
 		public void actionPerformed(ActionEvent e) {
+			
 		}
 	}
+	
 	private class Exit extends AbstractAction {
 		public Exit() {
 			putValue(NAME, "Exit");
@@ -67,4 +106,6 @@ public class Saves extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 		}
 	}
+	
+	
 }
