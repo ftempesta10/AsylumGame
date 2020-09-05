@@ -23,7 +23,7 @@ public class Manager extends JFrame {
 	public Manager() {
 		//setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		//Frame s = new Frame();
-		action = new NewGame(this);
+		action = new NewGame();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		layeredPane = new JLayeredPane();
@@ -52,14 +52,12 @@ public class Manager extends JFrame {
 	}
 
 	private class NewGame extends AbstractAction {
-		JFrame frame;
-		public NewGame(JFrame frame) {
-			this.frame=frame;
+		public NewGame() {
 			putValue(NAME, "NewGame");
 			putValue(SHORT_DESCRIPTION, "Start a new game");
 		}
 		public void actionPerformed(ActionEvent e) {
-			//JFrame frame;
+			JFrame frame;
 			JTextField textField;
 			final Action action = new Start();
 			/**
