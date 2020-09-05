@@ -63,13 +63,13 @@ public class Launcher extends JFrame {
 		setTitle("Launcher");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		
+
 		try {
 			bundle = ResourceBundle.getBundle("LauncherGUI", locale);
 		}catch (MissingResourceException e) {
 			bundle = ResourceBundle.getBundle("LauncherGUI", Locale.ENGLISH);
 		}
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -150,7 +150,7 @@ public class Launcher extends JFrame {
 			}
 			GameDescription g = (GameDescription) c.getConstructor().newInstance();
 			Engine engine = new Engine(g);
-			engine.run();
+			//engine.run();
 		}catch (ClassNotFoundException e) {
 			throw new LoaderException(bundle.getString("nogamefound"));
 		}

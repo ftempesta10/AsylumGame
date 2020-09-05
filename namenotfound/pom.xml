@@ -64,6 +64,7 @@
           					</excludes>
           					<includes>
           						<include>**/LauncherGUI_*</include>
+          						<include>**/engine_*</include>
           						<include>**/engine/*</include>
           						<include>**/engine/launcher/*</include>
           						<include>**/hashedGraph/*</include>
