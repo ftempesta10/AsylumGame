@@ -10,7 +10,8 @@ public class Asylum extends GameDescription {
 	@Override
 	public void init() throws Exception {
 		// TODO Auto-generated method stub
-		Manager a = new Manager();
+		//Manager a = new Manager();
+		HandleDB db = new HandleDB();
 
 	}
 

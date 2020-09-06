@@ -134,7 +134,7 @@ public class Launcher extends JFrame {
 		File games = new File("./games");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(null, "jar");
 		for(File g : games.listFiles()) {
-			if(filter.accept(g)) {
+			if(filter.accept(g) && g.isFile()) {
 				this.games.put(g.getName().substring(0, g.getName().indexOf(".jar")), g);
 			}
 		}
