@@ -9,46 +9,74 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Manager extends JFrame {
-	private final Action action;
-	private final Action action_1 = new Load();
-	private final Action action_2 = new Exit();
-	private JLayeredPane layeredPane;
+	private final Action newGameAction = new NewGame();;
+	private final Action loadAction = new Load();
+	private final Action actionStart = new Start();
+	private final Action actionBack = new Back();
+	private JLayeredPane layeredPane = new JLayeredPane();
+	JPanel newGamePanel = new JPanel();
+	JPanel mainPanel = new JPanel();
+	int value;
+
 
 	/**
 	 * Create the panel.
 	 */
 	public Manager() {
-		//setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		//Frame s = new Frame();
-		action = new NewGame();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		layeredPane = new JLayeredPane();
 		getContentPane().add(layeredPane);
 
+		//init mainPanel
+		mainPanel.setSize(414, 239);
+		mainPanel.setLocation(10, 11);
+		layeredPane.setLayer(mainPanel, 1);
+		layeredPane.add(mainPanel);
+		mainPanel.setLayout(null);
+
 		JButton btnNewButton = new JButton("New Game");
-		btnNewButton.setAction(action);
-		btnNewButton.setBounds(57, 213, 89, 23);
-		layeredPane.add(btnNewButton);
+		btnNewButton.setAction(newGameAction);
+		btnNewButton.setBounds(62, 205, 93, 23);
+		mainPanel.add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("Load");
-		btnNewButton_1.setAction(action_1);
-		btnNewButton_1.setBounds(156, 213, 89, 23);
-		layeredPane.add(btnNewButton_1);
-
-		JButton btnNewButton_2 = new JButton("Exit");
-		btnNewButton_2.setAction(action_2);
-		btnNewButton_2.setBounds(290, 213, 89, 23);
-		layeredPane.add(btnNewButton_2);
+		btnNewButton_1.setAction(loadAction);
+		btnNewButton_1.setBounds(176, 205, 67, 23);
+		mainPanel.add(btnNewButton_1);
 
 		JList list = new JList();
-		list.setBounds(57, 30, 313, 156);
-		layeredPane.add(list);
+		list.setBounds(52, 37, 299, 157);
+		mainPanel.add(list);
+		mainPanel.setVisible(true);
 		setVisible(true);
+		layeredPane.setLayer(newGamePanel, 1);
 
+		//init newGamePanel
+		layeredPane.add(newGamePanel);
+		newGamePanel.setSize(250, 200);
+		newGamePanel.setLocation(10, 11);
+		newGamePanel.setLayout(null);
+		JLabel label = new JLabel("Name");
+		label.setBounds(45, 20, 47, 14);
+		newGamePanel.add(label);
+		JTextField textField = new JTextField();
+		textField.setBounds(100, 20, 133, 20);
+		newGamePanel.add(textField);
+		textField.setColumns(10);
+		JButton startButton = new JButton("Start");
+		JButton backButton = new JButton("Indietro");
+		startButton.setBounds(50, 90, 80, 23);
+		backButton.setBounds(160, 90, 71, 23);
+		newGamePanel.add(backButton);
+		backButton.setAction(actionBack);
+		startButton.setAction(actionStart);
+
+		newGamePanel.add(startButton);
+		newGamePanel.setVisible(false);
 	}
 
 	private class NewGame extends AbstractAction {
@@ -56,30 +84,11 @@ public class Manager extends JFrame {
 			putValue(NAME, "NewGame");
 			putValue(SHORT_DESCRIPTION, "Start a new game");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFrame frame;
-			JTextField textField;
-			final Action action = new Start();
-			/**
-			 * Initialize the contents of the frame.
-			 */
-
-			frame = new JFrame();
-			frame.setBounds(100, 100, 450, 300);
-			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			frame.getContentPane().setLayout(null);
-			JLabel label = new JLabel("Name");
-			label.setBounds(78, 102, 67, 47);
-			frame.getContentPane().add(label);
-			textField = new JTextField();
-			textField.setBounds(145, 115, 155, 20);
-			frame.getContentPane().add(textField);
-			textField.setColumns(10);
-			JButton btnNewButton = new JButton("Start");
-			btnNewButton.setAction(action);
-			btnNewButton.setBounds(145, 146, 89, 23);
-			frame.getContentPane().add(btnNewButton);
-			frame.setVisible(true);
+			setBounds(100, 100, 300, 230);
+			mainPanel.setVisible(false);
+			newGamePanel.setVisible(true);
 		}
 	}
 
@@ -89,8 +98,10 @@ public class Manager extends JFrame {
 			putValue(NAME, "Start");
 			putValue(SHORT_DESCRIPTION, "Start the game");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			//INIZIA GIOCO
+			value = 1;
 		}
 	}
 
@@ -99,17 +110,26 @@ public class Manager extends JFrame {
 			putValue(NAME, "Load");
 			putValue(SHORT_DESCRIPTION, "Loading a save");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 		}
 	}
 
-	private class Exit extends AbstractAction {
-		public Exit() {
-			putValue(NAME, "Exit");
-			putValue(SHORT_DESCRIPTION, "Exit");
+	public int getValue() {
+		return value;
+	}
+
+	private class Back extends AbstractAction {
+		public Back() {
+			putValue(NAME, "Back");
+			putValue(SHORT_DESCRIPTION, "Go back to main panel");
 		}
+		@Override
 		public void actionPerformed(ActionEvent e) {
+			setBounds(100, 100, 450, 300);
+			newGamePanel.setVisible(false);
+			mainPanel.setVisible(true);
 		}
 	}
 }
