@@ -1,9 +1,12 @@
 package game;
 
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,6 +14,9 @@ import javax.swing.JLayeredPane;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
+import engine.GameDescription;
 
 public class Manager extends JFrame {
 	private final Action newGameAction = new NewGame();;
@@ -18,15 +24,22 @@ public class Manager extends JFrame {
 	private final Action actionStart = new Start();
 	private final Action actionBack = new Back();
 	private JLayeredPane layeredPane = new JLayeredPane();
+	private Map<String, GameDescription> saves = new HashMap<String, GameDescription>();
+	private HandleDB db;
+	private GameDescription selected = null;
+
 	JPanel newGamePanel = new JPanel();
 	JPanel mainPanel = new JPanel();
-	int value;
+	String player;
 
 
 	/**
 	 * Create the panel.
 	 */
-	public Manager() {
+	public Manager() throws Exception{
+
+		db = new HandleDB();
+		saves = db.recoveryTuple();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		getContentPane().add(layeredPane);
@@ -48,12 +61,18 @@ public class Manager extends JFrame {
 		btnNewButton_1.setBounds(176, 205, 67, 23);
 		mainPanel.add(btnNewButton_1);
 
+		//init lista dei salvataggi
 		JList list = new JList();
 		list.setBounds(52, 37, 299, 157);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setModel(new DefaultListModel<String>());
+		DefaultListModel<String> m = (DefaultListModel) list.getModel();
 		mainPanel.add(list);
 		mainPanel.setVisible(true);
 		setVisible(true);
 		layeredPane.setLayer(newGamePanel, 1);
+		for(String k : saves.keySet())
+			m.addElement(k);
 
 		//init newGamePanel
 		layeredPane.add(newGamePanel);
@@ -86,6 +105,7 @@ public class Manager extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//Crea pannello per la creazione del giocatore
 			setBounds(100, 100, 300, 230);
 			mainPanel.setVisible(false);
 			newGamePanel.setVisible(true);
@@ -101,7 +121,9 @@ public class Manager extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//INIZIA GIOCO
-			value = 1;
+			JTextField name = (JTextField) newGamePanel.getComponent(1);
+			player = name.getText();
+			close();
 		}
 	}
 
@@ -112,12 +134,20 @@ public class Manager extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			String selectedSave = ((JList<String>) mainPanel.getComponent(2)).getSelectedValue();
+			selected = saves.get(selectedSave);
+			//seleziona nome giocatore
+			player = selectedSave.split(" ")[0];
+			close();
 		}
 	}
 
-	public int getValue() {
-		return value;
+	public String getPlayer() {
+		return player;
+	}
+
+	public GameDescription getSave() {
+		return selected;
 	}
 
 	private class Back extends AbstractAction {
@@ -127,9 +157,14 @@ public class Manager extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//ripristina pannello principale
 			setBounds(100, 100, 450, 300);
 			newGamePanel.setVisible(false);
 			mainPanel.setVisible(true);
 		}
+	}
+
+	private void close() {
+		this.dispose();
 	}
 }

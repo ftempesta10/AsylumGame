@@ -44,6 +44,7 @@ public class Launcher extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					Launcher frame = new Launcher();
@@ -78,6 +79,7 @@ public class Launcher extends JFrame {
 
 		JRadioButton ItalianRadioButton = new JRadioButton(bundle.getString("launcher.ItalianRadioButton.text")); //$NON-NLS-1$
 		ItalianRadioButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				locale = Locale.ITALIAN;
 				dispose();
@@ -87,6 +89,7 @@ public class Launcher extends JFrame {
 		mnNewMenu.add(ItalianRadioButton);
 		JRadioButton EnglishRadioButton = new JRadioButton(bundle.getString("launcher.EnglishRadioButton.text")); //$NON-NLS-1$
 		EnglishRadioButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				locale = Locale.ENGLISH;
 				dispose();
@@ -111,6 +114,7 @@ public class Launcher extends JFrame {
 
 		JButton launchButton = new JButton(bundle.getString("launcher.launchButton.text")); //$NON-NLS-1$
 		launchButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					launchButtonActionPerformed();
@@ -148,9 +152,17 @@ public class Launcher extends JFrame {
 			if(!c.getGenericSuperclass().equals(GameDescription.class)) {
 				throw new LoaderException(bundle.getString("nogamefound"));
 			}
-			GameDescription g = (GameDescription) c.getConstructor().newInstance();
-			Engine engine = new Engine(g);
-			//engine.run();
+			final GameDescription g = (GameDescription) c.getConstructor().newInstance();
+			Thread t = new Thread( new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Engine engine = new Engine(g);
+					//engine.run();
+				}
+			});
+			t.start();
 		}catch (ClassNotFoundException e) {
 			throw new LoaderException(bundle.getString("nogamefound"));
 		}
