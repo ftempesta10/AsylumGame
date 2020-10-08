@@ -19,7 +19,7 @@ import javax.swing.ListSelectionModel;
 import engine.GameDescription;
 
 public class Manager extends JFrame {
-	private final Action newGameAction = new NewGame();;
+	private final Action newGameAction = new NewGame();
 	private final Action loadAction = new Load();
 	private final Action actionStart = new Start();
 	private final Action actionBack = new Back();
@@ -27,6 +27,7 @@ public class Manager extends JFrame {
 	private Map<String, GameDescription> saves = new HashMap<String, GameDescription>();
 	private HandleDB db;
 	private GameDescription selected = null;
+	private final Action deleteAction = new Delete();
 
 	JPanel newGamePanel = new JPanel();
 	JPanel mainPanel = new JPanel();
@@ -60,6 +61,11 @@ public class Manager extends JFrame {
 		btnNewButton_1.setAction(loadAction);
 		btnNewButton_1.setBounds(176, 205, 67, 23);
 		mainPanel.add(btnNewButton_1);
+
+		JButton btnNewButton_2 = new JButton("Delete");
+		btnNewButton_2.setAction(deleteAction);
+		btnNewButton_2.setBounds(262, 205, 89, 23);
+		mainPanel.add(btnNewButton_2);
 
 		//init lista dei salvataggi
 		JList list = new JList();
@@ -134,7 +140,7 @@ public class Manager extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String selectedSave = ((JList<String>) mainPanel.getComponent(2)).getSelectedValue();
+			String selectedSave = ((JList<String>) mainPanel.getComponent(3)).getSelectedValue();
 			selected = saves.get(selectedSave);
 			//seleziona nome giocatore
 			player = selectedSave.split(" ")[0];
@@ -166,5 +172,28 @@ public class Manager extends JFrame {
 
 	private void close() {
 		this.dispose();
+	}
+
+	private class Delete extends AbstractAction {
+
+		public Delete() {
+			putValue(NAME, "Delete");
+			putValue(SHORT_DESCRIPTION, "Delete the selected save");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				String selectedPlayer = ((JList<String>) mainPanel.getComponent(3)).getSelectedValue();
+				int index = ((JList<String>) mainPanel.getComponent(3)).getSelectedIndex();
+				DefaultListModel<String> m = (DefaultListModel) ((JList<String>) mainPanel.getComponent(3)).getModel();
+				m.remove(index);
+				db.deleteTuple(selectedPlayer);
+			}catch (Exception e1) {
+				// TODO: handle exception
+				System.out.print(e1);
+			}
+
+		}
 	}
 }
