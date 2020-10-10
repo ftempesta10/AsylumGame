@@ -11,8 +11,7 @@ public abstract class GameDescription {
     private Room currentRoom;
 
     private WeightedHashedGraph<Room, Gateway> map;
-
-    private List<Item> inventory = new ArrayList<Item>();
+    private Inventory inventory;
 
     private Item commandTarget;
 
@@ -26,7 +25,7 @@ public abstract class GameDescription {
         this.currentRoom = currentRoom;
     }
 
-    public List<Item> getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
 
@@ -53,10 +52,6 @@ public abstract class GameDescription {
 
 	public void setMap(WeightedHashedGraph<Room, Gateway> map) {
 		this.map = map;
-	}
-
-	public void setInventory(List<Item> inventory) {
-		this.inventory = inventory;
 	}
 
 	public abstract void init() throws Exception;

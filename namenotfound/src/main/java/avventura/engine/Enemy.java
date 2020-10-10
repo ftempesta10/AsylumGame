@@ -3,8 +3,8 @@ package engine;
 public class Enemy extends AdventureCharacter {
 	private Integer minDamage, maxDamage;
 
-	public Enemy(Integer minDamage, Integer maxDamage) {
-		super();
+	public Enemy(Integer health, String name, String description, String talk, Inventory inv, Item droppable, Integer minDamage, Integer maxDamage) {
+		super(health, name, description, talk, inv, droppable);
 		this.minDamage = minDamage;
 		this.maxDamage = maxDamage;
 	}
