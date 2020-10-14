@@ -136,9 +136,25 @@ public class Asylum extends GameDescription {
         Room bathroom = new Room("You can only go back to the hallway", 
 								"In this room there is a mirror",
         						"Bathroom");
+		Item key = new Item("key", "Useful key to open something");
+		Item corpse = new Item("corpse", "Decaying corpse");
+		Item bed = new Item("bed", "Bed in which the patients slept");
+		Item screwdriver = new Item("screwdriver", "Screwdriver, this might come in handy");
+		Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases");
+		Item mirror = new Item("mirror", "Mirror in which your image is reflected");
+		ItemContainer chest = new ItemContainer("chest", "Chest that may contain something");
 		room1.getObjects().add(corpse);
 		room1.getObjects().add(bed);
 		room1.getObjects().add(key);
+		room2.getObjects().add(bed);
+		room3.getObjects().add(chest);
+		room4.getObjects().add(bed);
+		room5.getObjects().add(bed);
+		room6.getObjects().add(screwdriver);
+		room7.getObjects().add(bed);
+		room8.getObjects().add(gasmask);
+		room8.getObjects().add(bed);
+		bathroom.getObjects().add(mirror);
 
         
         
