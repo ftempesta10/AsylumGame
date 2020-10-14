@@ -107,34 +107,34 @@ public class Asylum extends GameDescription {
 								"There is only one bad",
 								"Dormitory 2");
         Room room3 = new Room("You can only go back to the hallway", 
-								"In this room there is a chest",
-								"Dormitory 3");
+								"A room full of clothes and with a washing machine. Better leave them in their place ...",
+								"Laundry");
         Room room4 = new Room("You can only go back to the hallway", 
 								"There is only one bad",
 								"Dormitory 4");
         Room room5 = new Room("You can only go back to the hallway", 
-								"There is only one bad",
+								"A room with an unmade bed",
 								"Dormitory 5");	
         Room room6 = new Room("You can only go back to the hallway", 
-								"There's a bloodstained screwdriver, it might help",
+								"A room with a bed and numerous holes in the wall, who knows how they were made...",
 								"Dormitory 6");
         Room room7 = new Room("You can only go back to the hallway", 
-								"There is only one bad",
+								"A room with an unmade bed and strange writing on the wall",
 								"Dormitory 7");	
         Room room8 = new Room("You can only go back to the hallway", 
-								"In this room there is a gas mask and a bed",
+								"A room with an unmade bed",
         						"Dormitory 8");						
         Room hallway = new Room(" From the hallway you can enter room 2, 5, 6 or continue down the hallway towards a door from which monstrous voices are coming ...", 
-								"There is nothing useful here",
+								" A macabre hallway adorned with parts of the human body along the walls",
         						"Hallway 1");
         Room hallway2 = new Room("You can go back down the hallway or enter room 3, 4, 7, 8 or continue down the hallway", 
-								"As soon as you open the door, a bloody human with a disfigured face lashes out at you",
+								"A hallway with numerous traces of blood. Did someone drag themselves trying to escape?",
         						"Hallway 2");
         Room hallway3 = new Room("You can go back down the hallwaym, enter in the bathroom or take the stairs", 
-								"There is nothing useful here",
+								"An hallway with paintings depicting skeletons in daily actions. In one corner there is a statue of Santua Muerte. Maybe you are in a place of worship?",
 								"Hallway 3");
         Room bathroom = new Room("You can only go back to the hallway", 
-								"In this room there is a mirror",
+								"A room with a mirror and a toilet. You could take advantage of ... no, better to avoid",
         						"Bathroom");
 		Item key = new Item("key", "Useful key to open something");
 		Item corpse = new Item("corpse", "Decaying corpse");
