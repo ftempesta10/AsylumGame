@@ -136,6 +136,10 @@ public class Asylum extends GameDescription {
         Room bathroom = new Room("You can only go back to the hallway", 
 								"In this room there is a mirror",
         						"Bathroom");
+		room1.getObjects().add(corpse);
+		room1.getObjects().add(bed);
+		room1.getObjects().add(key);
+
         
         
 	}
