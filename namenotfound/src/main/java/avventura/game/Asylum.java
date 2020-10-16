@@ -130,7 +130,7 @@ public class Asylum extends GameDescription {
         Room hallway2 = new Room("You can go back down the hallway or enter room 3, 4, 7, 8 or continue down the hallway", 
 								"A hallway with numerous traces of blood. Did someone drag themselves trying to escape?",
         						"Hallway 2");
-        Room hallway3 = new Room("You can go back down the hallwaym, enter in the bathroom or take the stairs", 
+        Room hallway3 = new Room("You can go back down the hallway, enter in the bathroom or take the stairs", 
 								"An hallway with paintings depicting skeletons in daily actions. In one corner there is a statue of Santua Muerte. Maybe you are in a place of worship?",
 								"Hallway 3");
         Room bathroom = new Room("You can only go back to the hallway", 
@@ -155,8 +155,25 @@ public class Asylum extends GameDescription {
 		room8.getObjects().add(gasmask);
 		room8.getObjects().add(bed);
 		bathroom.getObjects().add(mirror);
-
-        
+		
+		Room hallway4 = new Room("You can enter in the surgery, in the infirmary or in surveillance", 
+							   	"An hallway with paintings depicting skeletons in daily actions. In one corner there is a statue of Santua Muerte. Maybe you are in a place of worship?",
+								"Hallway 4");
+		Room infirmary = new Room("You can only go back to the hallway", 
+								"A room with several shelves full of medicines. Here the patients were to be medicated",
+								"Infirmary");
+		Room surgery = new Room("You can only go back to the hallway", 
+								"A room with many medical tools. Here the operations were carried out on patients",
+								"Surgery");
+		Room surveillance = new Room("You can go back to the hallway, or in the padded cell", 
+								"A room with several screens connected to security cameras to monitor the building",
+								"Surveillance");
+		Room paddedCell = new Room("You can go back to the surveillance, or in the", 
+								"A room with several screens connected to security cameras to monitor the building",
+								"Padded Cell");
+		Room office = new Room("You can go back to the padded cell or go out the back door", 
+								"The room of the director of the asylum, full of documents and paperwork",
+								"Office");
         
 	}
 
