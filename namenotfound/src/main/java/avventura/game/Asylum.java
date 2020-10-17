@@ -5,13 +5,21 @@ import java.awt.event.WindowEvent;
 import java.io.PrintStream;
 
 import engine.GameDescription;
+import engine.Gateway;
 import engine.ParserOutput;
+import engine.Room;
+import hashedGraph.WeightedHashedGraph;
 
 public class Asylum extends GameDescription {
 	private static Object lock = new Object();
 	private static Manager frame;
 	private String player;
 	HandleDB db;
+
+	//game params
+	Integer health, maxMoves;
+	Boolean gasVuln, breathedGas;
+
 	@Override
 	public void init() throws Exception {
 		// TODO Auto-generated method stub
@@ -66,7 +74,15 @@ public class Asylum extends GameDescription {
 	}
 
 	private void initNew() {
+		health = 100;
+		gasVuln = true;
+		breathedGas = false;
+		maxMoves = 3;
 
+		WeightedHashedGraph<Room, Gateway> m;
+		//TO DO
+		Room room1 = new Room(description, look, name, visible, enemies, objects);
+		m.insNode(room1);
 	}
 
 	private void initFromSave(Asylum save) {
