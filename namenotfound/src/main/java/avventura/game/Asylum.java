@@ -221,12 +221,19 @@ public class Asylum extends GameDescription {
 			}
 		});
 
-		Item corpse = new Item("corpse", "Decaying corpse");
-		Item bed = new Item("bed", "Bed in which the patients slept");
-		Item screwdriver = new Item("screwdriver", "Screwdriver, this might come in handy");
-		Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases");
-		Item mirror = new Item("mirror", "Mirror in which your image is reflected");
-		ItemContainer chest = new ItemContainer("chest", "Chest that may contain something");
+		final Item corpse = new Item("corpse", "Decaying corpse");
+		final Item bed = new Item("bed", "Bed in which the patients slept");
+		final Item screwdriver = new Item("screwdriver", "Screwdriver, this might come in handy");
+		final Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases");
+		final Item flashlight = new Item("flashlight", "Torch to illuminate dark areas");
+		final Item compass = new Item("compass", "Compass useful for better orientation");
+		final Item pills = new Item("pills", "Pills that cure you of some discomfort");
+		final Item adrenaline = new Item("adrenaline", "Syringes of adrenaline that increase your health");
+		final Item mirror = new Item("mirror", "Mirror in which your image is reflected");
+		final Item scalpel = new Item("scalpel", "Scalpel used in experiments");
+		final Item pc = new Item("pc", "Computer used to interact with security systems");
+		final Item gun = new Item("gun", "Gun probably used against rebellious patients");
+		final ItemContainer chest = new ItemContainer("chest", "Chest that may contain something");
 		room1.getObjects().add(corpse);
 		room1.getObjects().add(bed);
 		room1.getObjects().add(key);
@@ -266,6 +273,17 @@ public class Asylum extends GameDescription {
 								"Office");
 		m.insNode(office);
 
+		infirmary.getObjects().add(pills);
+		infirmary.getObjects().add(adrenaline);
+		infirmary.getObjects().add(adrenaline);
+		surgery.getObjects().add(scalpel);
+		surgery.getObjects().add(bed);
+		surveillance.getObjects().add(gun);
+		surveillance.getObjects().add(pc);
+		paddedCell.getObjects().add(mirror);
+
+
+		
 		//doors
 		m.insArc(room1, hallway, new Gateway(Direction.SOUTH, key.getId(), true));
 		m.insArc(room2, hallway, new Gateway(Direction.SOUTH));
