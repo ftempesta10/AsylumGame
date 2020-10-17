@@ -79,4 +79,10 @@ public class Item implements Serializable {
 		this.handler = handler;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+
+
 }
