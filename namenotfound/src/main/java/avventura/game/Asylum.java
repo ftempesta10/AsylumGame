@@ -17,6 +17,7 @@ import engine.Item;
 import engine.ItemContainer;
 import engine.ParserOutput;
 import engine.Room;
+import engine.Weapon;
 import hashedGraph.WeightedHashedGraph;
 
 public class Asylum extends GameDescription {
@@ -28,6 +29,7 @@ public class Asylum extends GameDescription {
 	//game params
 	Integer health, maxMoves;
 	Boolean gasVuln, breathedGas;
+
 
 	final EventHandler invalidCommand = new EventHandler() {
 
@@ -182,6 +184,15 @@ public class Asylum extends GameDescription {
 			@Override
 			public EventHandler apply(CommandType t) {
 				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(key.getDescription());
+						}
+					};
+					break;
 				case USE:
 					return new EventHandler() {
 
@@ -271,7 +282,6 @@ public class Asylum extends GameDescription {
 				switch (t) {
 				case LOOK_AT:
 					return new EventHandler() {
-
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
@@ -287,18 +297,56 @@ public class Asylum extends GameDescription {
 			}
 		});
 
-		final Item screwdriver = new Item("screwdriver", "Screwdriver, this might come in handy");
+		final Weapon screwdriver = new Weapon("screwdriver", "Screwdriver, this might come in handy", new CommandHandler() {
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-screwdriver.getDamage());
+						}
+					};
+					break;
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getInventory().remove(screwdriver);
+						}
+					};
+					break;
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getInventory().add(screwdriver);
+						}
+					};
+				default:
+					return invalidCommand;
+					break;
+				}
+				return null;
+			}
+		}, 0, 5, 15);
+
 		final Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases");
 		final Item flashlight = new Item("flashlight", "Torch to illuminate dark areas");
 		final Item compass = new Item("compass", "Compass useful for better orientation");
 		final Item pills = new Item("pills", "Pills that cure you of some discomfort");
 		final Item adrenaline = new Item("adrenaline", "Syringes of adrenaline that increase your health");
 		final Item mirror = new Item("mirror", "Mirror in which your image is reflected");
-		final Item scalpel = new Item("scalpel", "Scalpel used in experiments");
+		final Wepaon scalpel = new Item("scalpel", "Scalpel used in experiments");
 		final Item pc = new Item("pc", "Computer used to interact with security systems");
-		final Item gun = new Item("gun", "Gun probably used against rebellious patients");
+		final Wepaon gun = new Item("gun", "Gun probably used against rebellious patients");
 		final ItemContainer chest = new ItemContainer("chest", "Chest that may contain something");
-		room1.getObjects().add(corpse);
+		room1.getEnemies().add(corpse);
 		room1.getObjects().add(bed);
 		room1.getObjects().add(key);
 		room2.getObjects().add(bed);

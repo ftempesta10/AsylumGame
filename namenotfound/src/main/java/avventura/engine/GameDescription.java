@@ -11,6 +11,7 @@ public abstract class GameDescription {
     private WeightedHashedGraph<Room, Gateway> map;
     private Inventory inventory;
     private Item commandTarget;
+    private Enemy currentEnemy;
 
     private List<Command> commands = new ArrayList<Command>();
 
@@ -18,7 +19,19 @@ public abstract class GameDescription {
         return currentRoom;
     }
 
-    public void setCurrentRoom(Room currentRoom) {
+    public Enemy getCurrentEnemy() {
+		return currentEnemy;
+	}
+
+	public void setCurrentEnemy(Enemy currentEnemy) {
+		this.currentEnemy = currentEnemy;
+	}
+
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
+	}
+
+	public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
     }
 

@@ -122,8 +122,6 @@ public class Room {
 		this.visited = visited;
 	}
 
-
-
 	public List<AdventureCharacter> getEnemies() {
 		return enemies;
 	}
