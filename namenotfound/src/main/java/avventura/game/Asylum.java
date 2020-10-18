@@ -4,6 +4,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.PrintStream;
 
+import engine.AdventureCharacter;
 import engine.Command;
 import engine.CommandHandler;
 import engine.CommandType;
@@ -11,6 +12,7 @@ import engine.Direction;
 import engine.EventHandler;
 import engine.GameDescription;
 import engine.Gateway;
+import engine.Inventory;
 import engine.Item;
 import engine.ItemContainer;
 import engine.ParserOutput;
@@ -26,6 +28,15 @@ public class Asylum extends GameDescription {
 	//game params
 	Integer health, maxMoves;
 	Boolean gasVuln, breathedGas;
+
+	final EventHandler invalidCommand = new EventHandler() {
+
+		@Override
+		public void accept(GameDescription t) {
+			// TODO Auto-generated method stub
+			System.out.println("I am not sure this is possible!");
+		}
+	};
 
 	@Override
 	public void init() throws Exception {
@@ -189,6 +200,7 @@ public class Asylum extends GameDescription {
 							}
 						}
 					};
+					break;
 				case PICK_UP:
 					return new EventHandler() {
 
@@ -198,6 +210,7 @@ public class Asylum extends GameDescription {
 							t.getInventory().add(key);
 						}
 					};
+					break;
 				case DROP:
 					return new EventHandler() {
 
@@ -207,22 +220,72 @@ public class Asylum extends GameDescription {
 							t.getInventory().remove(key);
 						}
 					};
+					break;
 				default:
+					return invalidCommand;
+				}
+
+			}
+		});
+		Inventory corpeInv = new Inventory();
+		corpeInv.add(key);
+		final Item hint = new Item("note", "Remember: 12689 to stay alive!", new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case LOOK_AT:
 					return new EventHandler() {
 
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("I am not sure this is possible!");
+							System.out.println(hint.getDescription());
 						}
 					};
+					break;
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getInventory().add(hint);
+						}
+					};
+					break;
+				default:
+					return invalidCommand;
+					break;
 				}
-
+				return null;
 			}
 		});
+		corpeInv.add(hint);
+		AdventureCharacter corpse = new AdventureCharacter(0, "corpe", "decaying corpe", null, corpeInv, null);
+		final Item bed = new Item("bed", "Bed in which the patients slept", new CommandHandler() {
 
-		Item corpse = new Item("corpse", "Decaying corpse");
-		Item bed = new Item("bed", "Bed in which the patients slept");
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case LOOK_AT:
+					return new EventHandler() {
+
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(bed.getDescription());
+						}
+					};
+					break;
+				default:
+					return invalidCommand;
+					break;
+				}
+				return null;
+			}
+		});
 		Item screwdriver = new Item("screwdriver", "Screwdriver, this might come in handy");
 		Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases");
 		Item mirror = new Item("mirror", "Mirror in which your image is reflected");
