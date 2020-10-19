@@ -130,6 +130,10 @@ public class Asylum extends GameDescription {
         Command push = new Command(CommandType.PUSH, "premi");
         push.setAlias(new String[]{"spingi","attiva"});
         getCommands().add(push);
+        Command brek = new Command(CommandType.BREAK, "rompi");
+        push.setAlias(new String[]{"distruggi","spacca","colpisci"});
+        getCommands().add(push);
+        
       //Rooms
         Room room1 = new Room("You awake confused in a room...try to remember what brought you here. You have severe pain in your head, something must have hit you. A nauseating stench is in the air ...",
         					   	"There is a corpse, an unmade bed and a key, you can only go south towards the corridor",
@@ -350,7 +354,6 @@ public class Asylum extends GameDescription {
 		}, 0, 5, 15);
 
 		final Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases", new CommandHandler() {
-
 			@Override
 			public EventHandler apply(CommandType t) {
 				switch(t) {
@@ -459,15 +462,209 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		});
-
+		final Item pills = new Item("pills", "Pills that cure you of some discomfort", new CommandHandler() {
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							int recovery = t.getPlayer().getHealth() + 30;
+							if(recovery < health) t.getPlayer().setHealth(recovery);
+							else t.getPlayer().setHealth(health);						}
+					};
+					break;
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(pills.getDescription());
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().add(pills);
+							t.getInventory().remove(pills);
+						}
+					};
+					break;
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().remove(pills);
+							t.getInventory().add(pills);
+						}
+					};
+					break;
+				default:
+					return invalidCommand;
+					break;
+				}
+				return null;
+			}
+		});
+		
+		final Item adrenaline = new Item("adrenaline", "Syringes of adrenaline that increase your health", new CommandHandler() {
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getPlayer().setHealth(health);						}
+					};
+					break;
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(adrenaline.getDescription());
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().add(adrenaline);
+							t.getInventory().remove(adrenaline);
+						}
+					};
+					break;
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().remove(adrenaline);
+							t.getInventory().add(adrenaline);
+						}
+					};
+					break;
+				default:
+					return invalidCommand;
+					break;
+				}
+				return null;
+			}
+		});
+		
+		//PULL, WALK_TO, TALK_TO, GIVE, USE, TURN_ON, TURN_OFF
+		final Item mirror = new Item("mirror", "Mirror in which your image is reflected", new CommandHandler() {
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getPlayer().setHealth(health);						}
+					};
+					break;
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(mirror.getDescription());
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().add(mirror);
+							t.getInventory().remove(mirror);
+						}
+					};
+					break;
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().remove(mirror);
+							t.getInventory().add(mirror);
+						}
+					};
+					break;
+				case BREAK:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().add(pills);
+						}
+					};
+					break;
+				default:
+					return invalidCommand;
+					break;
+				}
+				return null;
+			}
+		});
+		
+		final ItemContainer chest = new ItemContainer("chest", "Chest that may contain something", , new CommandHandler() {
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(chest.getDescription());
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().add(chest);
+							t.getInventory().remove(chest);
+						}
+					};
+					break;
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().remove(chest);
+							t.getInventory().add(chest);
+						}
+					};
+					break;
+				default:
+					return invalidCommand;
+					break;
+				}
+				return null;
+			}
+		});
 		final Item compass = new Item("compass", "Compass useful for better orientation");
-		final Item pills = new Item("pills", "Pills that cure you of some discomfort");
-		final Item adrenaline = new Item("adrenaline", "Syringes of adrenaline that increase your health");
-		final Item mirror = new Item("mirror", "Mirror in which your image is reflected");
 		final Weapon scalpel = new Item("scalpel", "Scalpel used in experiments");
 		final Item pc = new Item("pc", "Computer used to interact with security systems");
 		final Weapon gun = new Item("gun", "Gun probably used against rebellious patients");
-		final ItemContainer chest = new ItemContainer("chest", "Chest that may contain something");
 		room1.getEnemies().add(corpse);
 		room1.getObjects().add(bed);
 		room1.getObjects().add(key);
