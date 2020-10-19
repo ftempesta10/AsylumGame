@@ -6,20 +6,21 @@ import java.util.List;
 public class Room {
 	private static Integer istances = 0;
 	private String description, look, name;
-	private Boolean visible;
+	private Boolean hasLight, visible;
 	private Integer id;
 	private EventHandler trap;
 	private Boolean visited = false;
 	private List<AdventureCharacter> enemies = new ArrayList<AdventureCharacter>();
 	private List<Item> objects = new ArrayList<Item>();
 
-	public Room(String description, String look, String name, Boolean visible,
+	public Room(String description, String look, String name, Boolean hasLight,
 					List<AdventureCharacter> enemies, List<Item> objects) {
 		super();
 		this.description = description;
 		this.look = look;
 		this.name = name;
-		this.visible = visible;
+		this.hasLight = hasLight;
+		visible = hasLight;
 		this.enemies.addAll(enemies);
 		this.objects.addAll(objects);
 		id = istances;
@@ -32,10 +33,11 @@ public class Room {
 		this.description = description;
 		this.look = look;
 		this.name = name;
-		this.visible = true;
+		this.hasLight = true;
 		id = istances;
 		istances++;
 		trap = null;
+		visible = hasLight;
 	}
 
 	public String getDescription() {
@@ -62,12 +64,12 @@ public class Room {
 		this.name = name;
 	}
 
-	public Boolean isVisible() {
-		return visible;
+	public Boolean hasLight() {
+		return hasLight;
 	}
 
-	public void setVisible(Boolean visible) {
-		this.visible = visible;
+	public void setLight(Boolean hasLight) {
+		this.hasLight = hasLight;
 	}
 
 	public Integer getId() {
@@ -137,4 +139,14 @@ public class Room {
 	public void setObjects(List<Item> objects) {
 		this.objects = objects;
 	}
+
+	public Boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
+
+
 }

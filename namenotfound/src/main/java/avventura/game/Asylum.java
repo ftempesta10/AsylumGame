@@ -219,6 +219,7 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							t.getInventory().add(key);
+							t.getCurrentRoom().getObjects().remove(key);
 						}
 					};
 					break;
@@ -229,13 +230,13 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							t.getInventory().remove(key);
+							t.getCurrentRoom().getObjects().add(key);
 						}
 					};
 					break;
 				default:
 					return invalidCommand;
 				}
-
 			}
 		});
 		Inventory corpeInv = new Inventory();
@@ -262,9 +263,19 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							t.getInventory().add(hint);
+							t.getCurrentRoom().getObjects().remove(hint);
 						}
 					};
 					break;
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getInventory().remove(hint);
+							t.getCurrentRoom().getObjects().add(hint);
+						}
+					};
 				default:
 					return invalidCommand;
 					break;
@@ -317,6 +328,7 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							t.getInventory().remove(screwdriver);
+							t.getCurrentRoom().getObjects().add(screwdriver);
 						}
 					};
 					break;
@@ -326,6 +338,7 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							t.getInventory().add(screwdriver);
+							t.getCurrentRoom().getObjects().remove(screwdriver);
 						}
 					};
 				default:
@@ -336,15 +349,124 @@ public class Asylum extends GameDescription {
 			}
 		}, 0, 5, 15);
 
-		final Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases");
-		final Item flashlight = new Item("flashlight", "Torch to illuminate dark areas");
+		final Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases", new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(gasmask.getDescription());
+						}
+					};
+					break;
+				case USE:
+					return new EventHandler() {
+
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							gasVuln = false;
+						}
+					};
+					break;
+				case PICK_UP:
+					return new EventHandler() {
+
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getInventory().add(gasmask);
+							t.getCurrentRoom().getObjects().remove(gasmask);
+						}
+					};
+					break;
+				case DROP:
+					return new EventHandler() {
+
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getInventory().remove(gasmask);
+							t.getCurrentRoom().getObjects().add(gasmask);
+						}
+					};
+					break;
+				default:
+					return invalidCommand;
+				}
+			}
+		});
+		final Item flashlight = new Item("flashlight", "Torch to illuminate dark areas", new CommandHandler() {
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case USE:
+				case TURN_ON:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().setVisible(true);
+						}
+					};
+					break;
+				case TURN_OFF:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().setVisible(t.getCurrentRoom().hasLight());
+						}
+					};
+					break;
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(flashlight.getDescription());
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().add(flashlight);
+							t.getInventory().remove(flashlight);
+						}
+					};
+					break;
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().getObjects().remove(flashlight);
+							t.getInventory().add(flashlight);
+						}
+					};
+					break;
+				default:
+					return invalidCommand;
+					break;
+				}
+				return null;
+			}
+		});
+
 		final Item compass = new Item("compass", "Compass useful for better orientation");
 		final Item pills = new Item("pills", "Pills that cure you of some discomfort");
 		final Item adrenaline = new Item("adrenaline", "Syringes of adrenaline that increase your health");
 		final Item mirror = new Item("mirror", "Mirror in which your image is reflected");
-		final Wepaon scalpel = new Item("scalpel", "Scalpel used in experiments");
+		final Weapon scalpel = new Item("scalpel", "Scalpel used in experiments");
 		final Item pc = new Item("pc", "Computer used to interact with security systems");
-		final Wepaon gun = new Item("gun", "Gun probably used against rebellious patients");
+		final Weapon gun = new Item("gun", "Gun probably used against rebellious patients");
 		final ItemContainer chest = new ItemContainer("chest", "Chest that may contain something");
 		room1.getEnemies().add(corpse);
 		room1.getObjects().add(bed);
