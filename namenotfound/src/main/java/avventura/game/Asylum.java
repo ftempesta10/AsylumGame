@@ -133,7 +133,7 @@ public class Asylum extends GameDescription {
         Command brek = new Command(CommandType.BREAK, "rompi");
         push.setAlias(new String[]{"distruggi","spacca","colpisci"});
         getCommands().add(push);
-        
+
       //Rooms
         Room room1 = new Room("You awake confused in a room...try to remember what brought you here. You have severe pain in your head, something must have hit you. A nauseating stench is in the air ...",
         					   	"There is a corpse, an unmade bed and a key, you can only go south towards the corridor",
@@ -403,7 +403,7 @@ public class Asylum extends GameDescription {
 				}
 			}
 		});
-		
+
 		final Item flashlight = new Item("flashlight", "Torch to illuminate dark areas", new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -463,7 +463,7 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		});
-		
+
 		final Item pills = new Item("pills", "Pills that cure you of some discomfort", new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -514,7 +514,7 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		});
-		
+
 		final Item adrenaline = new Item("adrenaline", "Syringes of adrenaline that increase your health", new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -563,7 +563,7 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		});
-		
+
 		final Item mirrorBathroom = new Item("mirror", "Mirror in which your image is reflected", new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -606,7 +606,7 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		});
-		
+
 		final Item compass = new Item("compass", "Compass useful for better orientation", new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -657,7 +657,7 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		});
-		
+
 		final ItemContainer chest = new ItemContainer("chest", "Chest that may contain something", new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -668,45 +668,44 @@ public class Asylum extends GameDescription {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println(chest.getDescription());
+							if(!chest.isOpened()) {
+								System.out.println(chest.getDescription());
+							}else {
+								System.out.println("This chest contains: ");
+								for(Item i: chest.getContent()) {
+									System.out.println(i.getName());
+								}
+							}
 						}
 					};
-					break;
 				case OPEN:
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							if(!chest.isOpened()) {
-								if(!chest.isPushed()) {
-									t.getCurrentRoom().getObjects().add(flashlight);
-									t.getCurrentRoom().getObjects().add(compass);
-									chest.setPushed(true);
-								}
+							if(!chest.isOpened() && !chest.isLocked()) {
 								chest.setOpened(true);
+							}else if(chest.isLocked()) {
+								System.out.println("Is locked! Probably you need a key...");
 							}
 						}
 					};
-					break;
 				case CLOSE:
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							if(chest.isOpened()) {
 								chest.setOpened(false);
-							}
+								if(chest.getLockedBy()!=null)
+									chest.setLocked(true);
 						}
 					};
-					break;
 				default:
 					return invalidCommand;
-					break;
 				}
-				return null;
 			}
 		});
-		
+
 		final Item pc = new Item("pc", "Computer used to interact with security systems", new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -726,7 +725,7 @@ public class Asylum extends GameDescription {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println(chest.getDescription());
+							System.out.println(pc.getDescription());
 						}
 					};
 					break;
@@ -737,7 +736,7 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		});
-		
+
 		final Weapon scalpel = new Weapon("scalpel", "Scalpel used in experiments",  new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -778,7 +777,7 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		}, 15, 10, 30);
-		
+
 		final Weapon gun = new Weapon("gun", "Gun probably used against rebellious patients",   new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -789,7 +788,12 @@ public class Asylum extends GameDescription {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-gun.getDamage());
+							if(gun.getShots()>0) {
+								t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-gun.getDamage());
+								gun.setShots(gun.getShots()-1);
+							}else {
+								System.out.println("Ops... You run out of bullets!!");
+							}
 						}
 					};
 					break;
@@ -819,10 +823,10 @@ public class Asylum extends GameDescription {
 				return null;
 			}
 		}, 7, 30, 70);
-		
+
 		final Item mirrorCell = new Item("mirror", "Mirror in which your image is reflected");
-		
-		
+
+
 		room1.getEnemies().add(corpse);
 		room1.getObjects().add(bed);
 		room1.getObjects().add(key);
