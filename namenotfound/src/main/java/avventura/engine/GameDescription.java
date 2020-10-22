@@ -12,17 +12,8 @@ public abstract class GameDescription {
     private Inventory inventory;
     private Item commandTarget;
     private Enemy currentEnemy;
-    public AdventureCharacter player;
 
     private List<Command> commands = new ArrayList<Command>();
-
-    public AdventureCharacter getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(AdventureCharacter player) {
-		this.player = player;
-	}
 
 	public Room getCurrentRoom() {
         return currentRoom;
