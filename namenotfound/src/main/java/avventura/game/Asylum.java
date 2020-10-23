@@ -183,6 +183,34 @@ public class Asylum extends GameDescription {
 								"A room with a mirror and a toilet. You could take advantage of ... no, better to avoid",
         						"Bathroom");
         m.insNode(bathroom);
+        
+      //second floor
+  		Room hallway4 = new Room("You can enter in the surgery, in the infirmary or in surveillance",
+  							   	"An hallway with paintings depicting skeletons in daily actions. In one corner there is a statue of Santua Muerte. Maybe you are in a place of worship?",
+  								"Hallway 4");
+  		m.insNode(hallway4);
+  		Room infirmary = new Room("You can only go back to the hallway",
+  								"A room with several shelves full of medicines. Here the patients were to be medicated",
+  								"Infirmary");
+  		m.insNode(infirmary);
+  		Room surgery = new Room("You can only go back to the hallway",
+  								"A room with many medical tools. Here the operations were carried out on patients",
+  								"Surgery");
+  		m.insNode(surgery);
+  		Room surveillance = new Room("You can go back to the hallway",
+  								"A room with several screens connected to security cameras to monitor the building",
+  								"Surveillance");
+  		m.insNode(surveillance);
+  		Room paddedCell = new Room("You can go back to the surveillance, or in the",
+  								"A room with several screens connected to security cameras to monitor the building",
+  								"Padded Cell");
+  		m.insNode(paddedCell);
+  		Room office = new Room("You can go back to the padded cell or go out the back door",
+  								"The room of the director of the asylum, full of documents and paperwork",
+  								"Office");
+  		m.insNode(office);
+                
+        
 		final Item key = new Item("key", "Useful key to open something", null);
 		key.setHandler(new CommandHandler() {
 
@@ -750,12 +778,44 @@ public class Asylum extends GameDescription {
 			}
 		});
 
-		final Item mirrorCell = new Item("mirror", "Mirror in which your image is reflected", new CommandHandler() {
-
+		final Item mirrorCell = new Item("mirror", "Mirror in which your image is reflected", null);
+		mirrorBathroom.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
 				// TODO Auto-generated method stub
-				return null;
+				switch (t) {
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(mirrorCell.getDescription());
+						}
+					};
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(mirrorCell.getDescription());
+						}
+					};
+				case BREAK:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							if(!mirrorBathroom.isPushed()) {
+								
+								//inserire l'arco
+								m.insArc(paddedCell, office, new Gateway(Direction.SOUTH));
+								mirrorBathroom.setPushed(true);
+							}
+						}
+					};
+				default:
+					return invalidCommand;
+				}
 			}
 		});
 
@@ -773,31 +833,7 @@ public class Asylum extends GameDescription {
 		room8.getObjects().add(bed);
 		bathroom.getObjects().add(mirrorBathroom);
 
-		//second floor
-		Room hallway4 = new Room("You can enter in the surgery, in the infirmary or in surveillance",
-							   	"An hallway with paintings depicting skeletons in daily actions. In one corner there is a statue of Santua Muerte. Maybe you are in a place of worship?",
-								"Hallway 4");
-		m.insNode(hallway4);
-		Room infirmary = new Room("You can only go back to the hallway",
-								"A room with several shelves full of medicines. Here the patients were to be medicated",
-								"Infirmary");
-		m.insNode(infirmary);
-		Room surgery = new Room("You can only go back to the hallway",
-								"A room with many medical tools. Here the operations were carried out on patients",
-								"Surgery");
-		m.insNode(surgery);
-		Room surveillance = new Room("You can go back to the hallway",
-								"A room with several screens connected to security cameras to monitor the building",
-								"Surveillance");
-		m.insNode(surveillance);
-		Room paddedCell = new Room("You can go back to the surveillance, or in the",
-								"A room with several screens connected to security cameras to monitor the building",
-								"Padded Cell");
-		m.insNode(paddedCell);
-		Room office = new Room("You can go back to the padded cell or go out the back door",
-								"The room of the director of the asylum, full of documents and paperwork",
-								"Office");
-		m.insNode(office);
+		
 
 		infirmary.getObjects().add(pills);
 		infirmary.getObjects().add(adrenaline);
@@ -814,8 +850,27 @@ public class Asylum extends GameDescription {
 		m.insArc(room1, hallway, new Gateway(Direction.SOUTH, key.getId(), true));
 		m.insArc(room2, hallway, new Gateway(Direction.SOUTH));
 		m.insArc(room5, hallway, new Gateway(Direction.NORTH));
+		m.insArc(room6, hallway, new Gateway(Direction.NORTH));
 
+		m.insArc(hallway, hallway2, new Gateway(Direction.EAST));
 
+		m.insArc(room3, hallway2, new Gateway(Direction.SOUTH));
+		m.insArc(room4, hallway2, new Gateway(Direction.SOUTH));
+		m.insArc(room7, hallway2, new Gateway(Direction.NORTH));
+		m.insArc(room8, hallway2, new Gateway(Direction.NORTH));
+		
+		m.insArc(hallway2, hallway3, new Gateway(Direction.EAST));
+		
+		m.insArc(bathroom, hallway3, new Gateway(Direction.SOUTH));
+		
+		m.insArc(hallway3, hallway4, new Gateway(Direction.SOUTH));
+		
+		m.insArc(hallway4, surgery, new Gateway(Direction.EAST));
+		m.insArc(hallway4, infirmary, new Gateway(Direction.EAST));
+		m.insArc(hallway4, surveillance, new Gateway(Direction.OVEST));
+		
+		m.insArc(surveillance, paddedCell, new Gateway(Direction.SOUTH));
+		
 	}
 
 	// CLOSE, PULL, WALK_TO,  TALK_TO, GIVE, USE, TURN_ON, TURN_OFF
