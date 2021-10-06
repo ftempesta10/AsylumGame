@@ -183,7 +183,7 @@ public class Asylum extends GameDescription {
 								"A room with a mirror and a toilet. You could take advantage of ... no, better to avoid",
         						"Bathroom");
         m.insNode(bathroom);
-        
+
       //second floor
   		Room hallway4 = new Room("You can enter in the surgery, in the infirmary or in surveillance",
   							   	"An hallway with paintings depicting skeletons in daily actions. In one corner there is a statue of Santua Muerte. Maybe you are in a place of worship?",
@@ -209,8 +209,8 @@ public class Asylum extends GameDescription {
   								"The room of the director of the asylum, full of documents and paperwork",
   								"Office");
   		m.insNode(office);
-                
-        
+
+
 		final Item key = new Item("key", "Useful key to open something", null);
 		key.setHandler(new CommandHandler() {
 
@@ -232,10 +232,14 @@ public class Asylum extends GameDescription {
 							// TODO Auto-generated method stub
 							WeightedHashedGraph<Room, Gateway> m = t.getMap();
 							if(t.getCurrentRoom().getName().equals("Dormitory 1")) {
-								for(Room a : m.getAdjacents(t.getCurrentRoom())) {
-									if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==key.getId()) {
-										m.readArc(t.getCurrentRoom(), a).setLocked(false);
+								try {
+									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
+										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==key.getId()) {
+											m.readArc(t.getCurrentRoom(), a).setLocked(false);
+										}
 									}
+								} catch (Exception e) {
+									System.out.println(e.getMessage());
 								}
 							}else {
 								System.out.println("There is nothing to open here with this key!");
@@ -301,7 +305,8 @@ public class Asylum extends GameDescription {
 		});
 		corpeInv.add(hint);
 		final AdventureCharacter corpse = new AdventureCharacter(0, "corpe", "decaying corpe", null, corpeInv, null);
-		final Item bed = new Item("bed", "Bed in which the patients slept", new CommandHandler() {
+		final Item bed = new Item("bed", "Bed in which the patients slept", null);
+		bed.setHandler(new CommandHandler() {
 
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -320,6 +325,26 @@ public class Asylum extends GameDescription {
 				}
 			}
 		});
+		/*
+		final Item bed = new Item("bed", "Bed in which the patients slept", new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				// TODO Auto-generated method stub
+				switch (t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(bed.getDescription());
+						}
+					};
+				default:
+					return invalidCommand;
+				}
+			}
+		});*/
 
 		final Weapon screwdriver = new Weapon("screwdriver", "Screwdriver, this might come in handy", null, 0, 5, 15);
 		screwdriver.setHandler(new CommandHandler() {
@@ -806,7 +831,7 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							if(!mirrorBathroom.isPushed()) {
-								
+
 								//inserire l'arco
 								m.insArc(paddedCell, office, new Gateway(Direction.SOUTH));
 								mirrorBathroom.setPushed(true);
@@ -833,7 +858,7 @@ public class Asylum extends GameDescription {
 		room8.getObjects().add(bed);
 		bathroom.getObjects().add(mirrorBathroom);
 
-		
+
 
 		infirmary.getObjects().add(pills);
 		infirmary.getObjects().add(adrenaline);
@@ -858,19 +883,19 @@ public class Asylum extends GameDescription {
 		m.insArc(room4, hallway2, new Gateway(Direction.SOUTH));
 		m.insArc(room7, hallway2, new Gateway(Direction.NORTH));
 		m.insArc(room8, hallway2, new Gateway(Direction.NORTH));
-		
+
 		m.insArc(hallway2, hallway3, new Gateway(Direction.EAST));
-		
+
 		m.insArc(bathroom, hallway3, new Gateway(Direction.SOUTH));
-		
+
 		m.insArc(hallway3, hallway4, new Gateway(Direction.SOUTH));
-		
+
 		m.insArc(hallway4, surgery, new Gateway(Direction.EAST));
 		m.insArc(hallway4, infirmary, new Gateway(Direction.EAST));
 		m.insArc(hallway4, surveillance, new Gateway(Direction.OVEST));
-		
+
 		m.insArc(surveillance, paddedCell, new Gateway(Direction.SOUTH));
-		
+
 	}
 
 	// CLOSE, PULL, WALK_TO,  TALK_TO, GIVE, USE, TURN_ON, TURN_OFF
