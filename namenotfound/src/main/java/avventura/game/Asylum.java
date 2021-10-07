@@ -9,6 +9,7 @@ import engine.Command;
 import engine.CommandHandler;
 import engine.CommandType;
 import engine.Direction;
+import engine.Enemy;
 import engine.EventHandler;
 import engine.GameDescription;
 import engine.Gateway;
@@ -830,11 +831,11 @@ public class Asylum extends GameDescription {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							if(!mirrorBathroom.isPushed()) {
+							if(!mirrorCell.isPushed()) {
 
 								//inserire l'arco
 								m.insArc(paddedCell, office, new Gateway(Direction.SOUTH));
-								mirrorBathroom.setPushed(true);
+								mirrorCell.setPushed(true);
 							}
 						}
 					};
@@ -843,6 +844,66 @@ public class Asylum extends GameDescription {
 				}
 			}
 		});
+		
+		final Item codePaper = new Item("code paper", "Useful code to open something", null);
+		key.setHandler(new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(codePaper.getDescription());
+						}
+					};
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							WeightedHashedGraph<Room, Gateway> m = t.getMap();
+							if(t.getCurrentRoom().getName().equals("hallway2")) {
+								try {
+									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
+										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==codePaper.getId()) {
+											m.readArc(t.getCurrentRoom(), a).setLocked(false);
+										}
+									}
+								} catch (Exception e) {
+									System.out.println(e.getMessage());
+								}
+							}else {
+								System.out.println("There is nothing to open here with this code!");
+							}
+						}
+					};
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.pickUp(codePaper, t);
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.drop(codePaper, t);
+						}
+					};
+				default:
+					return invalidCommand;
+				}};
+		});
+		
+		final Enemy human = new Enemy(100, "human", "disfigured human", "commento umano", null, codePaper,5,20);
+		final Enemy assistant = new Enemy(100, "assistant", "director's assistant", "commento assistente", null, null,5,20);
+		final Enemy director = new Enemy(100, "director", "asylum's director", "commento direttore", null, null,5,20);
 
 
 		room1.getEnemies().add(corpse);
@@ -850,6 +911,7 @@ public class Asylum extends GameDescription {
 		room1.getObjects().add(key);
 		room2.getObjects().add(bed);
 		room3.getObjects().add(chest);
+		hallway2.getEnemies().add(human);
 		room4.getObjects().add(bed);
 		room5.getObjects().add(bed);
 		room6.getObjects().add(screwdriver);
@@ -868,6 +930,8 @@ public class Asylum extends GameDescription {
 		surveillance.getObjects().add(gun);
 		surveillance.getObjects().add(pc);
 		paddedCell.getObjects().add(mirrorCell);
+		paddedCell.getEnemies().add(assistant);
+		office.getEnemies().add(director);
 
 
 
