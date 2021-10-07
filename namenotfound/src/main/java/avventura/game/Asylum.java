@@ -136,79 +136,89 @@ public class Asylum extends GameDescription {
         getCommands().add(push);
 
       //Rooms
-        Room room1 = new Room("You awake confused in a room...try to remember what brought you here. You have severe pain in your head, something must have hit you. A nauseating stench is in the air ...",
-        					   	"There is a corpse, an unmade bed and a key, you can only go south towards the corridor",
-        						"Dormitory 1");
+        
+        //Start Game Message
+        // Ti svegli confuso in una stanza...cerchi di ricordare cosa ti ha portato qui. Stavi indagando su qualcosa ma non riesci a ricordare...hai un forte dolore alla testa. Un odore nauseabondo è nell'aria...
+
+
+        Room room1 = new Room("Sei nel dormitorio n°1, una stanza piccola e puzzolente",
+			   	               "In un angolo giace un cadavere, accanto a te c'è un letto in disordine. Vedi una porta che conduce a sud.",
+				               "Dormitorio 1");
         m.insNode(room1);
-        Room room2 = new Room("You can only go back to the hallway",
-								"There is only one bad",
-								"Dormitory 2");
+        Room room2 = new Room("Sei nel dormitorio n°2",
+				               "Vedi un letto. Puoi solo tornare indietro nel corridoio.",
+				               "Dormitorio 2");
         m.insNode(room2);
-        Room room3 = new Room("You can only go back to the hallway",
-								"A room full of clothes and with a washing machine. Better leave them in their place ...",
-								"Laundry");
+        Room room3 = new Room("Sei in una stanza piena di vestiti sparsi sul pavimento ed una lavatrice. Ci saranno momenti più adatti per aggiornare il tuo guardaroba!",
+				               "Non vedi altre porte. Noti una scatola per terra, conterrà qualcosa?",
+				               "Lavanderia");
         m.insNode(room3);
-        Room room4 = new Room("You can only go back to the hallway",
-								"There is only one bad",
-								"Dormitory 4");
+        Room room4 = new Room("Sei nel dormitorio n°4",
+				               "Vedi un letto. Puoi solo tornare indietro nel corridoio.",
+				               "Dormitorio 4");
         m.insNode(room4);
-        Room room5 = new Room("You can only go back to the hallway",
-								"A room with an unmade bed",
-								"Dormitory 5");
+        Room room5 = new Room("Sei nel dormitorio n°5",
+				               "Vedi un letto. Puoi solo tornare indietro nel corridoio.",
+				               "Dormitorio 5");
         m.insNode(room5);
-        Room room6 = new Room("You can only go back to the hallway",
-								"A room with a bed and numerous holes in the wall, who knows how they were made...",
-								"Dormitory 6");
+        Room room6 = new Room("Sei in una stanza piena di buchi sul muro, chissà come sono stati fatti...",
+				               "Vedi un letto ed un cacciavite per terra. Qualche paziente sperava forse che bastasse un cacciavite per crearsi una via di fuga...",
+				               "Dormitorio 6");
         m.insNode(room6);
-        Room room7 = new Room("You can only go back to the hallway",
-								"A room with an unmade bed and strange writing on the wall",
-								"Dormitory 7");
+        Room room7 = new Room("Sei nel dormitorio n°7",
+				               "Vedi un letto. Puoi solo tornare indietro nel corridoio.",
+				               "Dormitory 7");
         m.insNode(room7);
-        Room room8 = new Room("You can only go back to the hallway",
-								"A room with an unmade bed",
-        						"Dormitory 8");
+        Room room8 = new Room("Sei nel dormitorio n°8",
+				               "Vedi un letto e qualcosa sporgere da sotto ad esso. Non vedi altre porte.",
+				               "Dormitorio 8");
         m.insNode(room8);
-        Room hallway = new Room(" From the hallway you can enter room 2, 5, 6 or continue down the hallway towards a door from which monstrous voices are coming ...",
-								" A macabre hallway adorned with parts of the human body along the walls",
-        						"Hallway 1");
+        Room hallway = new Room("Sei in un corridoio macabro ornato con membra umane lungo le pareti. È chiaro che non sei in un semplice manicomio...",
+				                 "Senti dei lamenti mostruosi provenienti dalla porta di fronte a te. Puoi proseguire dritto o entrare nel dormitorio 1, 2, 5, o 6.",
+				                 "Corridoio 1");
         m.insNode(hallway);
-        Room hallway2 = new Room("You can go back down the hallway or enter room 3, 4, 7, 8 or continue down the hallway",
-								"A hallway with numerous traces of blood. Did someone drag themselves trying to escape?",
-        						"Hallway 2");
+        Room hallway2 = new Room("Sei in un corridoio con numerose tracce di sangue. Qualcuno si sarà trascinato per provare a scappare?",
+				                  "Il sangue è dappertutto. Puoi tornare indietro nel primo corridoio, o entrare nel dormitorio 3, 4, 7, 8.",
+				                  "Corridoio 2");
         m.insNode(hallway2);
-        Room hallway3 = new Room("You can go back down the hallway, enter in the bathroom or take the stairs",
-								"An hallway with paintings depicting skeletons in daily actions. In one corner there is a statue of Santua Muerte. Maybe you are in a place of worship?",
-								"Hallway 3");
+        Room hallway3 = new Room("Sei in un corridoio con quadri raffiguranti scheletri in azioni quotidiane. In un angolo c'è una statua della Santua Muerte. Forse sei in un luogo di culto?",
+				                  "Vedi scheletri ovunque. Puoi tornare indietro nel corridoio, entrare nel bagno a nord, o prendere le scale per il piano superiore",
+				                  "Corridoio 3");
         m.insNode(hallway3);
-        Room bathroom = new Room("You can only go back to the hallway",
-								"A room with a mirror and a toilet. You could take advantage of ... no, better to avoid",
-        						"Bathroom");
+        Room bathroom = new Room("Non appena entri nella stanza, nell'aria inizia a circolare del gas tossico. Se vuoi sopravvivere, forse dovresti scappare da qui e trovare qualcosa con cui proteggerti!",
+				                  "L'effetto del gas ti stordisce e non ti permette di vedere nulla. Puoi solo tornare indietro nel corridoio.",
+				                  "Bagno");
         m.insNode(bathroom);
+        /*Se hai la maschera
+        Room bathroom = new Room("Non appena entri nella stanza, i gas tossici iniziano a circolare nell'aria, ma la maschera ti protegge.",
+				"Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio.",
+				"Bagno");
+				*/
 
       //second floor
-  		Room hallway4 = new Room("You can enter in the surgery, in the infirmary or in surveillance",
-  							   	"An hallway with paintings depicting skeletons in daily actions. In one corner there is a statue of Santua Muerte. Maybe you are in a place of worship?",
-  								"Hallway 4");
+        Room hallway4 = new Room("Sei nel corridoio del piano superiore. L'atmosfera è più cupa, avverti un cattivo presentimento, sei vicino alla resa dei conti?",
+				   	              "Vedi delle porte che consentono l'accesso all'infermeria, alla sala operatoria e alla sorveglianza.",
+					              "Corridoio 4");
   		m.insNode(hallway4);
-  		Room infirmary = new Room("You can only go back to the hallway",
-  								"A room with several shelves full of medicines. Here the patients were to be medicated",
-  								"Infirmary");
+  		Room infirmary = new Room("Sei in una stanza con numerosi scaffali pieni di medicine. Qui dovrebbero essere "medicati" i pazienti.",
+					               "Vedi diversi medicinali sparsi per la stanza ed una cassa. Puoi solo tornare indietro nel corridoio.",
+					               "Infermeria");
   		m.insNode(infirmary);
-  		Room surgery = new Room("You can only go back to the hallway",
-  								"A room with many medical tools. Here the operations were carried out on patients",
-  								"Surgery");
+  		Room surgery = new Room("Sei nella stanza dove i pazienti sono sottoposti alle operazioni. Chissà a questo punto di che operazioni si tratta...",
+					             "Vedi un letto ed uno scaffale con tanti strumenti chirurgici. Puoi solo tornare indietro nel corridoio.",
+					             "Sala operatoria");
   		m.insNode(surgery);
-  		Room surveillance = new Room("You can go back to the hallway",
-  								"A room with several screens connected to security cameras to monitor the building",
-  								"Surveillance");
+  		Room surveillance = new Room("Sei in una stanza stanza con numerosi schermi collegati alle telecamere di sicurezza per controllare l'edificio.",
+					                  "Vedi un pc principale ed una pistola per terra. Puoi tornare nel corridoio o proseguire a sud verso la cella imbottita",
+					                  "Sorveglianza");
   		m.insNode(surveillance);
-  		Room paddedCell = new Room("You can go back to the surveillance, or in the",
-  								"A room with several screens connected to security cameras to monitor the building",
-  								"Padded Cell");
+  		Room paddedCell = new Room("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi. Davanti a te vedi un essere mastodontico.",
+					                "In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.",
+					                "Cella imbottita");
   		m.insNode(paddedCell);
-  		Room office = new Room("You can go back to the padded cell or go out the back door",
-  								"The room of the director of the asylum, full of documents and paperwork",
-  								"Office");
+  		Room office = new Room("Sei nell'ufficio del direttore del manicomio. Dai quadri posti lungo le pareti è possibile ripercorrere questi anni di esperimenti e gli effetti delle mutazioni nel corso del tempo. Hai di fronte la mente dietro tutto ciò, il direttore.",
+					            "Vedi delle scale che conducono all'esterno della struttura, ma il passaggio è bloccato dal direttore. Puoi tornare indietro nella cella imbottita.",
+					            "Ufficio");
   		m.insNode(office);
 
 
