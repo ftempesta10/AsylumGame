@@ -116,6 +116,18 @@ public class Asylum extends GameDescription {
         Command ovest = new Command(CommandType.WEST, "ovest");
         ovest.setAlias(new String[]{"o", "O", "Ovest", "OVEST"});
         getCommands().add(ovest);
+        Command nord_est = new Command(CommandType.NORTH_EAST, "nord_est");
+        ovest.setAlias(new String[]{"ne", "NE", "Ne", "nE", "Nord_est", "Nord_Est", "nord_Est", "NORD_EST"});
+        getCommands().add(nord_est);
+        Command north_ovest = new Command(CommandType.NORTH_WEST, "nord_ovest");
+        ovest.setAlias(new String[]{"no", "NO", "No", "nO", "Nord_ovest", "Nord_Ovest", "nord_Ovest", "NORD_OVEST"});
+        getCommands().add(nord_ovest);
+        Command sud_est = new Command(CommandType.SOUTH_EAST, "sud_est");
+        ovest.setAlias(new String[]{"se", "SE", "Se", "sE", "Sud_est", "Sud_Est", "sud_Est", "SUD_EST"});
+        getCommands().add(sud_est);
+        Command sud_ovest = new Command(CommandType.SOUTH_WEST, "sud_ovest");
+        ovest.setAlias(new String[]{"so", "SO", "So", "sO", "Sud_ovest", "Sud_Ovest", "sud_Ovest", "SUD_OVEST"});
+        getCommands().add(sud_ovest);
         Command end = new Command(CommandType.END, "end");
         end.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati","exit"});
         getCommands().add(end);
@@ -196,7 +208,7 @@ public class Asylum extends GameDescription {
 				*/
 
       //second floor
-        Room hallway4 = new Room("Sei nel corridoio del piano superiore. L'atmosfera è più cupa, avverti un cattivo presentimento, sei vicino alla resa dei conti?",
+        Room hallway4 = new Room("Sei nel corridoio del piano inferiore. L'atmosfera è più cupa, avverti un cattivo presentimento, sei vicino alla resa dei conti?",
 				   	              "Vedi delle porte che consentono l'accesso all'infermeria, alla sala operatoria e alla sorveglianza.",
 					              "Corridoio 4");
   		m.insNode(hallway4);
@@ -855,8 +867,8 @@ public class Asylum extends GameDescription {
 			}
 		});
 		
-		final Item codePaper = new Item("code paper", "Useful code to open something", null);
-		key.setHandler(new CommandHandler() {
+		final Item codePaper = new Item("code paper", "Il codice e' 1234", null);
+		codePaper.setHandler(new CommandHandler() {
 
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -868,28 +880,7 @@ public class Asylum extends GameDescription {
 							// TODO Auto-generated method stub
 							System.out.println(codePaper.getDescription());
 						}
-					};
-				case USE:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							WeightedHashedGraph<Room, Gateway> m = t.getMap();
-							if(t.getCurrentRoom().getName().equals("hallway2")) {
-								try {
-									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
-										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==codePaper.getId()) {
-											m.readArc(t.getCurrentRoom(), a).setLocked(false);
-										}
-									}
-								} catch (Exception e) {
-									System.out.println(e.getMessage());
-								}
-							}else {
-								System.out.println("There is nothing to open here with this code!");
-							}
-						}
-					};
+					};			
 				case PICK_UP:
 					return new EventHandler() {
 						@Override
@@ -904,6 +895,41 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							EventHandler.drop(codePaper, t);
+						}
+					};
+				default:
+					return invalidCommand;
+				}};
+		});
+		
+		final Item blockNotes = new Item("block notes", "INDIZIO TRAMA", null);
+		blockNotes.setHandler(new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(blockNotes.getDescription());
+						}
+					};
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.pickUp(blockNotes, t);
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.drop(blockNotes, t);
 						}
 					};
 				default:
@@ -947,28 +973,45 @@ public class Asylum extends GameDescription {
 
 		//doors
 		m.insArc(room1, hallway, new Gateway(Direction.SOUTH, key.getId(), true));
+		m.insArc(hallway, room1, new Gateway(Direction.NORTH_WEST));
 		m.insArc(room2, hallway, new Gateway(Direction.SOUTH));
+		m.insArc(hallway, room2, new Gateway(Direction.NORTH_EAST));
 		m.insArc(room5, hallway, new Gateway(Direction.NORTH));
+		m.insArc(hallway, room5, new Gateway(Direction.SOUTH_WEST));
 		m.insArc(room6, hallway, new Gateway(Direction.NORTH));
+		m.insArc(hallway, room6, new Gateway(Direction.SOUTH_EAST));
 
 		m.insArc(hallway, hallway2, new Gateway(Direction.EAST));
+		m.insArc(hallway2, hallway, new Gateway(Direction.WEST));
+
 
 		m.insArc(room3, hallway2, new Gateway(Direction.SOUTH));
+		m.insArc(hallway2, room3, new Gateway(Direction.NORTH_WEST));
 		m.insArc(room4, hallway2, new Gateway(Direction.SOUTH));
+		m.insArc(hallway2, room4, new Gateway(Direction.NORTH_EAST));
 		m.insArc(room7, hallway2, new Gateway(Direction.NORTH));
+		m.insArc(hallway2, room7, new Gateway(Direction.SOUTH_WEST));
 		m.insArc(room8, hallway2, new Gateway(Direction.NORTH));
+		m.insArc(hallway2, room8, new Gateway(Direction.SOUTH_EAST));
 
 		m.insArc(hallway2, hallway3, new Gateway(Direction.EAST));
-
+		m.insArc(hallway3, hallway2, new Gateway(Direction.WEST));
 		m.insArc(bathroom, hallway3, new Gateway(Direction.SOUTH));
+		m.insArc(hallway3, bathroom, new Gateway(Direction.NORTH));
 
 		m.insArc(hallway3, hallway4, new Gateway(Direction.SOUTH));
+		m.insArc(hallway4, hallway3, new Gateway(Direction.NORTH));
 
-		m.insArc(hallway4, surgery, new Gateway(Direction.EAST));
-		m.insArc(hallway4, infirmary, new Gateway(Direction.EAST));
-		m.insArc(hallway4, surveillance, new Gateway(Direction.OVEST));
+		m.insArc(hallway4, infirmary, new Gateway(Direction.NORTH_EAST));
+		m.insArc(infirmary, hallway4, new Gateway(Direction.WEST));
+		m.insArc(hallway4, surgery, new Gateway(Direction.SOUTH_EAST));
+		m.insArc(surgery, hallway4, new Gateway(Direction.WEST));
+		m.insArc(hallway4, surveillance, new Gateway(Direction.WEST));
+		m.insArc(surveillance, hallway4, new Gateway(Direction.EAST));
 
 		m.insArc(surveillance, paddedCell, new Gateway(Direction.SOUTH));
+		m.insArc(paddedCell, surveillance, new Gateway(Direction.NORTH));
+
 
 	}
 
