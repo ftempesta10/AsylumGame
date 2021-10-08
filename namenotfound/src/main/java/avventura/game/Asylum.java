@@ -3,6 +3,7 @@ package game;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.PrintStream;
+import java.util.Scanner;
 
 import engine.AdventureCharacter;
 import engine.Command;
@@ -121,7 +122,7 @@ public class Asylum extends GameDescription {
         getCommands().add(nord_est);
         Command north_ovest = new Command(CommandType.NORTH_WEST, "nord_ovest");
         ovest.setAlias(new String[]{"no", "NO", "No", "nO", "Nord_ovest", "Nord_Ovest", "nord_Ovest", "NORD_OVEST"});
-        getCommands().add(nord_ovest);
+        getCommands().add(north_ovest);
         Command sud_est = new Command(CommandType.SOUTH_EAST, "sud_est");
         ovest.setAlias(new String[]{"se", "SE", "Se", "sE", "Sud_est", "Sud_Est", "sud_Est", "SUD_EST"});
         getCommands().add(sud_est);
@@ -212,7 +213,7 @@ public class Asylum extends GameDescription {
 				   	              "Vedi delle porte che consentono l'accesso all'infermeria, alla sala operatoria e alla sorveglianza.",
 					              "Corridoio 4");
   		m.insNode(hallway4);
-  		Room infirmary = new Room("Sei in una stanza con numerosi scaffali pieni di medicine. Qui dovrebbero essere "medicati" i pazienti.",
+  		Room infirmary = new Room("Sei in una stanza con numerosi scaffali pieni di medicine. Qui dovrebbero essere 'medicati' i pazienti.",
 					               "Vedi diversi medicinali sparsi per la stanza ed una cassa. Puoi solo tornare indietro nel corridoio.",
 					               "Infermeria");
   		m.insNode(infirmary);
@@ -348,28 +349,8 @@ public class Asylum extends GameDescription {
 				}
 			}
 		});
-		/*
-		final Item bed = new Item("bed", "Bed in which the patients slept", new CommandHandler() {
 
-			@Override
-			public EventHandler apply(CommandType t) {
-				// TODO Auto-generated method stub
-				switch (t) {
-				case LOOK_AT:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(bed.getDescription());
-						}
-					};
-				default:
-					return invalidCommand;
-				}
-			}
-		});*/
-
-		final Weapon screwdriver = new Weapon("screwdriver", "Screwdriver, this might come in handy", null, 0, 5, 15);
+		final Weapon screwdriver = new Weapon("screwdriver", "Screwdriver, this might come in handy", null, 15, 5, 15);
 		screwdriver.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -936,6 +917,44 @@ public class Asylum extends GameDescription {
 					return invalidCommand;
 				}};
 		});
+		
+		final Item keypad = new Item("keypad", "keypad to enter a code", null);
+		keypad.setHandler(new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(keypad.getDescription());
+						}
+					};
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.pickUp(blockNotes, t);
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							Scanner scan = new Scanner(System.in);
+							String codEntered = scan.nextLine();
+							scan.close();
+						}
+					};
+				default:
+					return invalidCommand;
+				}};
+		});
+		
 		
 		final Enemy human = new Enemy(100, "human", "disfigured human", "commento umano", null, codePaper,5,20);
 		final Enemy assistant = new Enemy(100, "assistant", "director's assistant", "commento assistente", null, null,5,20);
