@@ -10,7 +10,7 @@ public class Engine {
 
 	private final GameDescription game;
 	static Locale locale = Locale.getDefault();
-	private final Parser parser;
+	public Parser parser;
 	private ResourceBundle bundle;
 
     public Engine(GameDescription game) {
@@ -19,11 +19,11 @@ public class Engine {
         this.game = game;
         try {
             this.game.init();
-
         } catch (Exception ex) {
             System.err.println(ex);
         }
         parser = null;
+        //parser = new game.ParserIT();
         /*
         if() parser = new Parser(this.loadDictionary("./resources/articoli.txt"),
         							this.loadDictionary("./resources/preposizioni.txt"));
