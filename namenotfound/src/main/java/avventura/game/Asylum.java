@@ -149,7 +149,7 @@ public class Asylum extends GameDescription {
         getCommands().add(push);
 
       //Rooms
-        
+
         //Start Game Message
         // Ti svegli confuso in una stanza...cerchi di ricordare cosa ti ha portato qui. Stavi indagando su qualcosa ma non riesci a ricordare...hai un forte dolore alla testa. Un odore nauseabondo è nell'aria...
 
@@ -847,7 +847,7 @@ public class Asylum extends GameDescription {
 				}
 			}
 		});
-		
+
 		final Item codePaper = new Item("code paper", "Il codice e' 1234", null);
 		codePaper.setHandler(new CommandHandler() {
 
@@ -861,7 +861,7 @@ public class Asylum extends GameDescription {
 							// TODO Auto-generated method stub
 							System.out.println(codePaper.getDescription());
 						}
-					};			
+					};
 				case PICK_UP:
 					return new EventHandler() {
 						@Override
@@ -882,7 +882,7 @@ public class Asylum extends GameDescription {
 					return invalidCommand;
 				}};
 		});
-		
+
 		final Item blockNotes = new Item("block notes", "INDIZIO TRAMA", null);
 		blockNotes.setHandler(new CommandHandler() {
 
@@ -917,7 +917,7 @@ public class Asylum extends GameDescription {
 					return invalidCommand;
 				}};
 		});
-		
+
 		final Item keypad = new Item("keypad", "keypad to enter a code", null);
 		keypad.setHandler(new CommandHandler() {
 
@@ -954,8 +954,8 @@ public class Asylum extends GameDescription {
 					return invalidCommand;
 				}};
 		});
-		
-		
+
+
 		final Enemy human = new Enemy(100, "human", "disfigured human", "commento umano", null, codePaper,5,20);
 		final Enemy assistant = new Enemy(100, "assistant", "director's assistant", "commento assistente", null, null,5,20);
 		final Enemy director = new Enemy(100, "director", "asylum's director", "commento direttore", null, null,5,20);
@@ -1030,6 +1030,34 @@ public class Asylum extends GameDescription {
 
 		m.insArc(surveillance, paddedCell, new Gateway(Direction.SOUTH));
 		m.insArc(paddedCell, surveillance, new Gateway(Direction.NORTH));
+
+		//traps
+		EventHandler gasTrap = new EventHandler() {
+
+			@Override
+			public void accept(GameDescription t) {
+				// TODO Auto-generated method stub
+				Asylum g = (Asylum) t;
+				if(g.gasVuln) {
+					g.breathedGas = true;
+					g.maxMoves = 4;
+					System.out.println("Stai respirando del gas! Non ti rimane molto tempo prima di perdere coscienza, devi fare subito qualcosa!");
+				}
+			}
+		};
+
+		bathroom.setTrap(gasTrap);
+		surgery.setTrap(gasTrap);
+
+		hallway3.setTrap(new EventHandler() {
+			@Override
+			public void accept(GameDescription t) {
+				// TODO Auto-generated method stub
+				Asylum g = (Asylum) t;
+				g.health = 0;
+				System.out.println("GAME OVER! Una trappola mortale posizionata sulla porta ti ha fatto a pezzi!");
+			}
+		});
 
 
 	}
