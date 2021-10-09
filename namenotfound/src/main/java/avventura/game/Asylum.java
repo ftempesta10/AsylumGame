@@ -118,16 +118,16 @@ public class Asylum extends GameDescription {
         ovest.setAlias(new String[]{"o", "O", "Ovest", "OVEST"});
         getCommands().add(ovest);
         Command nord_est = new Command(CommandType.NORTH_EAST, "nord_est");
-        ovest.setAlias(new String[]{"ne", "NE", "Ne", "nE", "Nord_est", "Nord_Est", "nord_Est", "NORD_EST"});
+        nord_est.setAlias(new String[]{"ne", "NE", "Ne", "nE", "Nord_est", "Nord_Est", "nord_Est", "NORD_EST"});
         getCommands().add(nord_est);
         Command north_ovest = new Command(CommandType.NORTH_WEST, "nord_ovest");
-        ovest.setAlias(new String[]{"no", "NO", "No", "nO", "Nord_ovest", "Nord_Ovest", "nord_Ovest", "NORD_OVEST"});
+        north_ovest.setAlias(new String[]{"no", "NO", "No", "nO", "Nord_ovest", "Nord_Ovest", "nord_Ovest", "NORD_OVEST"});
         getCommands().add(north_ovest);
         Command sud_est = new Command(CommandType.SOUTH_EAST, "sud_est");
-        ovest.setAlias(new String[]{"se", "SE", "Se", "sE", "Sud_est", "Sud_Est", "sud_Est", "SUD_EST"});
+        sud_est.setAlias(new String[]{"se", "SE", "Se", "sE", "Sud_est", "Sud_Est", "sud_Est", "SUD_EST"});
         getCommands().add(sud_est);
         Command sud_ovest = new Command(CommandType.SOUTH_WEST, "sud_ovest");
-        ovest.setAlias(new String[]{"so", "SO", "So", "sO", "Sud_ovest", "Sud_Ovest", "sud_Ovest", "SUD_OVEST"});
+        sud_ovest.setAlias(new String[]{"so", "SO", "So", "sO", "Sud_ovest", "Sud_Ovest", "sud_Ovest", "SUD_OVEST"});
         getCommands().add(sud_ovest);
         Command end = new Command(CommandType.END, "end");
         end.setAlias(new String[]{"end", "fine", "esci", "muori", "ammazzati", "ucciditi", "suicidati","exit"});
@@ -1059,6 +1059,8 @@ public class Asylum extends GameDescription {
 			}
 		});
 
+		setCurrentRoom(room1);
+
 
 	}
 
@@ -1070,7 +1072,6 @@ public class Asylum extends GameDescription {
 	@Override
 	public void nextMove(ParserOutput p, PrintStream out) {
 		// TODO Auto-generated method stub
-
 	}
 
 }
