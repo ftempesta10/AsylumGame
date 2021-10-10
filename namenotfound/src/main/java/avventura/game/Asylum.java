@@ -971,8 +971,8 @@ public class Asylum extends GameDescription {
 							scan.close();
 							String[] tokens = codePaper.getDescription().split("\\s+");
 							if(codEntered.equals(tokens[3])) {
-								m.insArc(hallway2, hallway3, new Gateway(Direction.EAST));
-							} else System.out.println("Incorrect code, the trap is still active");
+								hallway3.setTrap(null);
+							} else System.out.println("Incorrect code");
 						}
 					};
 				default:
