@@ -442,6 +442,9 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							t.getCurrentRoom().setVisible(true);
+							if (t.getCurrentRoom().equals(paddedCell) && t.getCurrentRoom().getTrap()!= null) {
+								t.getCurrentRoom().getTrap().accept(t);
+							}
 						}
 					};
 				case TURN_OFF:
@@ -957,9 +960,66 @@ public class Asylum extends GameDescription {
 
 
 		final Enemy human = new Enemy(100, "human", "disfigured human", "commento umano", null, codePaper,5,20);
-		final Enemy assistant = new Enemy(100, "assistant", "director's assistant", "commento assistente", null, null,5,20);
+		final Enemy assistant = new Enemy(100, "assistant", "director's assistant", "commento assistente", new Inventory(), null,5,20);
 		final Enemy director = new Enemy(100, "director", "asylum's director", "commento direttore", null, null,5,20);
 
+		Item key_1= new Item("Chiave assistente", "Sembra una chiave di una porta...", null);
+		key_1.setHandler(new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(key.getDescription());
+						}
+					};
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							WeightedHashedGraph<Room, Gateway> m = t.getMap();
+							if(t.getCurrentRoom().equals(paddedCell)) {
+								try {
+									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
+										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==key_1.getId()) {
+											m.readArc(t.getCurrentRoom(), a).setLocked(false);
+										}
+									}
+								} catch (Exception e) {
+									System.out.println(e.getMessage());
+								}
+							}else {
+								System.out.println("There is nothing to open here with this key!");
+							}
+						}
+					};
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.pickUp(key, t);
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.drop(key, t);
+						}
+					};
+				default:
+					return invalidCommand;
+				}};
+		});
+
+		assistant.getInv().add(key_1);
 
 		room1.getEnemies().add(corpse);
 		room1.getObjects().add(bed);
@@ -1059,7 +1119,24 @@ public class Asylum extends GameDescription {
 			}
 		});
 
+		//stanza iniziale
 		setCurrentRoom(room1);
+
+		paddedCell.setTrap(new EventHandler() {
+
+			@Override
+			public void accept(GameDescription t) {
+				// TODO Auto-generated method stub
+				if (getCurrentRoom().hasLight()) {
+					try {
+						t.getMap().readArc(paddedCell, surveillance).setLockedBy(key_1.getId());
+					} catch (Exception e) {}
+					System.out.println("Sei in trappola! ......");
+				}
+			}
+		});
+
+
 
 
 	}
