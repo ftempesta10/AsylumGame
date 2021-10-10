@@ -3,6 +3,9 @@ package game;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.PrintStream;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import engine.AdventureCharacter;
@@ -95,7 +98,7 @@ public class Asylum extends GameDescription {
 		}
 	}
 
-	private void initNew() {
+	private void initNew() throws SQLException, CloneNotSupportedException {
 		health = 100;
 		gasVuln = true;
 		breathedGas = false;
@@ -105,9 +108,9 @@ public class Asylum extends GameDescription {
 		Command nord = new Command(CommandType.NORD, "nord");
         nord.setAlias(new String[]{"n", "N", "Nord", "NORD"});
         getCommands().add(nord);
-        Command iventory = new Command(CommandType.INVENTORY, "inventario");
-        iventory.setAlias(new String[]{"inv", "i", "I"});
-        getCommands().add(iventory);
+        Command inventory = new Command(CommandType.INVENTORY, "inventario");
+        inventory.setAlias(new String[]{"inv", "i", "I"});
+        getCommands().add(inventory);
         Command sud = new Command(CommandType.SOUTH, "sud");
         sud.setAlias(new String[]{"s", "S", "Sud", "SUD"});
         getCommands().add(sud);
@@ -120,9 +123,9 @@ public class Asylum extends GameDescription {
         Command nord_est = new Command(CommandType.NORTH_EAST, "nord_est");
         nord_est.setAlias(new String[]{"ne", "NE", "Ne", "nE", "Nord_est", "Nord_Est", "nord_Est", "NORD_EST"});
         getCommands().add(nord_est);
-        Command north_ovest = new Command(CommandType.NORTH_WEST, "nord_ovest");
-        north_ovest.setAlias(new String[]{"no", "NO", "No", "nO", "Nord_ovest", "Nord_Ovest", "nord_Ovest", "NORD_OVEST"});
-        getCommands().add(north_ovest);
+        Command nord_ovest = new Command(CommandType.NORTH_WEST, "nord_ovest");
+        nord_ovest.setAlias(new String[]{"no", "NO", "No", "nO", "Nord_ovest", "Nord_Ovest", "nord_Ovest", "NORD_OVEST"});
+        getCommands().add(nord_ovest);
         Command sud_est = new Command(CommandType.SOUTH_EAST, "sud_est");
         sud_est.setAlias(new String[]{"se", "SE", "Se", "sE", "Sud_est", "Sud_Est", "sud_Est", "SUD_EST"});
         getCommands().add(sud_est);
@@ -148,6 +151,8 @@ public class Asylum extends GameDescription {
         push.setAlias(new String[]{"distruggi","spacca","colpisci"});
         getCommands().add(push);
 
+
+
       //Rooms
 
         //Start Game Message
@@ -155,7 +160,7 @@ public class Asylum extends GameDescription {
 
 
         Room room1 = new Room("Sei nel dormitorio n°1, una stanza piccola e puzzolente",
-			   	               "In un angolo giace un cadavere, accanto a te c'è un letto in disordine. Vedi una porta che conduce a sud.",
+			   	               "In un angolo giace un cadavere, accanto a te c'è un letto in disordine. Vedi una porta che conduce nel corridoio.",
 				               "Dormitorio 1");
         m.insNode(room1);
         Room room2 = new Room("Sei nel dormitorio n°2",
@@ -163,7 +168,7 @@ public class Asylum extends GameDescription {
 				               "Dormitorio 2");
         m.insNode(room2);
         Room room3 = new Room("Sei in una stanza piena di vestiti sparsi sul pavimento ed una lavatrice. Ci saranno momenti più adatti per aggiornare il tuo guardaroba!",
-				               "Non vedi altre porte. Noti una scatola per terra, conterrà qualcosa?",
+				               "Noti una scatola per terra, conterrà qualcosa? Non vedi altre porte. Puoi solo tornare indietro nel corridoio. ",
 				               "Lavanderia");
         m.insNode(room3);
         Room room4 = new Room("Sei nel dormitorio n°4",
@@ -175,7 +180,7 @@ public class Asylum extends GameDescription {
 				               "Dormitorio 5");
         m.insNode(room5);
         Room room6 = new Room("Sei in una stanza piena di buchi sul muro, chissà come sono stati fatti...",
-				               "Vedi un letto ed un cacciavite per terra. Qualche paziente sperava forse che bastasse un cacciavite per crearsi una via di fuga...",
+				               "Vedi un letto ed un cacciavite per terra. Qualche paziente sperava forse che bastasse un cacciavite per crearsi una via di fuga...Puoi solo tornare indietro nel corridoio.",
 				               "Dormitorio 6");
         m.insNode(room6);
         Room room7 = new Room("Sei nel dormitorio n°7",
@@ -183,11 +188,11 @@ public class Asylum extends GameDescription {
 				               "Dormitory 7");
         m.insNode(room7);
         Room room8 = new Room("Sei nel dormitorio n°8",
-				               "Vedi un letto e qualcosa sporgere da sotto ad esso. Non vedi altre porte.",
+				               "Vedi un letto e qualcosa sporgere da sotto ad esso. Non vedi altre porte. Puoi solo tornare indietro nel corridoio.",
 				               "Dormitorio 8");
         m.insNode(room8);
         Room hallway = new Room("Sei in un corridoio macabro ornato con membra umane lungo le pareti. È chiaro che non sei in un semplice manicomio...",
-				                 "Senti dei lamenti mostruosi provenienti dalla porta di fronte a te. Puoi proseguire dritto o entrare nel dormitorio 1, 2, 5, o 6.",
+				                 "Senti dei lamenti mostruosi provenienti dalla porta di fronte a te. Puoi andare nel secondo corridoio o entrare nel dormitorio 1, 2, 5, o 6.",
 				                 "Corridoio 1");
         m.insNode(hallway);
         Room hallway2 = new Room("Sei in un corridoio con numerose tracce di sangue. Qualcuno si sarà trascinato per provare a scappare?",
@@ -195,7 +200,7 @@ public class Asylum extends GameDescription {
 				                  "Corridoio 2");
         m.insNode(hallway2);
         Room hallway3 = new Room("Sei in un corridoio con quadri raffiguranti scheletri in azioni quotidiane. In un angolo c'è una statua della Santua Muerte. Forse sei in un luogo di culto?",
-				                  "Vedi scheletri ovunque. Puoi tornare indietro nel corridoio, entrare nel bagno a nord, o prendere le scale per il piano superiore",
+				                  "Vedi scheletri ovunque. Puoi tornare indietro nel corridoio, entrare nel bagno, o prendere le scale per il piano superiore",
 				                  "Corridoio 3");
         m.insNode(hallway3);
         Room bathroom = new Room("Non appena entri nella stanza, nell'aria inizia a circolare del gas tossico. Se vuoi sopravvivere, forse dovresti scappare da qui e trovare qualcosa con cui proteggerti!",
@@ -217,12 +222,12 @@ public class Asylum extends GameDescription {
 					               "Vedi diversi medicinali sparsi per la stanza ed una cassa. Puoi solo tornare indietro nel corridoio.",
 					               "Infermeria");
   		m.insNode(infirmary);
-  		Room surgery = new Room("Sei nella stanza dove i pazienti sono sottoposti alle operazioni. Chissà a questo punto di che operazioni si tratta...",
-					             "Vedi un letto ed uno scaffale con tanti strumenti chirurgici. Puoi solo tornare indietro nel corridoio.",
+  		Room surgery = new Room("Non appena entri nella stanza, nell'aria inizia a circolare del gas tossico. Se vuoi sopravvivere, forse dovresti scappare da qui e trovare qualcosa con cui proteggerti!",
+					             "L'effetto del gas ti stordisce e non ti permette di vedere nulla. Puoi solo tornare indietro nel corridoio.",
 					             "Sala operatoria");
   		m.insNode(surgery);
   		Room surveillance = new Room("Sei in una stanza stanza con numerosi schermi collegati alle telecamere di sicurezza per controllare l'edificio.",
-					                  "Vedi un pc principale ed una pistola per terra. Puoi tornare nel corridoio o proseguire a sud verso la cella imbottita",
+					                  "Vedi un pc principale ed una pistola per terra. Puoi tornare nel corridoio o proseguire verso la cella imbottita",
 					                  "Sorveglianza");
   		m.insNode(surveillance);
   		Room paddedCell = new Room("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi. Davanti a te vedi un essere mastodontico.",
@@ -405,6 +410,10 @@ public class Asylum extends GameDescription {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							gasVuln = false;
+							bathroom.setDescription("Non appena entri nella stanza, i gas tossici iniziano a circolare nell'aria, ma la maschera ti protegge.");
+							bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio.");
+							surgery.setDescription("Sei nella stanza dove i pazienti sono sottoposti alle operazioni. Chissà a questo punto di che operazioni si tratta...");
+							surgery.setLook("Vedi un letto ed uno scaffale con tanti strumenti chirurgici. Puoi solo tornare indietro nel corridoio.");
 						}
 					};
 				case PICK_UP:
@@ -629,8 +638,25 @@ public class Asylum extends GameDescription {
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							//DA SCRIVERE
+						room1.setLook("In un angolo giace un cadavere, accanto a te c'è un letto in disordine. Vedi una porta a sud che conduce nel corridoio.");
+						room2.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio.");
+						room3.setLook("Non vedi altre porte. Puoi solo tornare nel corridoio a sud.");
+						room4.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a sud.");
+						room5.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a nord.");
+						room6.setLook("Vedi un letto ed un cacciavite per terra. Qualche paziente sperava forse che bastasse un cacciavite per crearsi una via di fuga...Puoi solo tornare indietro nel corridoio a nord.");
+						room7.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a nord.");
+						room8.setLook("Vedi un letto e qualcosa sporgere da sotto ad esso. Non vedi altre porte, puoi solo tornare indietro nel corridoio a nord.");
+						hallway.setLook("Puoi proseguire a est o entrare nel dormitorio 1 a nord-ovest, 2 a nord-est, 5 a sud-ovest, o 6 a sud-est.");
+						hallway2.setLook("Il sangue è dappertutto. Puoi tornare indietro ad ovest nel primo corridoio, o entrare nel dormitorio 3 a nord-ovest, 4 a nord-est, 7 a sud-ovest, 8 a sud-est.");
+						hallway3.setLook("Vedi scheletri ovunque. Puoi tornare indietro ad ovest nel secondo corridoio, entrare nel bagno a nord, o prendere le scale a sud per il piano inferiore");
+						bathroom.setLook("L'effetto del gas ti stordisce e non ti permette di vedere nulla. Puoi solo tornare indietro a sud nel corridoio.");
+						hallway4.setLook("Vedi delle porte che consentono l'accesso all'infermeria a nord-est, alla sala operatoria a sud-est e alla sorveglianza ad ovest.");
+						infirmary.setLook("Vedi diversi medicinali sparsi per la stanza ed una cassa. Puoi solo tornare indietro nel corridoio ad ovest.");
+						surgery.setLook("Vedi un letto ed uno scaffale con tanti strumenti chirurgici. Puoi solo tornare indietro nel corridoio ad ovest.");
+						surveillance.setLook("Vedi un pc principale ed una pistola per terra. Puoi tornare nel corridoio ad est o proseguire a sud verso la cella imbottita.");
+						paddedCell.setLook("In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza a nord.");
+						office.setLook("Vedi delle scale a sud che conducono all'esterno della struttura, ma il passaggio è bloccato dal direttore. Puoi tornare indietro a nord nella cella imbottita.");
+
 						}
 					};
 				case DROP:
@@ -940,17 +966,13 @@ public class Asylum extends GameDescription {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							EventHandler.pickUp(blockNotes, t);
-						}
-					};
-				case DROP:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
 							Scanner scan = new Scanner(System.in);
 							String codEntered = scan.nextLine();
 							scan.close();
+							String[] tokens = codePaper.getDescription().split("\\s+");
+							if(codEntered.equals(tokens[3])) {
+								m.insArc(hallway2, hallway3, new Gateway(Direction.EAST));
+							} else System.out.println("Incorrect code, the trap is still active");
 						}
 					};
 				default:
@@ -1073,7 +1095,6 @@ public class Asylum extends GameDescription {
 		m.insArc(room8, hallway2, new Gateway(Direction.NORTH));
 		m.insArc(hallway2, room8, new Gateway(Direction.SOUTH_EAST));
 
-		m.insArc(hallway2, hallway3, new Gateway(Direction.EAST));
 		m.insArc(hallway3, hallway2, new Gateway(Direction.WEST));
 		m.insArc(bathroom, hallway3, new Gateway(Direction.SOUTH));
 		m.insArc(hallway3, bathroom, new Gateway(Direction.NORTH));
@@ -1138,11 +1159,24 @@ public class Asylum extends GameDescription {
 
 
 
+		//inserimento in db
+        this.db.insertionTuple(this.player, this.clone());
+
 
 	}
 
 	// CLOSE, PULL, WALK_TO,  TALK_TO, GIVE, USE, TURN_ON, TURN_OFF
-	private void initFromSave(Asylum save) {
+	private void initFromSave(Asylum save) throws SQLException, Exception {
+		Map<String,GameDescription> tuple = new HashMap<>();
+		tuple.putAll(db.recoveryTuple());
+
+		System.out.println("Inserire nel formato: nome player| spazio | data salvataggio");
+		Scanner scan = new Scanner(System.in);
+		String player = scan.nextLine();
+		GameDescription t = tuple.get(player);
+		/*
+		 * t.setObjectAsylum(save);
+		 */
 
 	}
 

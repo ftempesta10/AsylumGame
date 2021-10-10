@@ -15,7 +15,7 @@ public class AdventureCharacter implements Serializable {
 		this.name = name;
 		this.description = description;
 		this.talk = talk;
-		health = instances;
+		id = instances;
 		instances++;
 		this.inv = inv;
 		this.droppable = droppable;
