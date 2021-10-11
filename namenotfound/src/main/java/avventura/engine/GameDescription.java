@@ -1,12 +1,13 @@
 package engine;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import hashedGraph.WeightedHashedGraph;
 
-public abstract class GameDescription {
+public abstract class GameDescription implements Serializable {
     private Room currentRoom;
     private WeightedHashedGraph<Room, Gateway> map;
     private Inventory inventory;

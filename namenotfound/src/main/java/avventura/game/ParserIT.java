@@ -17,12 +17,14 @@ public class ParserIT implements Parser{
 		this.loadPrepositions();
 	}
 
+	@Override
 	public boolean checkInDictionary(String token, List<String> dictionary) throws Exception {
 		// TODO Auto-generated method stub
 		if(dictionary.contains(token)) return true;
 		else return false;
 	}
 
+	@Override
 	public int checkForCommand(String token, List<Command> commands) {
 	        for (int i = 0; i < commands.size(); i++) {
 	            if (commands.get(i).getName().equals(token) || commands.get(i).getAlias().contains(token)) {
@@ -31,6 +33,7 @@ public class ParserIT implements Parser{
 	        }
 	        return -1;
 	}
+	@Override
 	public int checkForObject(String token, List<Item> obejcts) {
         for (int i = 0; i < obejcts.size(); i++) {
             if (obejcts.get(i).getName().equals(token) || obejcts.get(i).getAlias().contains(token)) {
@@ -40,6 +43,7 @@ public class ParserIT implements Parser{
         return -1;
     }
 
+	@Override
 	public ParserOutput parse(String command, List<Command> commands, List<Item> objects, Inventory inv,
 			List<AdventureCharacter> enemies) throws Exception {
 		// TODO Auto-generated method stub
@@ -124,6 +128,7 @@ public class ParserIT implements Parser{
         }
 	}
 
+	@Override
 	public void loadArticles() {
 		// TODO Auto-generated method stub
 		articles.add("il");
@@ -135,6 +140,7 @@ public class ParserIT implements Parser{
 	}
 
 
+	@Override
 	public void loadPrepositions() {
 		// TODO Auto-generated method stub
 		prepositions.add("di");
