@@ -3,6 +3,7 @@ package game;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ import engine.Room;
 import engine.Weapon;
 import hashedGraph.WeightedHashedGraph;
 
-public class Asylum extends GameDescription {
+public class Asylum extends GameDescription implements Serializable {
 	private static Object lock = new Object();
 	private static Manager frame;
 	private String player;
@@ -1160,7 +1161,7 @@ public class Asylum extends GameDescription {
 
 
 		//inserimento in db
-        this.db.insertionTuple(this.player, this.clone());
+        this.db.insertionTuple(this.player, this);
 
 
 	}

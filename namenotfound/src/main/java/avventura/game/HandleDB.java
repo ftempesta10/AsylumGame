@@ -19,17 +19,20 @@ public class HandleDB {
 	public HandleDB() throws SQLException, Exception {
 		Class.forName("org.h2.Driver");
 		conn = DriverManager.getConnection("jdbc:h2:~/saves");
+		//final String elimina = "DROP TABLE saves";
+
 		final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS saves (player VARCHAR(30) PRIMARY KEY,"
 				+ " day VARCHAR(11),"
 				+ " game OBJECT )";
 		Statement stm = conn.createStatement();
+		//stm.executeUpdate(elimina);
 		stm.executeUpdate(CREATE_TABLE);
 		stm.close();
 	}
 
 	public void insertionTuple(String player, Object obj) throws SQLException {
 		PreparedStatement pstm = conn.prepareStatement(
-				"INSERT INTO db"
+				"INSERT INTO saves "
 				+ "VALUES (?, ?, ?)");
 		pstm.setString(1, player);
 		pstm.setString(2, LocalDate.now().toString());
@@ -46,12 +49,6 @@ public class HandleDB {
 		pstm.executeUpdate();
 		pstm.close();
 	}
-
-	/*
-	 * UPDATE table_name
-		SET column1 = value1, column2 = value2, ...
-		WHERE condition;
-	 */
 
 	public void updateTuple(String player, Object obj) throws SQLException {
 		PreparedStatement pstm = conn.prepareStatement(
