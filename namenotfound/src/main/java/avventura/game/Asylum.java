@@ -1168,17 +1168,13 @@ public class Asylum extends GameDescription implements Serializable {
 
 	// CLOSE, PULL, WALK_TO,  TALK_TO, GIVE, USE, TURN_ON, TURN_OFF
 	private void initFromSave(Asylum save) throws SQLException, Exception {
-		Map<String,GameDescription> tuple = new HashMap<>();
-		tuple.putAll(db.recoveryTuple());
-
-		System.out.println("Inserire nel formato: nome player| spazio | data salvataggio");
-		Scanner scan = new Scanner(System.in);
-		String player = scan.nextLine();
-		GameDescription t = tuple.get(player);
-		/*
-		 * t.setObjectAsylum(save);
-		 */
-
+		GameDescription t = frame.getSave();
+		this.breathedGas = save.breathedGas;
+		this.db = save.db;
+		this.gasVuln = save.gasVuln;
+		this.health = save.health;
+		this.maxMoves = save.maxMoves;
+		this.player = save.player;
 	}
 
 	@Override
