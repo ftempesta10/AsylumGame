@@ -185,10 +185,11 @@ public class Manager extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				String selectedPlayer = ((JList<String>) mainPanel.getComponent(3)).getSelectedValue();
+				String[] tokens = selectedPlayer.split("\\s+");
 				int index = ((JList<String>) mainPanel.getComponent(3)).getSelectedIndex();
 				DefaultListModel<String> m = (DefaultListModel) ((JList<String>) mainPanel.getComponent(3)).getModel();
 				m.remove(index);
-				db.deleteTuple(selectedPlayer);
+				db.deleteTuple(tokens[0]);
 			}catch (Exception e1) {
 				// TODO: handle exception
 				System.out.print(e1);
