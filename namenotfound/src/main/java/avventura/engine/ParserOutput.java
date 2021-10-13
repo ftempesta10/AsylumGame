@@ -6,7 +6,13 @@ public class ParserOutput {
     private Item object = null;
     private Item target = null;
     private AdventureCharacter enemy = null; 
-
+    private String currentRoom;
+    
+    public ParserOutput(Command command, String currentRoom) {
+        this.command = command;
+        this.currentRoom = currentRoom;
+    }
+    
     public ParserOutput(Command command, Item object) {
         this.command = command;
         this.object = object;
@@ -57,6 +63,14 @@ public class ParserOutput {
 
 	public void setEnemy(AdventureCharacter enemy) {
 		this.enemy = enemy;
+	}
+
+	public String getCurrentRoom() {
+		return currentRoom;
+	}
+
+	public void setCurrentRoom(String currentRoom) {
+		this.currentRoom = currentRoom;
 	}
 
 }
