@@ -49,5 +49,6 @@ public class Engine {
                 System.out.println("================================================");
             }
         }
+        System.exit(0);
     }
 }

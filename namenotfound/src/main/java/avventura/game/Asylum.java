@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Scanner;
 
 import engine.AdventureCharacter;
@@ -32,7 +33,7 @@ public class Asylum extends GameDescription implements Serializable {
 
 	//game params
 	Integer health, maxMoves;
-	Boolean gasVuln, breathedGas;
+	Boolean gasVuln, breathedGas, compassUsed;
 
 
 	final EventHandler invalidCommand = new EventHandler() {
@@ -102,6 +103,7 @@ public class Asylum extends GameDescription implements Serializable {
 		gasVuln = true;
 		breathedGas = false;
 		maxMoves = 3;
+		compassUsed = false;
 
 		WeightedHashedGraph<Room, Gateway> m = new WeightedHashedGraph<Room, Gateway>();
 		Command nord = new Command(CommandType.NORD, "nord");
@@ -150,7 +152,8 @@ public class Asylum extends GameDescription implements Serializable {
         _break.setAlias(new String[]{"distruggi","spacca","colpisci"});
         getCommands().add(_break);
 
-
+        //set inv
+        setInventory(new Inventory());
 
       //Rooms
 
@@ -637,24 +640,25 @@ public class Asylum extends GameDescription implements Serializable {
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
-						room1.setLook("In un angolo giace un cadavere, accanto a te c'è un letto in disordine. Vedi una porta a sud che conduce nel corridoio.");
-						room2.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio.");
-						room3.setLook("Non vedi altre porte. Puoi solo tornare nel corridoio a sud.");
-						room4.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a sud.");
-						room5.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a nord.");
-						room6.setLook("Vedi un letto ed un cacciavite per terra. Qualche paziente sperava forse che bastasse un cacciavite per crearsi una via di fuga...Puoi solo tornare indietro nel corridoio a nord.");
-						room7.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a nord.");
-						room8.setLook("Vedi un letto e qualcosa sporgere da sotto ad esso. Non vedi altre porte, puoi solo tornare indietro nel corridoio a nord.");
-						hallway.setLook("Puoi proseguire a est o entrare nel dormitorio 1 a nord-ovest, 2 a nord-est, 5 a sud-ovest, o 6 a sud-est.");
-						hallway2.setLook("Il sangue è dappertutto. Puoi tornare indietro ad ovest nel primo corridoio, o entrare nel dormitorio 3 a nord-ovest, 4 a nord-est, 7 a sud-ovest, 8 a sud-est.");
-						hallway3.setLook("Vedi scheletri ovunque. Puoi tornare indietro ad ovest nel secondo corridoio, entrare nel bagno a nord, o prendere le scale a sud per il piano inferiore");
-						bathroom.setLook("L'effetto del gas ti stordisce e non ti permette di vedere nulla. Puoi solo tornare indietro a sud nel corridoio.");
-						hallway4.setLook("Vedi delle porte che consentono l'accesso all'infermeria a nord-est, alla sala operatoria a sud-est e alla sorveglianza ad ovest.");
-						infirmary.setLook("Vedi diversi medicinali sparsi per la stanza ed una cassa. Puoi solo tornare indietro nel corridoio ad ovest.");
-						surgery.setLook("Vedi un letto ed uno scaffale con tanti strumenti chirurgici. Puoi solo tornare indietro nel corridoio ad ovest.");
-						surveillance.setLook("Vedi un pc principale ed una pistola per terra. Puoi tornare nel corridoio ad est o proseguire a sud verso la cella imbottita.");
-						paddedCell.setLook("In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza a nord.");
-						office.setLook("Vedi delle scale a sud che conducono all'esterno della struttura, ma il passaggio è bloccato dal direttore. Puoi tornare indietro a nord nella cella imbottita.");
+							room1.setLook("In un angolo giace un cadavere, accanto a te c'è un letto in disordine. Vedi una porta a sud che conduce nel corridoio.");
+							room2.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio.");
+							room3.setLook("Non vedi altre porte. Puoi solo tornare nel corridoio a sud.");
+							room4.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a sud.");
+							room5.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a nord.");
+							room6.setLook("Vedi un letto ed un cacciavite per terra. Qualche paziente sperava forse che bastasse un cacciavite per crearsi una via di fuga...Puoi solo tornare indietro nel corridoio a nord.");
+							room7.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio a nord.");
+							room8.setLook("Vedi un letto e qualcosa sporgere da sotto ad esso. Non vedi altre porte, puoi solo tornare indietro nel corridoio a nord.");
+							hallway.setLook("Puoi proseguire a est o entrare nel dormitorio 1 a nord-ovest, 2 a nord-est, 5 a sud-ovest, o 6 a sud-est.");
+							hallway2.setLook("Il sangue è dappertutto. Puoi tornare indietro ad ovest nel primo corridoio, o entrare nel dormitorio 3 a nord-ovest, 4 a nord-est, 7 a sud-ovest, 8 a sud-est.");
+							hallway3.setLook("Vedi scheletri ovunque. Puoi tornare indietro ad ovest nel secondo corridoio, entrare nel bagno a nord, o prendere le scale a sud per il piano inferiore");
+							bathroom.setLook("L'effetto del gas ti stordisce e non ti permette di vedere nulla. Puoi solo tornare indietro a sud nel corridoio.");
+							hallway4.setLook("Vedi delle porte che consentono l'accesso all'infermeria a nord-est, alla sala operatoria a sud-est e alla sorveglianza ad ovest.");
+							infirmary.setLook("Vedi diversi medicinali sparsi per la stanza ed una cassa. Puoi solo tornare indietro nel corridoio ad ovest.");
+							surgery.setLook("Vedi un letto ed uno scaffale con tanti strumenti chirurgici. Puoi solo tornare indietro nel corridoio ad ovest.");
+							surveillance.setLook("Vedi un pc principale ed una pistola per terra. Puoi tornare nel corridoio ad est o proseguire a sud verso la cella imbottita.");
+							paddedCell.setLook("In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza a nord.");
+							office.setLook("Vedi delle scale a sud che conducono all'esterno della struttura, ma il passaggio è bloccato dal direttore. Puoi tornare indietro a nord nella cella imbottita.");
+							compassUsed=true;
 
 						}
 					};
@@ -1179,9 +1183,52 @@ public class Asylum extends GameDescription implements Serializable {
 		this.setCommands(save.getCommands());
 	}
 
+	private Room searchDirection(Direction d) throws Exception {
+		Collection<Room> ad = getMap().getAdjacents(getCurrentRoom());
+		for(Room r: ad) {
+			if(getMap().readArc(getCurrentRoom(), r).getDirection()==d)
+				return r;
+		}
+		return null;
+	}
+
 	@Override
 	public void nextMove(ParserOutput p, PrintStream out) {
 		// TODO Auto-generated method stub
+		if (p.getObject()==null && p.getEnemy()==null && p.getTarget()==null ) {
+			switch (p.getCommand().getType()) {
+			case INVENTORY:
+				for(Item i : getInventory().getList()) {
+					out.println(i.getName());
+				}
+				if(getInventory().getList().isEmpty())
+					out.println("Inventario vuoto!");
+				break;
+			case LOOK_AT:
+				out.println(getCurrentRoom().getLook());
+				break;
+			case SOUTH:
+				if(compassUsed) {
+					try {
+						Room next = searchDirection(Direction.SOUTH);
+						if (next == null) {
+							out.println("Non esiste nessuna stanza adiacente in quella direzione!");
+						} else if(getMap().readArc(getCurrentRoom(), next).isLocked()) {
+							out.println("La porta sembra esser bloccata...");
+						} else {
+							setCurrentRoom(next);
+						}
+					} catch (Exception e) {
+						out.println(e.getMessage());
+					}
+				}else {
+					out.println("Se solo avessi una bussola...");
+				}
+				break;
+			}
+		}
 	}
+
+
 
 }
