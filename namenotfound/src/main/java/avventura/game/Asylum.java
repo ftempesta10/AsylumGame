@@ -197,7 +197,8 @@ public class Asylum extends GameDescription implements Serializable {
 				                 "Senti dei lamenti mostruosi provenienti dalla porta di fronte a te. Puoi andare nel secondo corridoio o entrare nel dormitorio 1, 2, 5, o 6.",
 				                 "Corridoio 1");
         m.insNode(hallway);
-        Room hallway2 = new Room("Sei in un corridoio con numerose tracce di sangue. Qualcuno si sarà trascinato per provare a scappare?",
+        //Sei in un corridoio con numerose tracce di sangue. Qualcuno si sarà trascinato per provare a scappare?
+        Room hallway2 = new Room("Non appena apri la porta, un umano insanguinato con la faccia sfigurata si scaglia contro di te",
 				                  "Il sangue è dappertutto. Puoi tornare indietro nel primo corridoio, o entrare nel dormitorio 3, 4, 7, 8.",
 				                  "Corridoio 2");
         m.insNode(hallway2);
@@ -232,9 +233,12 @@ public class Asylum extends GameDescription implements Serializable {
 					                  "Vedi un pc principale ed una pistola per terra. Puoi tornare nel corridoio o proseguire verso la cella imbottita",
 					                  "Sorveglianza");
   		m.insNode(surveillance);
-  		Room paddedCell = new Room("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi. Davanti a te vedi un essere mastodontico.",
+  		Room paddedCell = new Room("La scarsa illuminazione della stanza non ti permette di vedere bene. Dovresti utilizzare qualcosa per illuminare.",
+        "In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.",
+        "Cella imbottita");
+  		/*Room paddedCell = new Room("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi.",
 					                "In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.",
-					                "Cella imbottita");
+					                "Cella imbottita");*/
   		m.insNode(paddedCell);
   		Room office = new Room("Sei nell'ufficio del direttore del manicomio. Dai quadri posti lungo le pareti è possibile ripercorrere questi anni di esperimenti e gli effetti delle mutazioni nel corso del tempo. Hai di fronte la mente dietro tutto ciò, il direttore.",
 					            "Vedi delle scale che conducono all'esterno della struttura, ma il passaggio è bloccato dal direttore. Puoi tornare indietro nella cella imbottita.",
@@ -242,7 +246,7 @@ public class Asylum extends GameDescription implements Serializable {
   		m.insNode(office);
 
 
-		final Item key = new Item("key", "Useful key to open something", null);
+		final Item key = new Item("key", "Una chiave che potrebbe tornare utile per aprire qualcosa.", null);
 		key.setHandler(new CommandHandler() {
 
 			@Override
@@ -269,11 +273,12 @@ public class Asylum extends GameDescription implements Serializable {
 											m.readArc(t.getCurrentRoom(), a).setLocked(false);
 										}
 									}
+									System.out.println("La chiave sembra entrare perfettamente nella serratura della porta che conduce nel corridoio!");
 								} catch (Exception e) {
 									System.out.println(e.getMessage());
 								}
 							}else {
-								System.out.println("There is nothing to open here with this key!");
+								System.out.println("Non c'è niente da aprire con questa chiave!");
 							}
 						}
 					};
@@ -299,44 +304,8 @@ public class Asylum extends GameDescription implements Serializable {
 		});
 		Inventory corpeInv = new Inventory();
 		corpeInv.add(key);
-		final Item hint = new Item("note", "Remember: 12689 to stay alive!", null);
-		hint.setHandler(new CommandHandler() {
-			@Override
-			public EventHandler apply(CommandType t) {
-				// TODO Auto-generated method stub
-				switch (t) {
-				case LOOK_AT:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(hint.getDescription());
-						}
-					};
-				case PICK_UP:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							EventHandler.pickUp(hint, t);
-						}
-					};
-				case DROP:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							EventHandler.drop(hint, t);
-						}
-					};
-				default:
-					return invalidCommand;
-				}
-			}
-		});
-		corpeInv.add(hint);
-		final AdventureCharacter corpse = new AdventureCharacter(0, "corpe", "decaying corpe", null, corpeInv, null);
-		final Item bed = new Item("bed", "Bed in which the patients slept", null);
+		final AdventureCharacter corpse = new AdventureCharacter(0, "corpe", "Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo. Dalla tasca della sua giacca sembra spuntare una chiave.", null, corpeInv, null);
+		final Item bed = new Item("bed", "Un letto nel quale dormono i pazienti.", null);
 		bed.setHandler(new CommandHandler() {
 
 			@Override
@@ -357,12 +326,20 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Weapon screwdriver = new Weapon("screwdriver", "Screwdriver, this might come in handy", null, 15, 5, 15);
+		final Weapon screwdriver = new Weapon("screwdriver", "Un cacciavite che potrebbe tornare utile.", null, 15, 5, 15);
 		screwdriver.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
 				// TODO Auto-generated method stub
 				switch (t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(screwdriver.getDescription());
+						}
+					};
 				case USE:
 					return new EventHandler() {
 						@Override
@@ -393,7 +370,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item gasmask = new Item("gasmask", "Mask to protect yourself from toxic gases", null);
+		final Item gasmask = new Item("gasmask", "Una maschera per proteggerti dai gas tossici.", null);
 		gasmask.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -440,8 +417,8 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item flashlight = new Item("flashlight", "Torch to illuminate dark areas", null);
-		flashlight.setHandler(new CommandHandler() {
+		final Item torch = new Item("torch", "Una torcia utile per illuminare gli spazi bui.", null);
+		torch.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
 				// TODO Auto-generated method stub
@@ -455,6 +432,7 @@ public class Asylum extends GameDescription implements Serializable {
 							t.getCurrentRoom().setVisible(true);
 							if (t.getCurrentRoom().equals(paddedCell) && t.getCurrentRoom().getTrap()!= null) {
 								t.getCurrentRoom().getTrap().accept(t);
+								paddedCell.setLook("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi. Davanti a te vedi un essere mastodontico.")
 							}
 						}
 					};
@@ -462,8 +440,7 @@ public class Asylum extends GameDescription implements Serializable {
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							t.getCurrentRoom().setVisible(t.getCurrentRoom().hasLight());
+							// TODO Auto-generated method stubtCurrentRoom().hasLight());
 						}
 					};
 				case LOOK_AT:
@@ -471,7 +448,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println(flashlight.getDescription());
+							System.out.println(torch.getDescription());
 						}
 					};
 				case DROP:
@@ -479,7 +456,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							EventHandler.drop(flashlight, t);
+							EventHandler.drop(torch, t);
 						}
 					};
 				case PICK_UP:
@@ -487,7 +464,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							EventHandler.pickUp(flashlight, t);
+							EventHandler.pickUp(torch, t);
 						}
 					};
 				default:
@@ -496,7 +473,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item pills = new Item("pills", "Pills that cure you of some discomfort", null);
+		final Item pills = new Item("pills", "Delle pillole che ti rendono immune temporaneamente ai gas tossici.", null);
 		pills.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -539,7 +516,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item adrenaline = new Item("adrenaline", "Syringes of adrenaline that increase your health", null);
+		final Item adrenaline = new Item("adrenaline", "Delle siringhe di adrenalina che ti incrementano la salute.", null);
 		adrenaline.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -583,20 +560,12 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item mirrorBathroom = new Item("mirror", "Mirror in which your image is reflected", null);
+		final Item mirrorBathroom = new Item("mirror", "Uno specchio in cui viene riflessa la tua immagine. Mmm, non sei poi così male.", null);
 		mirrorBathroom.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
 				// TODO Auto-generated method stub
 				switch (t) {
-				case USE:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(mirrorBathroom.getDescription());
-						}
-					};
 				case LOOK_AT:
 					return new EventHandler() {
 						@Override
@@ -622,7 +591,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item compass = new Item("compass", "Compass useful for better orientation", null);
+		final Item compass = new Item("compass", "Una bussola utile per un miglior orientamento nella mappa.", null);
 		compass.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -640,6 +609,7 @@ public class Asylum extends GameDescription implements Serializable {
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
+							System.out.println("Grazie all'utilizzo della bussola ora sai in che direzione sono le porte e ti è possibile spostarti utilizzando i punti cardinali come comandi!");
 							room1.setLook("In un angolo giace un cadavere, accanto a te c'è un letto in disordine. Vedi una porta a sud che conduce nel corridoio.");
 							room2.setLook("Vedi un letto. Puoi solo tornare indietro nel corridoio.");
 							room3.setLook("Non vedi altre porte. Puoi solo tornare nel corridoio a sud.");
@@ -684,7 +654,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final ItemContainer chest = new ItemContainer("chest", "Chest that may contain something", null);
+		final ItemContainer chest = new ItemContainer("chest", "Una cassa che potrebbe contenere qualcosa al suo interno.", null);
 		chest.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -698,7 +668,7 @@ public class Asylum extends GameDescription implements Serializable {
 							if(!chest.isOpened()) {
 								System.out.println(chest.getDescription());
 							}else {
-								System.out.println("This chest contains: ");
+								System.out.println("Questa cassa contiene: ");
 								for(Item i: chest.getContent()) {
 									System.out.println(i.getName());
 								}
@@ -713,7 +683,7 @@ public class Asylum extends GameDescription implements Serializable {
 							if(!chest.isOpened() && !chest.isLocked()) {
 								chest.setOpened(true);
 							}else if(chest.isLocked()) {
-								System.out.println("Is locked! Probably you need a key...");
+								System.out.println("È bloccata! Probabilmente hai bisogno di una chiave...");
 							}
 						}
 					};
@@ -733,7 +703,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item pc = new Item("pc", "Computer used to interact with security systems", null);
+		final Item pc = new Item("pc", "Un computer utilizzato per interagire con i sistemi di sicurezza.", null);
 		pc.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -744,8 +714,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							//DA SCRIVERE
-						}
+							System.out.println("Accendi il PC: vengono mostrati i video degli esperimenti sui pazienti. Ora ricordi: stavi indagando sulla scomparsa di un paziente all'interno del manicomio quando qualcuno ti ha colpito alla testa! Dai video emerge che questi esperimenti causano delle mutazioni nei pazienti!")						}
 					};
 				case LOOK_AT:
 					return new EventHandler() {
@@ -761,12 +730,20 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Weapon scalpel = new Weapon("scalpel", "Scalpel used in experiments", null, 15, 10, 30);
+		final Weapon scalpel = new Weapon("scalpel", "Un bisturi utilizzato negli esperimenti.", null, 15, 10, 30);
 		scalpel.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
 				// TODO Auto-generated method stub
 				switch (t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(scalpel.getDescription());
+						}
+					};
 				case USE:
 					return new EventHandler() {
 						@Override
@@ -798,12 +775,20 @@ public class Asylum extends GameDescription implements Serializable {
 		});
 
 
-		final Weapon gun = new Weapon("gun", "Gun probably used against rebellious patients", null, 7, 30, 70);
+		final Weapon gun = new Weapon("gun", "Una pistola probabilmente utilizzata contro i pazienti più inquieti e difficili da controllare.", null, 7, 30, 70);
 		gun.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
 				// TODO Auto-generated method stub
 				switch (t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(gun.getDescription());
+						}
+					};
 				case USE:
 					return new EventHandler() {
 						@Override
@@ -813,7 +798,7 @@ public class Asylum extends GameDescription implements Serializable {
 								t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-gun.getDamage());
 								gun.setShots(gun.getShots()-1);
 							}else {
-								System.out.println("Ops... You run out of bullets!!");
+								System.out.println("Ops...Hai esaurito le munizioni!!");
 							}
 						}
 					};
@@ -839,20 +824,12 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item mirrorCell = new Item("mirror", "Mirror in which your image is reflected", null);
+		final Item mirrorCell = new Item("mirror", "Uno specchio in cui viene riflessa la tua immagine. Mmm, non sei poi così male.", null);
 		mirrorBathroom.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
 				// TODO Auto-generated method stub
 				switch (t) {
-				case USE:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(mirrorCell.getDescription());
-						}
-					};
 				case LOOK_AT:
 					return new EventHandler() {
 						@Override
@@ -871,6 +848,7 @@ public class Asylum extends GameDescription implements Serializable {
 								//inserire l'arco
 								m.insArc(paddedCell, office, new Gateway(Direction.SOUTH));
 								mirrorCell.setPushed(true);
+								System.out.println("La rottura dello specchio ti rivela un passaggio segreto a sud nell'ufficio del direttore!");
 							}
 						}
 					};
@@ -880,7 +858,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Item codePaper = new Item("code paper", "Il codice e' 1234", null);
+		final Item codePaper = new Item("code paper", "Il codice e' 5030", null);
 		codePaper.setHandler(new CommandHandler() {
 
 			@Override
@@ -915,7 +893,7 @@ public class Asylum extends GameDescription implements Serializable {
 				}};
 		});
 
-		final Item blockNotes = new Item("block notes", "INDIZIO TRAMA", null);
+		final Item blockNotes = new Item("block notes", "Un quaderno di appunti che a giudicare dalla grafia sembra proprio essere il tuo. A quanto pare stavi raccogliendo dati su questa struttura e indizi per lo svolgimento di un caso, ma non riesci a ricordare bene. Avevi sottolineato più volte \"DEVO ROMPERE LO SPECCHIO PER PROSEGUIRE\"...", null);
 		blockNotes.setHandler(new CommandHandler() {
 
 			@Override
@@ -950,7 +928,7 @@ public class Asylum extends GameDescription implements Serializable {
 				}};
 		});
 
-		final Item keypad = new Item("keypad", "keypad to enter a code", null);
+		final Item keypad = new Item("keypad", "Un tastierino numerico in cui inserire un codice.", null);
 		keypad.setHandler(new CommandHandler() {
 
 			@Override
@@ -975,7 +953,8 @@ public class Asylum extends GameDescription implements Serializable {
 							String[] tokens = codePaper.getDescription().split("\\s+");
 							if(codEntered.equals(tokens[3])) {
 								hallway3.setTrap(null);
-							} else System.out.println("Incorrect code");
+								System.out.println("Codice esatto! La trappola è stata disattivata!");
+							} else System.out.println("Codice errato!");
 						}
 					};
 				default:
@@ -984,11 +963,90 @@ public class Asylum extends GameDescription implements Serializable {
 		});
 
 
-		final Enemy human = new Enemy(100, "human", "disfigured human", "commento umano", null, codePaper,5,20);
-		final Enemy assistant = new Enemy(100, "assistant", "director's assistant", "commento assistente", new Inventory(), null,5,20);
-		final Enemy director = new Enemy(100, "director", "asylum's director", "commento direttore", null, null,5,20);
+		final Enemy mutant = new Enemy(100, "mutant", "Un mutante dal viso fortemente sfigurato. Sarà mica Deadpool?", "Anche tu sei uno di loro?! Non ti lascerò farmi del male!", null, codePaper,5,20);
+		mutant.setHandler(new CommandHandler() {
 
-		Item key_1= new Item("Chiave assistente", "Sembra una chiave di una porta...", null);
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(mutant.getDescription());
+						}
+					};
+				case TALK_TO:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(mutant.getTalk());
+						}
+					};	
+				default:
+					return invalidCommand;
+				}};
+		});
+		final Enemy assistant = new Enemy(100, "assistant", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.", 
+				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
+				new Inventory(), null,5,20);
+		assistant.setHandler(new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(assistant.getDescription());
+						}
+					};
+				case TALK_TO:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(assistant.getTalk());
+						}
+					};	
+				default:
+					return invalidCommand;
+				}};
+		});
+		final Enemy director = new Enemy(100, "director", "È il direttore, nonchè la mente contorta dietro tutto questo. I segni del virus sembrano meno evidenti su di lui. Avrà furbamente aspettato più miglioramenti possibili al virus prima di sottoporsi lui stesso ad esso. Eppure ti è sempre sembrato un tipo perbene...",
+				"Muahahah! Eccoti qua agente. Dopo aver sentito gli spari dalla cella, ti aspettavo. Sei sopreso dopo aver scoperto i miei piani? Lo sarai di più dopo aver visto i poteri che acquisirai tramite il virus! Non prendermi per pazzo, grazie a questo virus non esisteranno mai più deboli in questo mondo. Io renderò l'essere umano la creatura più potente che sia mai esistita sulla Terra! Si parlerà di me per milioni e milioni di anni! Ma se non vuoi aiutarmi, non preoccuparti. Ci servono delle vittime sacrificali in onore della Santa Muerte che ci supporta in tutto questo. Dunque preparati a morire!",
+				null, null,5,20);
+		director.setHandler(new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(director.getDescription());
+						}
+					};
+				case TALK_TO:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(director.getTalk());
+						}
+					};	
+				default:
+					return invalidCommand;
+				}};
+		});
+
+		Item key_1= new Item("Chiave assistente", "Sembra la chiave di una porta...", null);
 		key_1.setHandler(new CommandHandler() {
 
 			@Override
@@ -1015,11 +1073,12 @@ public class Asylum extends GameDescription implements Serializable {
 											m.readArc(t.getCurrentRoom(), a).setLocked(false);
 										}
 									}
+									System.out.println("La chiave sembra entrare perfettamente nella serratura della porta che conduce nell'ufficio del direttore!");
 								} catch (Exception e) {
 									System.out.println(e.getMessage());
 								}
 							}else {
-								System.out.println("There is nothing to open here with this key!");
+								System.out.println("Non c'è niente da aprire con questa chiave!");
 							}
 						}
 					};
@@ -1045,6 +1104,9 @@ public class Asylum extends GameDescription implements Serializable {
 		});
 
 		assistant.getInv().add(key_1);
+		chest.add(compass);
+		chest.add(torch);
+		chest.add(blockNotes);
 
 		room1.getEnemies().add(corpse);
 		room1.getObjects().add(bed);
