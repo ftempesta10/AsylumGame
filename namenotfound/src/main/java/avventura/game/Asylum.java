@@ -1225,6 +1225,22 @@ public class Asylum extends GameDescription implements Serializable {
 					out.println("Se solo avessi una bussola...");
 				}
 				break;
+			case WALK_TO:
+				try {
+					for(Room a : getMap().getAdjacents(getCurrentRoom())) {
+						if(a.getName().equals(p.getNextRoom())) {
+							setCurrentRoom(a);
+							break;
+						}
+					}
+					if(!getCurrentRoom().getName().equals(p.getNextRoom())) {
+						out.println("Nessuna stanza adiacente ha questo nome!");
+					}
+
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+				break;
 			}
 		}
 	}
