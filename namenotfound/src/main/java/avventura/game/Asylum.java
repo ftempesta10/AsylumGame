@@ -436,7 +436,8 @@ public class Asylum extends GameDescription implements Serializable {
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
-							// TODO Auto-generated method stubtCurrentRoom().hasLight());
+							// TODO Auto-generated method stub
+							t.getCurrentRoom().setVisible(t.getCurrentRoom().hasLight());
 						}
 					};
 				case LOOK_AT:
@@ -889,7 +890,7 @@ public class Asylum extends GameDescription implements Serializable {
 				}};
 		});
 
-		final Item blockNotes = new Item("block notes", "Un quaderno di appunti che a giudicare dalla grafia sembra proprio essere il tuo. A quanto pare stavi raccogliendo dati su questa struttura e indizi per lo svolgimento di un caso, ma non riesci a ricordare bene. Avevi sottolineato più volte \"DEVO ROMPERE LO SPECCHIO PER PROSEGUIRE\"...", null);
+		final Item blockNotes = new Item("block notes", "Un quaderno di appunti che a giudicare dalla grafia sembra proprio essere il tuo. A quanto pare stavi raccogliendo dati su questa struttura e indizi per la risoluzione di un caso, ma non riesci a ricordare bene. Avevi sottolineato più volte \"DEVO ROMPERE LO SPECCHIO PER PROSEGUIRE\"...", null);
 		blockNotes.setHandler(new CommandHandler() {
 
 			@Override
