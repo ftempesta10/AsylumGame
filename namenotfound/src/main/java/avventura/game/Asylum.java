@@ -210,11 +210,7 @@ public class Asylum extends GameDescription implements Serializable {
 				                  "L'effetto del gas ti stordisce e non ti permette di vedere nulla. Puoi solo tornare indietro nel corridoio.",
 				                  "Bagno");
         m.insNode(bathroom);
-        /*Se hai la maschera
-        Room bathroom = new Room("Non appena entri nella stanza, i gas tossici iniziano a circolare nell'aria, ma la maschera ti protegge.",
-				"Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio.",
-				"Bagno");
-				*/
+        
 
       //second floor
         Room hallway4 = new Room("Sei nel corridoio del piano inferiore. L'atmosfera è più cupa, avverti un cattivo presentimento, sei vicino alla resa dei conti?",
@@ -233,9 +229,8 @@ public class Asylum extends GameDescription implements Serializable {
 					                  "Vedi un pc principale ed una pistola per terra. Puoi tornare nel corridoio o proseguire verso la cella imbottita",
 					                  "Sorveglianza");
   		m.insNode(surveillance);
-  		Room paddedCell = new Room("La scarsa illuminazione della stanza non ti permette di vedere bene. Dovresti utilizzare qualcosa per illuminare.",
-        "In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.",
-        "Cella imbottita");
+  		Room paddedCell = new Room("La scarsa illuminazione della stanza non ti permette di vedere bene. Dovresti utilizzare qualcosa per illuminare.", "Non riesci a vedere nulla, è troppo buio", "Cella imbottita");
+      ;
   		/*Room paddedCell = new Room("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi.",
 					                "In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.",
 					                "Cella imbottita");*/
@@ -432,7 +427,8 @@ public class Asylum extends GameDescription implements Serializable {
 							t.getCurrentRoom().setVisible(true);
 							if (t.getCurrentRoom().equals(paddedCell) && t.getCurrentRoom().getTrap()!= null) {
 								t.getCurrentRoom().getTrap().accept(t);
-								paddedCell.setLook("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi. Davanti a te vedi un essere mastodontico.")
+								paddedCell.setDescription("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi. Davanti a te vedi un essere mastodontico, è l'assistente del direttore.");
+								paddedCell.setLook("In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.");
 							}
 						}
 					};
