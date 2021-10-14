@@ -210,7 +210,7 @@ public class Asylum extends GameDescription implements Serializable {
 				                  "L'effetto del gas ti stordisce e non ti permette di vedere nulla. Puoi solo tornare indietro nel corridoio.",
 				                  "Bagno");
         m.insNode(bathroom);
-        
+
 
       //second floor
         Room hallway4 = new Room("Sei nel corridoio del piano inferiore. L'atmosfera è più cupa, avverti un cattivo presentimento, sei vicino alla resa dei conti?",
@@ -981,12 +981,12 @@ public class Asylum extends GameDescription implements Serializable {
 							// TODO Auto-generated method stub
 							System.out.println(mutant.getTalk());
 						}
-					};	
+					};
 				default:
 					return invalidCommand;
 				}};
 		});
-		final Enemy assistant = new Enemy(100, "assistant", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.", 
+		final Enemy assistant = new Enemy(100, "assistant", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.",
 				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
 				new Inventory(), null,5,20);
 		assistant.setHandler(new CommandHandler() {
@@ -1009,7 +1009,7 @@ public class Asylum extends GameDescription implements Serializable {
 							// TODO Auto-generated method stub
 							System.out.println(assistant.getTalk());
 						}
-					};	
+					};
 				default:
 					return invalidCommand;
 				}};
@@ -1037,7 +1037,7 @@ public class Asylum extends GameDescription implements Serializable {
 							// TODO Auto-generated method stub
 							System.out.println(director.getTalk());
 						}
-					};	
+					};
 				default:
 					return invalidCommand;
 				}};
@@ -1251,6 +1251,52 @@ public class Asylum extends GameDescription implements Serializable {
 		return null;
 	}
 
+	private Direction commandToDirection(CommandType c) {
+		switch (c) {
+		case NORD:
+			return Direction.NORTH;
+		case NORTH_EAST:
+			return Direction.NORTH_EAST;
+		case NORTH_WEST:
+			return Direction.NORTH_WEST;
+		case SOUTH:
+			return Direction.SOUTH;
+		case SOUTH_EAST:
+			return Direction.SOUTH_EAST;
+		case SOUTH_WEST:
+			return Direction.SOUTH_WEST;
+		case WEST:
+			return Direction.WEST;
+		case EAST:
+			return Direction.EAST;
+		case UP:
+			return Direction.UP;
+		case DOWN:
+			return Direction.DOWN;
+		default:
+			return null;
+		}
+	}
+
+	private void changeRoom(CommandType c, PrintStream out) {
+		if(compassUsed || c==CommandType.UP || c==CommandType.DOWN) {
+			try {
+				Room next = searchDirection(commandToDirection(c));
+				if (next == null) {
+					out.println("Non esiste nessuna stanza adiacente in quella direzione!");
+				} else if(getMap().readArc(getCurrentRoom(), next).isLocked()) {
+					out.println("La porta sembra esser bloccata...");
+				} else {
+					setCurrentRoom(next);
+				}
+			} catch (Exception e) {
+				out.println(e.getMessage());
+			}
+		}else {
+			out.println("Se solo avessi una bussola...");
+		}
+	}
+
 	@Override
 	public void nextMove(ParserOutput p, PrintStream out) {
 		// TODO Auto-generated method stub
@@ -1266,23 +1312,35 @@ public class Asylum extends GameDescription implements Serializable {
 			case LOOK_AT:
 				out.println(getCurrentRoom().getLook());
 				break;
+			case NORD:
+				changeRoom(p.getCommand().getType(), out);
+				break;
+			case NORTH_EAST:
+				changeRoom(p.getCommand().getType(), out);
+				break;
+			case NORTH_WEST:
+				changeRoom(p.getCommand().getType(), out);
+				break;
+			case SOUTH_EAST:
+				changeRoom(p.getCommand().getType(), out);
+				break;
+			case SOUTH_WEST:
+				changeRoom(p.getCommand().getType(), out);
+				break;
+			case EAST:
+				changeRoom(p.getCommand().getType(), out);
+				break;
+			case WEST:
+				changeRoom(p.getCommand().getType(), out);
+				break;
 			case SOUTH:
-				if(compassUsed) {
-					try {
-						Room next = searchDirection(Direction.SOUTH);
-						if (next == null) {
-							out.println("Non esiste nessuna stanza adiacente in quella direzione!");
-						} else if(getMap().readArc(getCurrentRoom(), next).isLocked()) {
-							out.println("La porta sembra esser bloccata...");
-						} else {
-							setCurrentRoom(next);
-						}
-					} catch (Exception e) {
-						out.println(e.getMessage());
-					}
-				}else {
-					out.println("Se solo avessi una bussola...");
-				}
+				changeRoom(p.getCommand().getType(), out);
+				break;
+			case UP:
+				changeRoom(p.getCommand().getType(), out);
+				break;
+			case DOWN:
+				changeRoom(p.getCommand().getType(), out);
 				break;
 			case WALK_TO:
 				try {
