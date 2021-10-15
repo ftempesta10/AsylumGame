@@ -155,7 +155,7 @@ public class Asylum extends GameDescription implements Serializable {
         pull.setAlias(new String[]{});
         getCommands().add(pull);
         Command _break = new Command(CommandType.BREAK, "rompi");
-        _break.setAlias(new String[]{"distruggi","spacca","colpisci"});
+        _break.setAlias(new String[]{"distruggi","spacca","colpisci", "attacca"});
         getCommands().add(_break);
         Command talk_to = new Command(CommandType.TALK_TO, "parla");
         talk_to.setAlias(new String[]{"dialoga","interagisci","comunica"});
@@ -263,7 +263,7 @@ public class Asylum extends GameDescription implements Serializable {
 					                  "Sorveglianza");
   		m.insNode(surveillance);
   		Room paddedCell = new Room("La scarsa illuminazione della stanza non ti permette di vedere bene. Dovresti utilizzare qualcosa per illuminare.", "Non riesci a vedere nulla, è troppo buio", "Cella imbottita");
-      
+
   		/*Room paddedCell = new Room("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi.",
 					                "In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.",
 					                "Cella imbottita");*/
@@ -272,7 +272,7 @@ public class Asylum extends GameDescription implements Serializable {
 					            "Vedi delle scale che conducono all'esterno della struttura, ma il passaggio è bloccato dal direttore. Puoi tornare indietro nella cella imbottita.",
 					            "Ufficio");
   		m.insNode(office);
-  		
+
   		Room exit = new Room("Sei finalmente uscito dal manicomio! Non puoi ancora credere a quello che ti è successo, sei ancora stordito, ma decidi di andare subito in ufficio a riferire tutto l'accaduto al tuo capo. Dopo aver risolto un caso del genere sarai sicuramente l'eroe della città!",
   				              "Sei all'esterno della struttura",
   				              "Uscita");
@@ -1337,7 +1337,7 @@ public class Asylum extends GameDescription implements Serializable {
 	@Override
 	public void nextMove(ParserOutput p, PrintStream out) {
 		// TODO Auto-generated method stub
-		if (p.getObject()==null && p.getEnemy()==null && p.getTarget()==null ) {
+		if (p.getObject()==null && p.getEnemy()==null && p.getTarget()==null) {
 			switch (p.getCommand().getType()) {
 			case INVENTORY:
 				for(Item i : getInventory().getList()) {
@@ -1394,6 +1394,49 @@ public class Asylum extends GameDescription implements Serializable {
 				}catch (Exception e) {
 					// TODO: handle exception
 				}
+				break;
+			default:
+				out.println("Credo che tu sia un po' confuso...");
+			}
+		} else if(p.getObject()!=null && p.getTarget()==null) {
+			p.getObject().getHandler().apply(p.getCommand().getType());
+		} else if(p.getEnemy()!=null && p.getTarget()==null) {
+			switch (p.getCommand().getType()) {
+			case TALK_TO:
+				out.println(p.getEnemy().getTalk());
+				break;
+			case BREAK:
+				p.getEnemy().setHealth(p.getEnemy().getHealth()-5);
+				break;
+			case LOOK_AT:
+				out.println(p.getEnemy().getDescription());
+				break;
+			default:
+				out.println("Credo che tu sia un po' confuso...");
+				break;
+			}
+		} else if(p.getObject()!=null && p.getTarget()!=null) {
+			switch (p.getCommand().getType()) {
+			case DROP:
+				if(p.getTarget() instanceof ItemContainer) {
+					p.getObject().getHandler().apply(CommandType.DROP);
+					getCurrentRoom().getObjects().remove(p.getObject());
+					((ItemContainer) p.getTarget()).add(p.getObject());
+				}else {
+					out.println("Credo che tu sia un po' confuso...");
+				}
+				break;
+			case BREAK:
+				if(p.getTarget() instanceof Weapon) {
+					p.getObject().getHandler().apply(CommandType.BREAK);
+					Integer s = ((Weapon) p.getTarget()).getShots();
+					((Weapon) p.getTarget()).setShots(s-1);
+				}else {
+					out.println("Credo che tu sia un po' confuso...");
+				}
+				break;
+			default:
+				out.println("Credo che tu sia un po' confuso...");
 				break;
 			}
 		}
