@@ -145,12 +145,45 @@ public class Asylum extends GameDescription implements Serializable {
         Command open = new Command(CommandType.OPEN, "apri");
         open.setAlias(new String[]{});
         getCommands().add(open);
+        Command close = new Command(CommandType.CLOSE, "chiudi");
+        close.setAlias(new String[]{});
+        getCommands().add(close);
         Command push = new Command(CommandType.PUSH, "premi");
         push.setAlias(new String[]{"spingi","attiva"});
         getCommands().add(push);
+        Command pull = new Command(CommandType.PULL, "tira");
+        pull.setAlias(new String[]{});
+        getCommands().add(pull);
         Command _break = new Command(CommandType.BREAK, "rompi");
         _break.setAlias(new String[]{"distruggi","spacca","colpisci"});
         getCommands().add(_break);
+        Command talk_to = new Command(CommandType.TALK_TO, "parla");
+        talk_to.setAlias(new String[]{"dialoga","interagisci","comunica"});
+        getCommands().add(talk_to);
+        Command walk_to = new Command(CommandType.WALK_TO, "vai");
+        walk_to.setAlias(new String[]{"entra"});
+        getCommands().add(walk_to);
+        Command up = new Command(CommandType.UP, "su");
+        up.setAlias(new String[]{"sopra"});
+        getCommands().add(up);
+        Command down = new Command(CommandType.DOWN, "giù");
+        down.setAlias(new String[]{"sotto"});
+        getCommands().add(down);
+        Command give = new Command(CommandType.GIVE, "dai");
+        give.setAlias(new String[]{});
+        getCommands().add(give);
+        Command use = new Command(CommandType.USE, "usa");
+        use.setAlias(new String[]{"utilizza"});
+        getCommands().add(use);
+        Command turn_on = new Command(CommandType.TURN_ON, "accendi");
+        turn_on.setAlias(new String[]{""});
+        getCommands().add(turn_on);
+        Command turn_off = new Command(CommandType.TURN_OFF, "spegni");
+        turn_off.setAlias(new String[]{""});
+        getCommands().add(turn_off);
+        Command drop = new Command(CommandType.DROP, "lascia");
+        drop.setAlias(new String[]{"getta","scarta"});
+        getCommands().add(drop);
 
         //set inv
         setInventory(new Inventory());
@@ -203,7 +236,7 @@ public class Asylum extends GameDescription implements Serializable {
 				                  "Corridoio 2");
         m.insNode(hallway2);
         Room hallway3 = new Room("Sei in un corridoio con quadri raffiguranti scheletri in azioni quotidiane. In un angolo c'è una statua della Santua Muerte. Forse sei in un luogo di culto?",
-				                  "Vedi scheletri ovunque. Puoi tornare indietro nel corridoio, entrare nel bagno, o prendere le scale per il piano superiore",
+				                  "Vedi scheletri ovunque. Puoi tornare indietro nel corridoio, entrare nel bagno, o prendere le scale per il piano inferiore",
 				                  "Corridoio 3");
         m.insNode(hallway3);
         Room bathroom = new Room("Non appena entri nella stanza, nell'aria inizia a circolare del gas tossico. Se vuoi sopravvivere, forse dovresti scappare da qui e trovare qualcosa con cui proteggerti!",
@@ -230,7 +263,7 @@ public class Asylum extends GameDescription implements Serializable {
 					                  "Sorveglianza");
   		m.insNode(surveillance);
   		Room paddedCell = new Room("La scarsa illuminazione della stanza non ti permette di vedere bene. Dovresti utilizzare qualcosa per illuminare.", "Non riesci a vedere nulla, è troppo buio", "Cella imbottita");
-      ;
+      
   		/*Room paddedCell = new Room("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi.",
 					                "In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.",
 					                "Cella imbottita");*/
@@ -239,6 +272,10 @@ public class Asylum extends GameDescription implements Serializable {
 					            "Vedi delle scale che conducono all'esterno della struttura, ma il passaggio è bloccato dal direttore. Puoi tornare indietro nella cella imbottita.",
 					            "Ufficio");
   		m.insNode(office);
+  		
+  		Room exit = new Room("Sei finalmente uscito dal manicomio! Non puoi ancora credere a quello che ti è successo, sei ancora stordito, ma decidi di andare subito in ufficio a riferire tutto l'accaduto al tuo capo. Dopo aver risolto un caso del genere sarai sicuramente l'eroe della città!",
+  				              "Sei all'esterno della struttura",
+  				              "Uscita");
 
 
 		final Item key = new Item("key", "Una chiave che potrebbe tornare utile per aprire qualcosa.", null);
@@ -1161,8 +1198,8 @@ public class Asylum extends GameDescription implements Serializable {
 		m.insArc(bathroom, hallway3, new Gateway(Direction.SOUTH));
 		m.insArc(hallway3, bathroom, new Gateway(Direction.NORTH));
 
-		m.insArc(hallway3, hallway4, new Gateway(Direction.SOUTH));
-		m.insArc(hallway4, hallway3, new Gateway(Direction.NORTH));
+		m.insArc(hallway3, hallway4, new Gateway(Direction.DOWN));
+		m.insArc(hallway4, hallway3, new Gateway(Direction.UP));
 
 		m.insArc(hallway4, infirmary, new Gateway(Direction.NORTH_EAST));
 		m.insArc(infirmary, hallway4, new Gateway(Direction.WEST));
