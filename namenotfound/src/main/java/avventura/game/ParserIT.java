@@ -34,7 +34,7 @@ public class ParserIT implements Parser{
 	        }
 	        return -1;
 	}
-	
+
 	@Override
 	public int checkForSingleCommand(String token, Command commands) {
 	       if (commands.getName().equals(token) || commands.getAlias().contains(token)) {
@@ -52,13 +52,22 @@ public class ParserIT implements Parser{
         return -1;
     }
 
+	private Command searchWalkto(List<Command> commands) {
+		for(Command c: commands) {
+			if(c.getType()==CommandType.WALK_TO) {
+				return c;
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public ParserOutput parse(String command, List<Command> commands, List<Item> objects, Inventory inv,
 			List<AdventureCharacter> enemies) throws Exception {
 		// TODO Auto-generated method stub
 		String cmd = command.toLowerCase().trim();
         String[] tokens = cmd.split("\\s+");
-        Command walk = new Command(CommandType.WALK_TO, "walk_to");
+        Command walk = searchWalkto(commands);
         switch(tokens.length) {
         case 1 :
         	//verbo
@@ -67,8 +76,8 @@ public class ParserIT implements Parser{
         	else throw new InvalidCommandException();
 
         case 2 :
-        	//verbo oggetto | verbo nemico | verbo stanza	
-        	if(checkForSingleCommand(tokens[0], walk) == 0 && !articles.contains(tokens[1]) 
+        	//verbo oggetto | verbo nemico | verbo stanza
+        	if(checkForSingleCommand(tokens[0], walk) == 0 && !articles.contains(tokens[1])
         												&& !prepositions.contains(tokens[1])) {
         		return new ParserOutput(walk, tokens[1]);
         	}
@@ -89,11 +98,11 @@ public class ParserIT implements Parser{
         	}
         case 3 :
         	//verbo articolo oggetto | verbo articolo nemico | verbo articolo stanza
-        	if(checkForSingleCommand(tokens[0], walk) == 0 && articles.contains(tokens[1]) 
+        	if(checkForSingleCommand(tokens[0], walk) == 0 && articles.contains(tokens[1])
 						&& prepositions.contains(tokens[1])) {
         			return new ParserOutput(walk, tokens[2]);
 			}
-        	
+
         	int com3 = checkForCommand(tokens[0], commands);
         	if(com3 > -1) {
         		if(articles.contains(tokens[1])) {
@@ -119,13 +128,13 @@ public class ParserIT implements Parser{
             			int secondObj = checkForObject(tokens[3], objects);
             			if(secondObj != -1 && obj4 != -1) return new ParserOutput(commands.get(com4), objects.get(obj4),objects.get(secondObj));
             			if(secondObj != -1 && inv4 != -1) return new ParserOutput(commands.get(com4), objects.get(inv4),objects.get(secondObj));
-            			
+
             			int secondInv = checkForObject(tokens[3], inv.getList());
             			if(secondInv != -1 && obj4 != -1) return new ParserOutput(commands.get(com4), objects.get(obj4),objects.get(secondInv));
             			if(secondInv != -1 && inv4 != -1) return new ParserOutput(commands.get(com4), objects.get(inv4),objects.get(secondInv));
             			throw new InvalidCommandException();
             		} else throw new InvalidCommandException();
-            	} else throw new InvalidCommandException(); 	
+            	} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
 
         case 5 :
@@ -140,7 +149,7 @@ public class ParserIT implements Parser{
                 			int secondObj = checkForObject(tokens[4], objects);
                 			if(secondObj != -1 && obj5 != -1) return new ParserOutput(commands.get(com5), objects.get(obj5),objects.get(secondObj));
                 			if(secondObj != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), objects.get(inv5),objects.get(secondObj));
-                			
+
                 			int secondInv = checkForObject(tokens[4], inv.getList());
                 			if(secondInv != -1 && obj5 != -1) return new ParserOutput(commands.get(com5), objects.get(obj5),objects.get(secondInv));
                 			if(secondInv != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), objects.get(inv5),objects.get(secondInv));

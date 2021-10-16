@@ -1,6 +1,7 @@
 package engine;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Item implements Serializable {
@@ -21,6 +22,7 @@ public class Item implements Serializable {
 		pushed=false;
 		opened=false;
 		this.handler = handler;
+		this.alias = new HashSet<String>();
 	}
 
 	public String getName() {

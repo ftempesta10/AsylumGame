@@ -1324,7 +1324,7 @@ public class Asylum extends GameDescription implements Serializable {
 				out.println("Credo che tu sia un po' confuso...");
 			}
 		} else if(p.getObject()!=null && p.getTarget()==null) {
-			p.getObject().getHandler().apply(p.getCommand().getType());
+			p.getObject().getHandler().apply(p.getCommand().getType()).accept(this);
 		} else if(p.getEnemy()!=null && p.getTarget()==null) {
 			switch (p.getCommand().getType()) {
 			case TALK_TO:
