@@ -46,7 +46,7 @@ public class HandleDB {
 		PreparedStatement pstm = conn.prepareStatement(
 				"DELETE FROM saves WHERE player = ?");
 		pstm.setString(1, player);
-		
+
 		pstm.executeUpdate();
 		pstm.close();
 	}

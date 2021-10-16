@@ -748,7 +748,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Accendi il PC: vengono mostrati i video degli esperimenti sui pazienti. Ora ricordi: stavi indagando sulla scomparsa di un paziente all'interno del manicomio quando qualcuno ti ha colpito alla testa! Dai video emerge che questi esperimenti causano delle mutazioni nei pazienti!")						}
+							System.out.println("Accendi il PC: vengono mostrati i video degli esperimenti sui pazienti. Ora ricordi: stavi indagando sulla scomparsa di un paziente all'interno del manicomio quando qualcuno ti ha colpito alla testa! Dai video emerge che questi esperimenti causano delle mutazioni nei pazienti!");						}
 					};
 				case LOOK_AT:
 					return new EventHandler() {
@@ -998,87 +998,12 @@ public class Asylum extends GameDescription implements Serializable {
 
 
 		final Enemy mutant = new Enemy(100, "mutant", "Un mutante dal viso fortemente sfigurato. Sarà mica Deadpool?", "Anche tu sei uno di loro?! Non ti lascerò farmi del male!", null, codePaper,5,20);
-		mutant.setHandler(new CommandHandler() {
-
-			@Override
-			public EventHandler apply(CommandType t) {
-				switch(t) {
-				case LOOK_AT:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(mutant.getDescription());
-						}
-					};
-				case TALK_TO:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(mutant.getTalk());
-						}
-					};
-				default:
-					return invalidCommand;
-				}};
-		});
 		final Enemy assistant = new Enemy(100, "assistant", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.",
 				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
 				new Inventory(), null,5,20);
-		assistant.setHandler(new CommandHandler() {
-
-			@Override
-			public EventHandler apply(CommandType t) {
-				switch(t) {
-				case LOOK_AT:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(assistant.getDescription());
-						}
-					};
-				case TALK_TO:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(assistant.getTalk());
-						}
-					};
-				default:
-					return invalidCommand;
-				}};
-		});
 		final Enemy director = new Enemy(100, "director", "È il direttore, nonchè la mente contorta dietro tutto questo. I segni del virus sembrano meno evidenti su di lui. Avrà furbamente aspettato più miglioramenti possibili al virus prima di sottoporsi lui stesso ad esso. Eppure ti è sempre sembrato un tipo perbene...",
 				"Muahahah! Eccoti qua agente. Dopo aver sentito gli spari dalla cella, ti aspettavo. Sei sopreso dopo aver scoperto i miei piani? Lo sarai di più dopo aver visto i poteri che acquisirai tramite il virus! Non prendermi per pazzo, grazie a questo virus non esisteranno mai più deboli in questo mondo. Io renderò l'essere umano la creatura più potente che sia mai esistita sulla Terra! Si parlerà di me per milioni e milioni di anni! Ma se non vuoi aiutarmi, non preoccuparti. Ci servono delle vittime sacrificali in onore della Santa Muerte che ci supporta in tutto questo. Dunque preparati a morire!",
 				null, null,5,20);
-		director.setHandler(new CommandHandler() {
-
-			@Override
-			public EventHandler apply(CommandType t) {
-				switch(t) {
-				case LOOK_AT:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(director.getDescription());
-						}
-					};
-				case TALK_TO:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(director.getTalk());
-						}
-					};
-				default:
-					return invalidCommand;
-				}};
-		});
 
 		Item key_1= new Item("Chiave assistente", "Sembra la chiave di una porta...", null);
 		key_1.setHandler(new CommandHandler() {
@@ -1147,7 +1072,7 @@ public class Asylum extends GameDescription implements Serializable {
 		room1.getObjects().add(key);
 		room2.getObjects().add(bed);
 		room3.getObjects().add(chest);
-		hallway2.getEnemies().add(human);
+		hallway2.getEnemies().add(mutant);
 		room4.getObjects().add(bed);
 		room5.getObjects().add(bed);
 		room6.getObjects().add(screwdriver);
