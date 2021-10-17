@@ -1,6 +1,10 @@
 package engine;
 
 public class Weapon extends Item {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 5385694912875362656L;
 	private Integer shots, minDamage, maxDamage;
 
 	public Weapon(String name, String description, CommandHandler handler, Integer shots, Integer minDamage, Integer maxDamage) {

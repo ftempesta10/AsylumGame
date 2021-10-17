@@ -8,7 +8,12 @@ import java.util.Set;
 
 public class Command implements Serializable {
 
-    private final CommandType type;
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = -5831787013149230373L;
+
+	private final CommandType type;
 
     private final String name;
 

@@ -3,6 +3,11 @@ package engine;
 import java.io.Serializable;
 
 public class Gateway implements Serializable{
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 6181706106900241206L;
+
 	private Integer lockedBy = null;
 
 	private Boolean locked = false;

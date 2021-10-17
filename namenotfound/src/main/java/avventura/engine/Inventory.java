@@ -6,7 +6,11 @@ import java.util.List;
 
 public class Inventory implements Serializable {
 
-    private List<Item> list = new ArrayList<Item>();
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = 4533980696666065652L;
+	private List<Item> list = new ArrayList<Item>();
 
     public List<Item> getList() {
         return list;

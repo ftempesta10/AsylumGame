@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Item implements Serializable {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 5059157097169486201L;
 	private static Integer istances = 0;
 	private String name, description;
 	private Integer id;

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemContainer extends Item {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 5235540060863130525L;
 	private Integer lockedBy;
 	private Boolean locked;
 	private List<Item> content = new ArrayList<Item>();

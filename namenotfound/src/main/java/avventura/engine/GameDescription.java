@@ -8,7 +8,11 @@ import java.util.List;
 import hashedGraph.WeightedHashedGraph;
 
 public abstract class GameDescription implements Serializable {
-    private Room currentRoom;
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = 8139556683440889287L;
+	private Room currentRoom;
     private WeightedHashedGraph<Room, Gateway> map;
     private Inventory inventory;
     private Item commandTarget;

@@ -2,6 +2,10 @@ package engine;
 import java.io.Serializable;
 
 public class AdventureCharacter implements Serializable {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -6608717241444829961L;
 	private static Integer instances = 0;
 	private Integer health;
 	private String name, description, talk;
