@@ -1,6 +1,5 @@
 package game;
 
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,14 +53,14 @@ public class Manager extends JFrame {
 		layeredPane.setLayer(mainPanel, 1);
 		layeredPane.add(mainPanel);
 		mainPanel.setLayout(null);
-		
-		ImageIcon icon = new ImageIcon("C:\\Users\\39348\\Downloads\\img.png"); 
+
+		ImageIcon icon = new ImageIcon(getClass().getResource("/header_manager.png"));
 		JLabel thumb = new JLabel();
 		thumb.setIcon(icon);
 		thumb.setBounds(52,0,299,41);
 		mainPanel.add(thumb);
 
-		
+
 		JButton btnNewButton = new JButton("New Game");
 		btnNewButton.setAction(newGameAction);
 		btnNewButton.setBounds(62, 205, 93, 23);
@@ -112,8 +111,8 @@ public class Manager extends JFrame {
 
 		newGamePanel.add(startButton);
 		newGamePanel.setVisible(false);
-		
-		
+
+
 	}
 
 	private class NewGame extends AbstractAction {
