@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -46,12 +48,21 @@ public class Manager extends JFrame {
 		getContentPane().add(layeredPane);
 
 		//init mainPanel
+		this.setTitle("Salvataggi Asylum Game");
 		mainPanel.setSize(414, 239);
 		mainPanel.setLocation(10, 11);
 		layeredPane.setLayer(mainPanel, 1);
 		layeredPane.add(mainPanel);
 		mainPanel.setLayout(null);
+		
+		//+
+		ImageIcon icon = new ImageIcon("C:\\Users\\39348\\Downloads\\img.png"); 
+		JLabel thumb = new JLabel();
+		thumb.setIcon(icon);
+		thumb.setBounds(52,0,299,41);
+		mainPanel.add(thumb);
 
+		
 		JButton btnNewButton = new JButton("New Game");
 		btnNewButton.setAction(newGameAction);
 		btnNewButton.setBounds(62, 205, 93, 23);
@@ -69,7 +80,7 @@ public class Manager extends JFrame {
 
 		//init lista dei salvataggi
 		JList list = new JList();
-		list.setBounds(52, 37, 299, 157);
+		list.setBounds(52, 40, 299, 157);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setModel(new DefaultListModel<String>());
 		DefaultListModel<String> m = (DefaultListModel) list.getModel();
@@ -102,6 +113,8 @@ public class Manager extends JFrame {
 
 		newGamePanel.add(startButton);
 		newGamePanel.setVisible(false);
+		
+		
 	}
 
 	private class NewGame extends AbstractAction {
