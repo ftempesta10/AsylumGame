@@ -55,7 +55,6 @@ public class Manager extends JFrame {
 		layeredPane.add(mainPanel);
 		mainPanel.setLayout(null);
 		
-		//+
 		ImageIcon icon = new ImageIcon("C:\\Users\\39348\\Downloads\\img.png"); 
 		JLabel thumb = new JLabel();
 		thumb.setIcon(icon);
