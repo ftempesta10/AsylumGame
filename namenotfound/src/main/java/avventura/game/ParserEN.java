@@ -19,12 +19,14 @@ public class ParserEN implements Parser{
 	}
 
 
+	@Override
 	public boolean checkInDictionary(String token, List<String> dictionary) throws Exception {
 		// TODO Auto-generated method stub
 		if(dictionary.contains(token)) return true;
 		else return false;
 	}
 
+	@Override
 	public int checkForCommand(String token, List<Command> commands) {
 	        for (int i = 0; i < commands.size(); i++) {
 	            if (commands.get(i).getName().equals(token) || commands.get(i).getAlias().contains(token)) {
@@ -34,13 +36,15 @@ public class ParserEN implements Parser{
 	        return -1;
 	}
 
+	@Override
 	public int checkForSingleCommand(String token, Command commands) {
 	       if (commands.getName().equals(token) || commands.getAlias().contains(token)) {
 	                return 0;
 	          }
 	        return -1;
 	}
-	
+
+	@Override
 	public int checkForObject(String token, List<Item> obejcts) {
         for (int i = 0; i < obejcts.size(); i++) {
             if (obejcts.get(i).getName().equals(token) || obejcts.get(i).getAlias().contains(token)) {
@@ -50,7 +54,8 @@ public class ParserEN implements Parser{
         return -1;
     }
 
-	
+
+	@Override
 	public ParserOutput parse(String command, List<Command> commands, List<Item> objects, Inventory inv,
 			List<AdventureCharacter> enemies) throws Exception {
 		// TODO Auto-generated method stub
@@ -58,7 +63,7 @@ public class ParserEN implements Parser{
         String[] tokens = cmd.split("\\s+");
         Command walk = new Command(CommandType.WALK_TO, "walk_to");
         switch(tokens.length) {
-        case 1 : 
+        case 1 :
         	//Verb
         	int com = checkForCommand(tokens[0], commands);
         	if(com > -1) return new ParserOutput(commands.get(com));
@@ -66,7 +71,7 @@ public class ParserEN implements Parser{
 
         case 2 :
         	//Verb object | verb enemy | verb room
-        	if(checkForSingleCommand(tokens[0], walk) == 0 && !articles.contains(tokens[1]) 
+        	if(checkForSingleCommand(tokens[0], walk) == 0 && !articles.contains(tokens[1])
 						&& !prepositions.contains(tokens[1])) {
         			return new ParserOutput(walk, tokens[1]);
         	}
@@ -75,7 +80,7 @@ public class ParserEN implements Parser{
 			int obj2 = checkForObject(tokens[1], objects);
 			if(obj2 != -1) return new ParserOutput(commands.get(com2), objects.get(obj2));
 			int inv2= checkForObject(tokens[1], inv.getList());
-			if(inv2 != -1) return new ParserOutput(commands.get(com2), objects.get(inv2));
+			if(inv2 != -1) return new ParserOutput(commands.get(com2), inv.getList().get(inv2));
 			for(AdventureCharacter a : enemies) {
 				if(a.getName().equals(tokens[1])) {
 					return new ParserOutput(commands.get(com2), a);
@@ -83,20 +88,20 @@ public class ParserEN implements Parser{
 				}
 				throw new InvalidCommandException();
 			} else throw new InvalidCommandException();
- 
+
         case 3 :
         	//verb article object | verb article enemy | verb article room
-        	if(checkForSingleCommand(tokens[0], walk) == 0 && articles.contains(tokens[1]) 
+        	if(checkForSingleCommand(tokens[0], walk) == 0 && articles.contains(tokens[1])
 							&& prepositions.contains(tokens[1])) {
         			return new ParserOutput(walk, tokens[2]);
-			}	
+			}
 			int com3 = checkForCommand(tokens[0], commands);
 			if(com3 > -1) {
 				if(articles.contains(tokens[1])) {
 					int obj3 = checkForObject(tokens[2], objects);
 			    	if(obj3 != -1) return new ParserOutput(commands.get(com3), objects.get(obj3));
 			    	int inv3= checkForObject(tokens[2], inv.getList());
-			    	if(inv3 != -1) return new ParserOutput(commands.get(com3), objects.get(inv3));
+			    	if(inv3 != -1) return new ParserOutput(commands.get(com3), inv.getList().get(inv3));
 					for(AdventureCharacter a : enemies) {
 						if(a.getName().equals(tokens[2])) return new ParserOutput(commands.get(com3), a);
 					}
@@ -114,14 +119,14 @@ public class ParserEN implements Parser{
             		if(prepositions.contains(tokens[2])) {
             			int secondObj = checkForObject(tokens[3], objects);
             			if(secondObj != -1 && obj4 != -1) return new ParserOutput(commands.get(com4), objects.get(obj4),objects.get(secondObj));
-            			if(secondObj != -1 && inv4 != -1) return new ParserOutput(commands.get(com4), objects.get(inv4),objects.get(secondObj));
-            			
+            			if(secondObj != -1 && inv4 != -1) return new ParserOutput(commands.get(com4), inv.getList().get(inv4), objects.get(secondObj));
+
             			int secondInv = checkForObject(tokens[3], inv.getList());
-            			if(secondInv != -1 && obj4 != -1) return new ParserOutput(commands.get(com4), objects.get(obj4),objects.get(secondInv));
-            			if(secondInv != -1 && inv4 != -1) return new ParserOutput(commands.get(com4), objects.get(inv4),objects.get(secondInv));
+            			if(secondInv != -1 && obj4 != -1) return new ParserOutput(commands.get(com4), objects.get(obj4), inv.getList().get(secondInv));
+            			if(secondInv != -1 && inv4 != -1) return new ParserOutput(commands.get(com4), inv.getList().get(inv4), inv.getList().get(secondInv));
             			throw new InvalidCommandException();
             		} else throw new InvalidCommandException();
-            	} else throw new InvalidCommandException(); 	
+            	} else throw new InvalidCommandException();
         	} else throw new InvalidCommandException();
 
         case 5 :
@@ -136,11 +141,11 @@ public class ParserEN implements Parser{
                 		if(prepositions.contains(tokens[3])) {
                 			int secondObj = checkForObject(tokens[4], objects);
                 			if(secondObj != -1 && obj5 != -1) return new ParserOutput(commands.get(com5), objects.get(obj5),objects.get(secondObj));
-                			if(secondObj != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), objects.get(inv5),objects.get(secondObj));
-                			
+                			if(secondObj != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), inv.getList().get(inv5),objects.get(secondObj));
+
                 			int secondInv = checkForObject(tokens[4], inv.getList());
-                			if(secondInv != -1 && obj5 != -1) return new ParserOutput(commands.get(com5), objects.get(obj5),objects.get(secondInv));
-                			if(secondInv != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), objects.get(inv5),objects.get(secondInv));
+                			if(secondInv != -1 && obj5 != -1) return new ParserOutput(commands.get(com5), objects.get(obj5), inv.getList().get(secondInv));
+                			if(secondInv != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), inv.getList().get(inv5), inv.getList().get(secondInv));
                 			throw new InvalidCommandException();
                 		} else throw new InvalidCommandException();
                 	} else throw new InvalidCommandException();
@@ -151,11 +156,11 @@ public class ParserEN implements Parser{
                 		if(prepositions.contains(tokens[2]) && articles.contains(tokens[3])) {
                 			int secondObj = checkForObject(tokens[4], objects);
                 			if(secondObj != -1 && obj5 != -1) return new ParserOutput(commands.get(com5), objects.get(obj5),objects.get(secondObj));
-                			if(secondObj != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), objects.get(inv5),objects.get(secondObj));
-                			
+                			if(secondObj != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), inv.getList().get(inv5), objects.get(secondObj));
+
                 			int secondInv = checkForObject(tokens[4], inv.getList());
-                			if(secondInv != -1 && obj5 != -1) return new ParserOutput(commands.get(com5), objects.get(obj5),objects.get(secondInv));
-                			if(secondInv != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), objects.get(inv5),objects.get(secondInv));
+                			if(secondInv != -1 && obj5 != -1) return new ParserOutput(commands.get(com5), objects.get(obj5), inv.getList().get(secondInv));
+                			if(secondInv != -1 && inv5 != -1) return new ParserOutput(commands.get(com5), inv.getList().get(inv5), inv.getList().get(secondInv));
                 			throw new InvalidCommandException();
                 		} else throw new InvalidCommandException();
                 	} else throw new InvalidCommandException();
@@ -173,11 +178,11 @@ public class ParserEN implements Parser{
                 		if(prepositions.contains(tokens[3]) && articles.contains(tokens[4])) {
                 			int secondObj = checkForObject(tokens[5], objects);
                 			if(secondObj != -1 && obj6 != -1) return new ParserOutput(commands.get(com6), objects.get(obj6),objects.get(secondObj));
-                			if(secondObj != -1 && inv6 != -1) return new ParserOutput(commands.get(com6), objects.get(inv6),objects.get(secondObj));
-                			
+                			if(secondObj != -1 && inv6 != -1) return new ParserOutput(commands.get(com6), inv.getList().get(inv6), objects.get(secondObj));
+
                 			int secondInv = checkForObject(tokens[5], inv.getList());
-                			if(secondInv != -1 && obj6 != -1) return new ParserOutput(commands.get(com6), objects.get(obj6),objects.get(secondInv));
-                			if(secondInv != -1 && inv6 != -1) return new ParserOutput(commands.get(com6), objects.get(inv6),objects.get(secondInv));
+                			if(secondInv != -1 && obj6 != -1) return new ParserOutput(commands.get(com6), objects.get(obj6), inv.getList().get(secondInv));
+                			if(secondInv != -1 && inv6 != -1) return new ParserOutput(commands.get(com6), inv.getList().get(inv6), inv.getList().get(secondInv));
                 			throw new InvalidCommandException();
                 		} else throw new InvalidCommandException();
                 	} else throw new InvalidCommandException();
@@ -190,12 +195,14 @@ public class ParserEN implements Parser{
 	}
 
 
+	@Override
 	public void loadArticles() {
 		// TODO Auto-generated method stub
 		articles.add("the");
 	}
 
 
+	@Override
 	public void loadPrepositions() {
 		// TODO Auto-generated method stub
 		prepositions.add("with");
