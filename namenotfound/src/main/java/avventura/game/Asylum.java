@@ -340,7 +340,7 @@ public class Asylum extends GameDescription implements Serializable {
 		});
 		Inventory corpeInv = new Inventory();
 		corpeInv.add(key);
-		final AdventureCharacter corpse = new AdventureCharacter(0, "corpe", "Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo. Dalla tasca della sua giacca sembra spuntare una chiave.", null, corpeInv, null);
+		final AdventureCharacter corpse = new AdventureCharacter(0, "corpe", "Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo. Dalla tasca della sua giacca sembra spuntare una chiave.", null, corpeInv, key);
 		final Item bed = new Item("bed", "Un letto nel quale dormono i pazienti.", null);
 		bed.setHandler(new CommandHandler() {
 
@@ -1073,7 +1073,6 @@ public class Asylum extends GameDescription implements Serializable {
 
 		room1.getEnemies().add(corpse);
 		room1.getObjects().add(bed);
-		room1.getObjects().add(key);
 		room2.getObjects().add(bed);
 		room3.getObjects().add(chest);
 		hallway2.getEnemies().add(mutant);
@@ -1339,6 +1338,7 @@ public class Asylum extends GameDescription implements Serializable {
 				break;
 			case LOOK_AT:
 				out.println(p.getEnemy().getDescription());
+				if(p.getEnemy().getHealth() == 0) getCurrentRoom().getObjects().add(p.getEnemy().getDroppable());
 				break;
 			default:
 				out.println("Credo che tu sia un po' confuso...");
