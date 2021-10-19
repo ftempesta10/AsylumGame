@@ -75,6 +75,7 @@
           						<include>**/engine/*</include>
           						<include>**/engine/launcher/*</include>
           						<include>**/hashedGraph/*</include>
+          						<include>**/InvalidCommandException*</include>
           					</includes>
           					<archive>
 								<manifest>

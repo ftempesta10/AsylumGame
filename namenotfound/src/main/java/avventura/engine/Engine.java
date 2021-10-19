@@ -38,16 +38,22 @@ public class Engine {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
-            ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(),
-            		game.getInventory(), game.getCurrentRoom().getEnemies());
-            if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
-            	System.out.println(bundle.getString("end"));
-            	scanner.close();
-                break;
-            } else {
-                game.nextMove(p, System.out);
-                System.out.println("================================================");
-            }
+            try {
+            	ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(),
+                		game.getInventory(), game.getCurrentRoom().getEnemies());
+                if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
+                	System.out.println(bundle.getString("end"));
+                	scanner.close();
+                    break;
+                } else {
+                    game.nextMove(p, System.out);
+                    System.out.println("================================================");
+                }
+            }catch (InvalidCommandException e) {
+				System.out.println(e.getMessage());
+				System.out.println("================================================");
+			}
+
         }
         System.exit(0);
     }
