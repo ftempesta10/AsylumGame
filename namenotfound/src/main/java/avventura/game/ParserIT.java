@@ -16,6 +16,7 @@ public class ParserIT implements Parser{
 	public ParserIT() {
 		this.loadArticles();
 		this.loadPrepositions();
+		this.loadWhitespace();
 	}
 
 	@Override
@@ -99,9 +100,12 @@ public class ParserIT implements Parser{
         case 3 :
         	//verbo articolo oggetto | verbo articolo nemico | verbo articolo stanza
         	if(checkForSingleCommand(tokens[0], walk) == 0 && articles.contains(tokens[1])
-						&& prepositions.contains(tokens[1])) {
+						|| prepositions.contains(tokens[1]))  {
         			return new ParserOutput(walk, tokens[2]);
 			}
+        	else if (checkForSingleCommand(tokens[0], walk) == 0 && whitespace.contains(tokens[2]))  {
+    			return new ParserOutput(walk, tokens[1] + " " + tokens[2]);
+		}
 
         	int com3 = checkForCommand(tokens[0], commands);
         	if(com3 > -1) {
@@ -119,6 +123,10 @@ public class ParserIT implements Parser{
 
         case 4 :
         	//verbo oggetto preposizione oggetto
+        	if(checkForSingleCommand(tokens[0], walk) == 0 && whitespace.contains(tokens[3]) && 
+						 prepositions.contains(tokens[1]))  {
+        			return new ParserOutput(walk, tokens[2] + " " + tokens[3]);
+			}
         	int com4 = checkForCommand(tokens[0], commands);
         	if(com4 > -1) {
         		int obj4 = checkForObject(tokens[1], objects);
@@ -174,6 +182,22 @@ public class ParserIT implements Parser{
 		articles.add("gli");
 		articles.add("gle");
 	}
+	
+	public void loadWhitespace() {
+		whitespace.add("operatoria");
+		whitespace.add("imbottita");
+		whitespace.add("1");
+		whitespace.add("2");
+		whitespace.add("3");
+		whitespace.add("4");
+		whitespace.add("5");
+		whitespace.add("6");
+		whitespace.add("7");
+		whitespace.add("8");
+
+
+	}
+
 
 
 	@Override

@@ -16,6 +16,8 @@ public class ParserEN implements Parser{
 	public ParserEN() {
 		this.loadArticles();
 		this.loadPrepositions();
+		this.loadWhitespace();
+
 	}
 
 
@@ -199,6 +201,10 @@ public class ParserEN implements Parser{
 	public void loadArticles() {
 		// TODO Auto-generated method stub
 		articles.add("the");
+	}
+
+	public void loadWhitespace() {
+		whitespace.add("");
 	}
 
 
