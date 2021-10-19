@@ -306,11 +306,18 @@ public class Asylum extends GameDescription implements Serializable {
 								try {
 									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
 										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==key.getId()) {
-											m.readArc(t.getCurrentRoom(), a).setLocked(false);
+											for (Item i : t.getInventory().getList()) {
+												if (i.equals(key)) {
+													m.readArc(t.getCurrentRoom(), a).setLocked(false);
+													System.out.println("La chiave sembra entrare perfettamente nella serratura della porta che conduce nel corridoio!");
+													EventHandler.drop(key, t);
+													break;
+												}
+											}
 										}
 									}
-									System.out.println("La chiave sembra entrare perfettamente nella serratura della porta che conduce nel corridoio!");
-									EventHandler.drop(key, t);
+								
+									
 
 								} catch (Exception e) {
 									System.out.println(e.getMessage());
@@ -1319,7 +1326,6 @@ public class Asylum extends GameDescription implements Serializable {
 			case WALK_TO:
 				outer:
 				try {
-					out.println(p.getNextRoom());
 					for(Room a : getMap().getAdjacents(getCurrentRoom())) {
 						if(a.getName().equals(p.getNextRoom())) {
 							 if(getMap().readArc(getCurrentRoom(), a).isLocked()) {
