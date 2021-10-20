@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -53,10 +52,6 @@ public class Manager extends JFrame {
 		layeredPane.setLayer(mainPanel, 1);
 		layeredPane.add(mainPanel);
 		mainPanel.setLayout(null);
-
-		JLabel thumb = new JLabel(new javax.swing.ImageIcon(getClass().getResource("/header_manager.png")));
-		thumb.setBounds(52,0,299,41);
-		mainPanel.add(thumb);
 
 
 		JButton btnNewButton = new JButton("New Game");
@@ -110,6 +105,10 @@ public class Manager extends JFrame {
 		newGamePanel.add(startButton);
 		newGamePanel.setVisible(false);
 
+
+		JLabel thumb = new JLabel(new javax.swing.ImageIcon(getClass().getResource("/header_manager.png")));
+		thumb.setBounds(52,0,299,41);
+		mainPanel.add(thumb);
 
 	}
 
