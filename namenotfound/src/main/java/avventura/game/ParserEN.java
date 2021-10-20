@@ -94,9 +94,12 @@ public class ParserEN implements Parser{
         case 3 :
         	//verb article object | verb article enemy | verb article room
         	if(checkForSingleCommand(tokens[0], walk) == 0 && articles.contains(tokens[1])
-							&& prepositions.contains(tokens[1])) {
-        			return new ParserOutput(walk, tokens[2]);
-			}
+			|| prepositions.contains(tokens[1]))  {
+        		return new ParserOutput(walk, tokens[2]);
+        	}
+        	else if (checkForSingleCommand(tokens[0], walk) == 0 && whitespace.contains(tokens[2]))  {
+        		return new ParserOutput(walk, tokens[1] + " " + tokens[2]);
+        	}
 			int com3 = checkForCommand(tokens[0], commands);
 			if(com3 > -1) {
 				if(articles.contains(tokens[1])) {
@@ -113,6 +116,10 @@ public class ParserEN implements Parser{
 
         case 4 :
         	//verb object preposition object
+        	if(checkForSingleCommand(tokens[0], walk) == 0 && whitespace.contains(tokens[3]) && 
+			 		prepositions.contains(tokens[1]))  {
+        		return new ParserOutput(walk, tokens[2] + " " + tokens[3]);
+        	}
         	int com4 = checkForCommand(tokens[0], commands);
         	if(com4 > -1) {
         		int obj4 = checkForObject(tokens[1], objects);
@@ -204,7 +211,17 @@ public class ParserEN implements Parser{
 	}
 
 	public void loadWhitespace() {
-		whitespace.add("");
+		whitespace.add("cell");
+		whitespace.add("1");
+		whitespace.add("2");
+		whitespace.add("3");
+		whitespace.add("4");
+		whitespace.add("5");
+		whitespace.add("6");
+		whitespace.add("7");
+		whitespace.add("8");
+
+
 	}
 
 
