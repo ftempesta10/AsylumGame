@@ -82,6 +82,10 @@ public class Manager extends JFrame {
 		for(String k : saves.keySet())
 			m.addElement(k);
 
+		JLabel thumb = new JLabel(new javax.swing.ImageIcon(getClass().getResource("/header_manager.png")));
+		thumb.setBounds(52,0,299,41);
+		mainPanel.add(thumb);
+
 		//init newGamePanel
 		layeredPane.add(newGamePanel);
 		newGamePanel.setSize(250, 200);
@@ -105,10 +109,6 @@ public class Manager extends JFrame {
 		newGamePanel.add(startButton);
 		newGamePanel.setVisible(false);
 
-
-		JLabel thumb = new JLabel(new javax.swing.ImageIcon(getClass().getResource("/header_manager.png")));
-		thumb.setBounds(52,0,299,41);
-		mainPanel.add(thumb);
 
 	}
 
