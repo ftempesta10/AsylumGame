@@ -348,9 +348,7 @@ public class Asylum extends GameDescription implements Serializable {
 					return invalidCommand;
 				}};
 		});
-		Inventory corpseInv = new Inventory();
-		corpseInv.add(key);
-		final AdventureCharacter corpse = new AdventureCharacter(0, "cadavere", "Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo. Dalla tasca della sua giacca sembra spuntare una chiave.", null, corpseInv, key);
+		
 		final Item bed = new Item("letto", "Un letto nel quale dormono i pazienti.", null);
 		bed.setHandler(new CommandHandler() {
 
@@ -1013,7 +1011,9 @@ public class Asylum extends GameDescription implements Serializable {
 				}};
 		});
 
-
+		Inventory corpseInv = new Inventory();
+		corpseInv.add(key);
+		final AdventureCharacter corpse = new AdventureCharacter(0, "cadavere", "Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo. Dalla tasca della sua giacca sembra spuntare una chiave.", null, corpseInv, null);
 		final Enemy mutant = new Enemy(100, "mutante", "Un mutante dal viso fortemente sfigurato. Sarà mica Deadpool?", "Anche tu sei uno di loro?! Non ti lascerò farmi del male!", null, codePaper,5,20);
 		final Enemy assistant = new Enemy(100, "assistente", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.",
 				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
@@ -1362,7 +1362,11 @@ public class Asylum extends GameDescription implements Serializable {
 				break;
 			case LOOK_AT:
 				out.println(p.getEnemy().getDescription());
-				if(p.getEnemy().getHealth() == 0) getCurrentRoom().getObjects().add(p.getEnemy().getDroppable());
+				if(p.getEnemy().getHealth() == 0) {
+					for(Item i: p.getEnemy().getInv().getList()) {
+						getCurrentRoom().getObjects().add(i);
+					}
+				}
 				break;
 			default:
 				out.println("Credo che tu sia un po' confuso...");

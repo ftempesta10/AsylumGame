@@ -54,9 +54,7 @@ public class Manager extends JFrame {
 		layeredPane.add(mainPanel);
 		mainPanel.setLayout(null);
 
-		ImageIcon icon = new ImageIcon(getClass().getResource("/header_manager.png"));
-		JLabel thumb = new JLabel();
-		thumb.setIcon(icon);
+		JLabel thumb = new JLabel(new javax.swing.ImageIcon(getClass().getResource("/header_manager.png")));
 		thumb.setBounds(52,0,299,41);
 		mainPanel.add(thumb);
 
