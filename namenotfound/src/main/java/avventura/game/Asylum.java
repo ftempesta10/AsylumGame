@@ -304,6 +304,7 @@ public class Asylum extends GameDescription implements Serializable {
 							WeightedHashedGraph<Room, Gateway> m = t.getMap();
 							if(t.getCurrentRoom().getName().equals("dormitorio 1")) {
 								try {
+									Boolean in_inv=false;
 									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
 										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==key.getId()) {
 											for (Item i : t.getInventory().getList()) {
@@ -311,14 +312,15 @@ public class Asylum extends GameDescription implements Serializable {
 													m.readArc(t.getCurrentRoom(), a).setLocked(false);
 													System.out.println("La chiave sembra entrare perfettamente nella serratura della porta che conduce nel corridoio!");
 													EventHandler.drop(key, t);
+													in_inv=true;
 													break;
 												}
 											}
 										}
 									}
-								
-									
-
+									if(!in_inv) {
+										System.out.println("L'oggetto non è presente nell'inventario!");
+									}
 								} catch (Exception e) {
 									System.out.println(e.getMessage());
 								}
@@ -348,7 +350,7 @@ public class Asylum extends GameDescription implements Serializable {
 					return invalidCommand;
 				}};
 		});
-		
+
 		final Item bed = new Item("letto", "Un letto nel quale dormono i pazienti.", null);
 		bed.setHandler(new CommandHandler() {
 
@@ -1201,7 +1203,7 @@ public class Asylum extends GameDescription implements Serializable {
 
 		//inserimento in db
         this.db.insertionTuple(this.player, this);
-        
+
         //set mappa
         setMap(m);
 
