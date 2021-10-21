@@ -72,7 +72,8 @@ public class Asylum extends GameDescription implements Serializable {
 	        @Override
 	        public void windowClosing(WindowEvent arg0) {
 	            synchronized (lock) {
-	                frame.setVisible(false);
+	                //frame.setVisible(false);
+	                frame.onClose();
 	                lock.notify();
 	            }
 	        }
@@ -95,6 +96,11 @@ public class Asylum extends GameDescription implements Serializable {
 		db = new HandleDB();
 		t.join();
 		player=frame.getPlayer();
+		if(player==null) {
+			Thread.currentThread().interrupt();
+			db.closeConnection();
+			return;
+		}
 		if(frame.getSave()==null) {
 			initNew();
 		}else {

@@ -19,6 +19,9 @@ public class Engine {
         this.game = game;
         try {
             this.game.init();
+            if(Thread.interrupted()) {
+    			return;
+    		}
         } catch (Exception ex) {
             System.err.println(ex);
         }

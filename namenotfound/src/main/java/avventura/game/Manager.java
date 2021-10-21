@@ -205,4 +205,13 @@ public class Manager extends JFrame {
 
 		}
 	}
+
+	public void onClose() {
+		this.setVisible(false);
+		try {
+			db.closeConnection();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
 }

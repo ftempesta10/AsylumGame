@@ -83,4 +83,8 @@ public class HandleDB {
 		return tuple;
 	}
 
+	public void closeConnection() throws Exception{
+		conn.close();
+	}
+
 }
