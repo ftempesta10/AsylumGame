@@ -1,11 +1,17 @@
 package hashedGraph;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class WeightedHashedGraph<T, W> {
+public class WeightedHashedGraph<T, W> implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 7371846499712012234L;
 	private Map<T, Map<T, W>> arcs = new HashMap<T, Map<T,W>>();
 	private Set<T> nodes= new HashSet<T>();
 

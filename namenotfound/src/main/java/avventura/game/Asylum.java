@@ -103,6 +103,8 @@ public class Asylum extends GameDescription implements Serializable {
 		}
 		if(frame.getSave()==null) {
 			initNew();
+			//inserimento in db
+	        this.db.insertionTuple(this.player, this);
 		}else {
 			initFromSave((Asylum) frame.getSave());
 		}
@@ -327,7 +329,7 @@ public class Asylum extends GameDescription implements Serializable {
 									System.out.println(e.getMessage());
 								}
 							}else {
-								System.out.println("Non c'è niente da aprire con questa chiave!");
+								System.out.println("Non c'è niente da aprire con questa chiave nella stanza!");
 							}
 						}
 					};
@@ -1203,12 +1205,9 @@ public class Asylum extends GameDescription implements Serializable {
 		});
 
 
-
-		//inserimento in db
-        this.db.insertionTuple(this.player, this);
-
-        //set mappa
+		//set mappa
         setMap(m);
+
 
 	}
 
