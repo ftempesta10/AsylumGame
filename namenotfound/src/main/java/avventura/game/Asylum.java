@@ -346,7 +346,7 @@ public class Asylum extends GameDescription implements Serializable {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
 							}
-							
+
 						}
 					};
 				case DROP:
@@ -469,7 +469,7 @@ public class Asylum extends GameDescription implements Serializable {
 							try {
 								System.out.println("Hai preso la maschera!");
 								EventHandler.pickUp(gasmask, t);
-							
+
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -778,8 +778,8 @@ public class Asylum extends GameDescription implements Serializable {
 								System.out.println(chest.getDescription());
 							}else {
 								System.out.println("Questa cassa contiene: ");
-								for(Item i: chest.getContent()) { 
-									if(!getInventory().getList().contains(i)) System.out.println(i.getName());	
+								for(Item i: chest.getContent()) {
+									if(!getInventory().getList().contains(i)) System.out.println(i.getName());
 								}
 								if(!chest.isPushed()) {
 									for(Item i: chest.getContent()) {
@@ -975,7 +975,7 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							if(!mirrorCell.isPushed()) {
-								
+
 
 								//inserire l'arco
 								m.insArc(paddedCell, office, new Gateway(Direction.SOUTH));
@@ -1241,6 +1241,7 @@ public class Asylum extends GameDescription implements Serializable {
 		m.insArc(hallway2, room8, new Gateway(Direction.SOUTH_EAST));
 
 		m.insArc(hallway3, hallway2, new Gateway(Direction.WEST));
+		m.insArc(hallway2, hallway3, new Gateway(Direction.EAST));
 		m.insArc(bathroom, hallway3, new Gateway(Direction.SOUTH));
 		m.insArc(hallway3, bathroom, new Gateway(Direction.NORTH));
 
@@ -1317,6 +1318,7 @@ public class Asylum extends GameDescription implements Serializable {
 		this.health = save.health;
 		this.maxMoves = save.maxMoves;
 		this.player = save.player;
+		this.compassUsed = save.compassUsed;
 		this.setMap(save.getMap());
 		this.setInventory(save.getInventory());
 		this.setCurrentRoom(save.getCurrentRoom());
