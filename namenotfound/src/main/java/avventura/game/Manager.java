@@ -42,7 +42,7 @@ public class Manager extends JFrame {
 		db = new HandleDB();
 		saves = db.recoveryTuple();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 475, 300);
 		getContentPane().add(layeredPane);
 
 		//init mainPanel
