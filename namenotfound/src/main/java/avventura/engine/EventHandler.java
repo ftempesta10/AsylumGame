@@ -10,6 +10,11 @@ public interface EventHandler extends Consumer<GameDescription>, Serializable {
 			g.getInventory().add(i);
 			g.getCurrentRoom().getObjects().remove(i);
 		} else throw new InvalidCommandException();
+		for(Item it : g.getCurrentRoom().getObjects()) {
+			if(it instanceof ItemContainer && ((ItemContainer)it).getContent().contains(i)) {
+				((ItemContainer)it).remove(i);
+			}
+		}
 	}
 
 
