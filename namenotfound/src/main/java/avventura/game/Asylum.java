@@ -456,7 +456,7 @@ public class Asylum extends GameDescription implements Serializable {
 							System.out.println("Stai indossando correttamente la maschera!");
 							gasVuln = false;
 							bathroom.setDescription("Non appena entri nella stanza, i gas tossici iniziano a circolare nell'aria, ma la maschera ti protegge.");
-					     	if(compassUsed) bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio 3.");
+					     	if(!compassUsed) bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio 3.");
 					     	else bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro a sud nel corridoio 3.");
 					     	surgery.setDescription("Sei nella stanza dove i pazienti sono sottoposti alle operazioni. Chissà a questo punto di che operazioni si tratta...");
 							surgery.setLook("Vedi un letto ed uno scaffale con tanti strumenti chirurgici. Puoi solo tornare indietro nel corridoio 4.");
@@ -636,7 +636,7 @@ public class Asylum extends GameDescription implements Serializable {
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub	
+							// TODO Auto-generated method stub
 							EventHandler.drop(adrenaline, t);
 							System.out.println("Hai lasciato l'adrenalina!");
 						}
