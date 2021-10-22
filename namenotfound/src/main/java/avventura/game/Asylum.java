@@ -1395,6 +1395,12 @@ public class Asylum extends GameDescription implements Serializable {
 				break;
 			case LOOK_AT:
 				out.println(getCurrentRoom().getLook());
+				if(!getCurrentRoom().getObjects().isEmpty()) {
+					out.println("La stanza contiene anche: ");
+					for(Item i : getCurrentRoom().getObjects()) {
+						out.println(i.getName());
+					}
+				}
 				break;
 			case NORD:
 				changeRoom(p.getCommand().getType(), out);
