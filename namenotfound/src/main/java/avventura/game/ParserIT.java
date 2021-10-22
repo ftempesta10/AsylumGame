@@ -99,8 +99,8 @@ public class ParserIT implements Parser{
         	}
         case 3 :
         	//verbo articolo oggetto | verbo articolo nemico | verbo articolo stanza
-        	if(checkForSingleCommand(tokens[0], walk) == 0 && articles.contains(tokens[1])
-						|| prepositions.contains(tokens[1]))  {
+        	if(checkForSingleCommand(tokens[0], walk) == 0 && (articles.contains(tokens[1])
+						|| prepositions.contains(tokens[1])))  {
         			return new ParserOutput(walk, tokens[2]);
 			}
         	else if (checkForSingleCommand(tokens[0], walk) == 0 && whitespace.contains(tokens[2]))  {
@@ -233,6 +233,8 @@ public class ParserIT implements Parser{
 		prepositions.add("al");
 		prepositions.add("dal");
 		prepositions.add("nel");
+		prepositions.add("nello");
+		prepositions.add("nella");
 		prepositions.add("col");
 		prepositions.add("sul");
 	}
