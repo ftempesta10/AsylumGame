@@ -354,8 +354,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato la chiave!");
 							EventHandler.drop(key, t);
+							System.out.println("Hai lasciato la chiave!");
 						}
 					};
 				default:
@@ -411,8 +411,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato il cacciavite!");
 							EventHandler.drop(screwdriver, t);
+							System.out.println("Hai lasciato il cacciavite!");
 						}
 					};
 				case PICK_UP:
@@ -456,8 +456,9 @@ public class Asylum extends GameDescription implements Serializable {
 							System.out.println("Stai indossando correttamente la maschera!");
 							gasVuln = false;
 							bathroom.setDescription("Non appena entri nella stanza, i gas tossici iniziano a circolare nell'aria, ma la maschera ti protegge.");
-							bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio 3.");
-							surgery.setDescription("Sei nella stanza dove i pazienti sono sottoposti alle operazioni. Chissà a questo punto di che operazioni si tratta...");
+					     	if(compassUsed) bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio 3.");
+					     	else bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro a sud nel corridoio 3.");
+					     	surgery.setDescription("Sei nella stanza dove i pazienti sono sottoposti alle operazioni. Chissà a questo punto di che operazioni si tratta...");
 							surgery.setLook("Vedi un letto ed uno scaffale con tanti strumenti chirurgici. Puoi solo tornare indietro nel corridoio 4.");
 						}
 					};
@@ -467,9 +468,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso la maschera!");
 								EventHandler.pickUp(gasmask, t);
-
+								System.out.println("Hai preso la maschera!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -481,8 +481,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato la maschera!");
 							EventHandler.drop(gasmask, t);
+							System.out.println("Hai lasciato la maschera!");
 						}
 					};
 				default:
@@ -517,8 +517,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai spento la torcia!");
 							t.getCurrentRoom().setVisible(t.getCurrentRoom().hasLight());
+							System.out.println("Hai spento la torcia!");
 						}
 					};
 				case LOOK_AT:
@@ -534,8 +534,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato la torcia!");
 							EventHandler.drop(torch, t);
+							System.out.println("Hai lasciato la torcia!");
 						}
 					};
 				case PICK_UP:
@@ -544,8 +544,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso la torcia!");
 								EventHandler.pickUp(torch, t);
+								System.out.println("Hai preso la torcia!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -585,8 +585,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato le pillole!");
 							EventHandler.drop(pills, t);
+							System.out.println("Hai lasciato le pillole!");
 						}
 					};
 				case PICK_UP:
@@ -595,8 +595,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso le pillole!");
 								EventHandler.pickUp(pills, t);
+								System.out.println("Hai preso le pillole!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -636,9 +636,9 @@ public class Asylum extends GameDescription implements Serializable {
 					return new EventHandler() {
 						@Override
 						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato l'adrenalina!");
+							// TODO Auto-generated method stub	
 							EventHandler.drop(adrenaline, t);
+							System.out.println("Hai lasciato l'adrenalina!");
 						}
 					};
 				case PICK_UP:
@@ -647,8 +647,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso l'adrenalina!");
 								EventHandler.pickUp(adrenaline, t);
+								System.out.println("Hai preso l'adrenalina!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -680,10 +680,10 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai rotto lo specchio!");
 							if(!mirrorBathroom.isPushed()) {
 								t.getCurrentRoom().getObjects().add(pills);
 								mirrorBathroom.setPushed(true);
+								System.out.println("Hai rotto lo specchio!");
 							}
 						}
 					};
@@ -722,7 +722,7 @@ public class Asylum extends GameDescription implements Serializable {
 							room8.setLook("Vedi un letto e qualcosa sporgere da sotto ad esso. Non vedi altre porte, puoi solo tornare indietro nel corridoio 2 a nord.");
 							hallway.setLook("Puoi proseguire a est per il corridoio 2 o entrare nel dormitorio 1 a nord-ovest, 2 a nord-est, 5 a sud-ovest, o 6 a sud-est.");
 							hallway2.setLook("Il sangue è dappertutto. Puoi tornare indietro ad ovest nel corridoio 1, proseguire ad est per il corridoio 3, entrare nella lavanderia a nord-ovest o entrare nel dormitorio 4 a nord-est, 7 a sud-ovest, 8 a sud-est.");
-							hallway3.setLook("Vedi scheletri ovunque. Puoi tornare indietro ad ovest nel corridoio 2, entrare nel bagno a nord, o prendere le scale a sud per il piano inferiore");
+							hallway3.setLook("Vedi scheletri ovunque. Puoi tornare indietro ad ovest nel corridoio 2, entrare nel bagno a nord, o prendere le scale per scendere al piano inferiore");
 							bathroom.setLook("L'effetto del gas ti stordisce e non ti permette di vedere nulla. Puoi solo tornare indietro a sud nel corridoio 3.");
 							hallway4.setLook("Puoi tornare a nord verso il piano superiore o accedere all'infermeria a nord-est, alla sala operatoria a sud-est e alla sorveglianza ad ovest.");
 							infirmary.setLook("Vedi diversi medicinali sparsi per la stanza ed una cassa. Puoi solo tornare indietro nel corridoio 4 ad ovest.");
@@ -739,8 +739,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato la bussola!");
 							EventHandler.drop(compass, t);
+							System.out.println("Hai lasciato la bussola!");
 						}
 					};
 				case PICK_UP:
@@ -749,8 +749,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso la bussola!");
 								EventHandler.pickUp(compass, t);
+								System.out.println("Hai preso la bussola!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -874,8 +874,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato il bisturi!");
 							EventHandler.drop(scalpel, t);
+							System.out.println("Hai lasciato il bisturi!");
 						}
 					};
 				case PICK_UP:
@@ -884,8 +884,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso il bisturi!");
 								EventHandler.pickUp(scalpel, t);
+								System.out.println("Hai preso il bisturi!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -931,8 +931,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato la pistola!");
 							EventHandler.drop(gun, t);
+							System.out.println("Hai lasciato la pistola!");
 						}
 					};
 				case PICK_UP:
@@ -941,8 +941,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso la pistola!");
 								EventHandler.pickUp(gun, t);
+								System.out.println("Hai preso la pistola!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -956,7 +956,7 @@ public class Asylum extends GameDescription implements Serializable {
 		});
 
 		final Item mirrorCell = new Item("specchio", "Uno specchio in cui viene riflessa la tua immagine. Mmm, non sei poi così male.", null);
-		mirrorBathroom.setHandler(new CommandHandler() {
+		mirrorCell.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
 				// TODO Auto-generated method stub
@@ -975,8 +975,6 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							if(!mirrorCell.isPushed()) {
-
-
 								//inserire l'arco
 								m.insArc(paddedCell, office, new Gateway(Direction.SOUTH));
 								mirrorCell.setPushed(true);
@@ -1010,8 +1008,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso il foglio!");
 								EventHandler.pickUp(codePaper, t);
+								System.out.println("Hai preso il foglio!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -1023,8 +1021,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato il foglio!");
 							EventHandler.drop(codePaper, t);
+							System.out.println("Hai lasciato il foglio!");
 						}
 					};
 				default:
@@ -1052,8 +1050,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso il blocco-note!");
 								EventHandler.pickUp(blockNotes, t);
+								System.out.println("Hai preso il blocco-note!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -1065,8 +1063,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato il blocco-note!");
 							EventHandler.drop(blockNotes, t);
+							System.out.println("Hai lasciato il blocco-note!");
 						}
 					};
 				default:
@@ -1161,8 +1159,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								System.out.println("Hai preso la chiave!");
 								EventHandler.pickUp(key, t);
+								System.out.println("Hai preso la chiave!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
 								System.out.println("Oggetto non presente nella stanza");
@@ -1174,8 +1172,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("Hai lasciato la chiave!");
 							EventHandler.drop(key, t);
+							System.out.println("Hai lasciato la chiave!");
 						}
 					};
 				default:
