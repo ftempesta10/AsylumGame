@@ -455,6 +455,7 @@ public class Asylum extends GameDescription implements Serializable {
 							// TODO Auto-generated method stub
 							System.out.println("Stai indossando correttamente la maschera!");
 							gasVuln = false;
+							breathedGas = false;
 							bathroom.setDescription("Non appena entri nella stanza, i gas tossici iniziano a circolare nell'aria, ma la maschera ti protegge.");
 					     	if(!compassUsed) bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio 3.");
 					     	else bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro a sud nel corridoio 3.");
@@ -482,6 +483,7 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							EventHandler.drop(gasmask, t);
+							gasVuln = true;
 							System.out.println("Hai lasciato la maschera!");
 						}
 					};
@@ -1506,6 +1508,32 @@ public class Asylum extends GameDescription implements Serializable {
 				break;
 			}
 		}
+		//gestione trappola gas
+		if(!breathedGas && (getCurrentRoom().getName().equals("bagno") || getCurrentRoom().getName().equals("sala operatoria"))) {
+			getCurrentRoom().getTrap().accept(this);
+		}
+		if(this.breathedGas) {
+			switch(maxMoves) {
+				case 4:
+					out.println("il gas inizia ad entrare in circolo nell'organismo");
+					break;
+				case 3:
+					out.println("il gas sta iniziando a fere il suo effetto, sintomi indolenzimento e debolezza");
+					break;
+				case 2:
+					out.println("il gas sta iniziando a ofuscarti le idee e non riesci più a ragionare, devi fare in fretta");
+					break;
+				case 1:
+					out.println("La vista si offusca, la tua fine è vicina ");
+					break;
+				case 0:
+					out.println("Sei morto per asfissia");
+					System.exit(0);
+					break;
+				}
+				maxMoves--;
+			}
+		
 	}
 
 
