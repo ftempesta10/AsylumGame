@@ -455,7 +455,6 @@ public class Asylum extends GameDescription implements Serializable {
 							// TODO Auto-generated method stub
 							System.out.println("Stai indossando correttamente la maschera!");
 							gasVuln = false;
-							breathedGas = false;
 							bathroom.setDescription("Non appena entri nella stanza, i gas tossici iniziano a circolare nell'aria, ma la maschera ti protegge.");
 					     	if(!compassUsed) bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro nel corridoio 3.");
 					     	else bathroom.setLook("Vedi uno specchio ed un gabinetto. Potresti approfittare per...no, meglio evitare. Puoi solo tornare indietro a sud nel corridoio 3.");
@@ -781,7 +780,7 @@ public class Asylum extends GameDescription implements Serializable {
 							}else {
 								System.out.println("Questa cassa contiene: ");
 								for(Item i: chest.getContent()) {
-									if(!getInventory().getList().contains(i)) System.out.println(i.getName());
+									System.out.println(i.getName());
 								}
 								if(!chest.isPushed()) {
 									for(Item i: chest.getContent()) {
@@ -1265,7 +1264,7 @@ public class Asylum extends GameDescription implements Serializable {
 			public void accept(GameDescription t) {
 				// TODO Auto-generated method stub
 				Asylum g = (Asylum) t;
-				if(g.gasVuln) {
+				if(g.gasVuln && !g.breathedGas) {
 					g.breathedGas = true;
 					g.maxMoves = 4;
 					System.out.println("Stai respirando del gas! Non ti rimane molto tempo prima di perdere coscienza, devi fare subito qualcosa!");
@@ -1508,10 +1507,12 @@ public class Asylum extends GameDescription implements Serializable {
 				break;
 			}
 		}
-		//gestione trappola gas
-		if(!breathedGas && (getCurrentRoom().getName().equals("bagno") || getCurrentRoom().getName().equals("sala operatoria"))) {
+		//gestione trappola
+		if(getCurrentRoom().hasTrap()) {
 			getCurrentRoom().getTrap().accept(this);
 		}
+
+		//gestione del gas
 		if(this.breathedGas) {
 			switch(maxMoves) {
 				case 4:
@@ -1533,7 +1534,7 @@ public class Asylum extends GameDescription implements Serializable {
 				}
 				maxMoves--;
 			}
-		
+
 	}
 
 
