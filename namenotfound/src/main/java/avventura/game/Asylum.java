@@ -109,6 +109,7 @@ public class Asylum extends GameDescription implements Serializable {
 		}else {
 			initFromSave((Asylum) frame.getSave());
 		}
+		db.closeConnection();
 	}
 
 	private void initNew() throws SQLException, CloneNotSupportedException {
@@ -1282,6 +1283,7 @@ public class Asylum extends GameDescription implements Serializable {
 				Asylum g = (Asylum) t;
 				g.health = 0;
 				System.out.println("GAME OVER! Una trappola mortale posizionata sulla porta ti ha fatto a pezzi!");
+				Thread.currentThread().interrupt();
 			}
 		});
 
@@ -1372,6 +1374,10 @@ public class Asylum extends GameDescription implements Serializable {
 					out.println("La porta sembra esser bloccata...");
 				} else {
 					setCurrentRoom(next);
+					//gestione trappola
+					if(getCurrentRoom().hasTrap()) {
+						getCurrentRoom().getTrap().accept(this);
+					}
 					out.println(getCurrentRoom().getDescription());
 				}
 			} catch (Exception e) {
@@ -1385,6 +1391,10 @@ public class Asylum extends GameDescription implements Serializable {
 	@Override
 	public void nextMove(ParserOutput p, PrintStream out) {
 		// TODO Auto-generated method stub
+
+		if(health==0) {
+			System.exit(0);
+		}
 		if (p.getObject()==null && p.getEnemy()==null && p.getTarget()==null) {
 			switch (p.getCommand().getType()) {
 			case INVENTORY:
@@ -1443,7 +1453,13 @@ public class Asylum extends GameDescription implements Serializable {
 								break outer;
 							} else {
 							setCurrentRoom(a);
-							out.println(getCurrentRoom().getDescription());
+							//gestione trappola
+							if(getCurrentRoom().hasTrap()) {
+								getCurrentRoom().getTrap().accept(this);
+							}
+							if(this.health>0) {
+								out.println(getCurrentRoom().getDescription());
+							}
 							break;
 						}
 					}
@@ -1506,10 +1522,6 @@ public class Asylum extends GameDescription implements Serializable {
 				out.println("Credo che tu sia un po' confuso...");
 				break;
 			}
-		}
-		//gestione trappola
-		if(getCurrentRoom().hasTrap()) {
-			getCurrentRoom().getTrap().accept(this);
 		}
 
 		//gestione del gas

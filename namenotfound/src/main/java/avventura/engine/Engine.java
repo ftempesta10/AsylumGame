@@ -39,14 +39,14 @@ public class Engine {
         System.out.println("================================================");
         System.out.println(game.getCurrentRoom().getDescription());
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextLine()) {
+        while (!Thread.interrupted() && scanner.hasNextLine()) {
             String command = scanner.nextLine();
             try {
             	ParserOutput p = parser.parse(command, game.getCommands(), game.getCurrentRoom().getObjects(),
                 		game.getInventory(), game.getCurrentRoom().getEnemies());
                 if (p.getCommand() != null && p.getCommand().getType() == CommandType.END) {
                 	System.out.println(bundle.getString("end"));
-                	scanner.close();
+                	Thread.currentThread().interrupt();
                     break;
                 } else {
                     game.nextMove(p, System.out);
@@ -58,6 +58,6 @@ public class Engine {
 			}
 
         }
-        System.exit(0);
+        return;
     }
 }

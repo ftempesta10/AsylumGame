@@ -123,7 +123,7 @@ public class ParserIT implements Parser{
 
         case 4 :
         	//verbo oggetto preposizione oggetto
-        	if(checkForSingleCommand(tokens[0], walk) == 0 && whitespace.contains(tokens[3]) && 
+        	if(checkForSingleCommand(tokens[0], walk) == 0 && whitespace.contains(tokens[3]) &&
 						 prepositions.contains(tokens[1]))  {
         			return new ParserOutput(walk, tokens[2] + " " + tokens[3]);
 			}
@@ -182,7 +182,8 @@ public class ParserIT implements Parser{
 		articles.add("gli");
 		articles.add("gle");
 	}
-	
+
+	@Override
 	public void loadWhitespace() {
 		whitespace.add("operatoria");
 		whitespace.add("imbottita");

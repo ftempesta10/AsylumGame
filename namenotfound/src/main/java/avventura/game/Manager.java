@@ -180,6 +180,11 @@ public class Manager extends JFrame {
 
 	private void close() {
 		this.dispose();
+		try {
+			db.closeConnection();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	private class Delete extends AbstractAction {
