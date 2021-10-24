@@ -404,7 +404,11 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-screwdriver.getDamage());
+							if(t.getCurrentEnemy()!=null) {
+								t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-screwdriver.getDamage());
+							}else {
+								System.out.println("Non sembra esserci nessuno da colpire!");
+							}
 						}
 					};
 				case DROP:
@@ -1094,8 +1098,8 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							Scanner scan = new Scanner(System.in);
+							System.out.println(":");
 							String codEntered = scan.nextLine();
-							scan.close();
 							String[] tokens = codePaper.getDescription().split("\\s+");
 							if(codEntered.equals(tokens[3])) {
 								hallway3.setTrap(null);
@@ -1111,7 +1115,7 @@ public class Asylum extends GameDescription implements Serializable {
 		Inventory corpseInv = new Inventory();
 		corpseInv.add(key);
 		final AdventureCharacter corpse = new AdventureCharacter(0, "cadavere", "Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo. Dalla tasca della sua giacca sembra spuntare una chiave.", null, corpseInv, null);
-		final Enemy mutant = new Enemy(100, "mutante", "Un mutante dal viso fortemente sfigurato. Sarà mica Deadpool?", "Anche tu sei uno di loro?! Non ti lascerò farmi del male!", null, codePaper,5,20);
+		final Enemy mutant = new Enemy(55, "mutante", "Un mutante dal viso fortemente sfigurato. Sarà mica Deadpool?", "Anche tu sei uno di loro?! Non ti lascerò farmi del male!", null, codePaper,5,20);
 		final Enemy assistant = new Enemy(100, "assistente", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.",
 				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
 				new Inventory(), null,5,20);
@@ -1193,6 +1197,7 @@ public class Asylum extends GameDescription implements Serializable {
 		room2.getObjects().add(bed);
 		room3.getObjects().add(chest);
 		hallway2.getEnemies().add(mutant);
+		hallway2.getObjects().add(keypad);
 		room4.getObjects().add(bed);
 		room5.getObjects().add(bed);
 		room6.getObjects().add(bed);
@@ -1378,6 +1383,13 @@ public class Asylum extends GameDescription implements Serializable {
 					if(getCurrentRoom().hasTrap()) {
 						getCurrentRoom().getTrap().accept(this);
 					}
+					setCurrentEnemy(null);
+					for(AdventureCharacter a: getCurrentRoom().getEnemies()) {
+						if(a instanceof Enemy && a.getHealth()>0) {
+							setCurrentEnemy((Enemy)a);
+							break;
+						}
+					}
 					out.println(getCurrentRoom().getDescription());
 				}
 			} catch (Exception e) {
@@ -1392,9 +1404,6 @@ public class Asylum extends GameDescription implements Serializable {
 	public void nextMove(ParserOutput p, PrintStream out) {
 		// TODO Auto-generated method stub
 
-		if(health==0) {
-			System.exit(0);
-		}
 		if (p.getObject()==null && p.getEnemy()==null && p.getTarget()==null) {
 			switch (p.getCommand().getType()) {
 			case INVENTORY:
@@ -1453,6 +1462,13 @@ public class Asylum extends GameDescription implements Serializable {
 								break outer;
 							} else {
 							setCurrentRoom(a);
+							setCurrentEnemy(null);
+							for(AdventureCharacter ad: getCurrentRoom().getEnemies()) {
+								if(ad instanceof Enemy && ad.getHealth()>0) {
+									setCurrentEnemy((Enemy)ad);
+									break;
+								}
+							}
 							//gestione trappola
 							if(getCurrentRoom().hasTrap()) {
 								getCurrentRoom().getTrap().accept(this);
@@ -1484,7 +1500,12 @@ public class Asylum extends GameDescription implements Serializable {
 				out.println(p.getEnemy().getTalk());
 				break;
 			case BREAK:
-				p.getEnemy().setHealth(p.getEnemy().getHealth()-5);
+				if(p.getEnemy().getHealth()>0 && p.getEnemy() instanceof Enemy) {
+					setCurrentEnemy((Enemy)p.getEnemy());
+					p.getEnemy().setHealth(p.getEnemy().getHealth()-5);
+				}else {
+					out.println("Non dovresti... Non sembra essere minaccioso!");
+				}
 				break;
 			case LOOK_AT:
 				out.println(p.getEnemy().getDescription());
@@ -1546,6 +1567,28 @@ public class Asylum extends GameDescription implements Serializable {
 				}
 				maxMoves--;
 			}
+
+		if(getCurrentEnemy()!=null && getCurrentEnemy().getHealth()>0) {
+			health = health - getCurrentEnemy().getDamage();
+			if(health<0) health=0;
+			out.println(getCurrentEnemy().getName()+" ti ha attaccato! Salute: "+ health);
+			out.println(getCurrentEnemy().getName()+" ha salute: "+getCurrentEnemy().getHealth());
+		}
+		if(getCurrentEnemy()!=null && getCurrentEnemy().getHealth()<=0) {
+			out.println("Hai ucciso "+getCurrentEnemy().getName()+"!");
+			if(getCurrentEnemy().getDroppable()!=null) {
+				getCurrentRoom().getObjects().add(getCurrentEnemy().getDroppable());
+				out.println(getCurrentEnemy().getName()+" ha rilasciato "+getCurrentEnemy().getDroppable().getName());
+				getCurrentEnemy().setDroppable(null);
+			}
+			setCurrentEnemy(null);
+		}
+
+		if(health==0) {
+			out.println("Sei morto! GAME OVER!");
+			Thread.currentThread().interrupt();
+			return;
+		}
 
 	}
 
