@@ -205,7 +205,7 @@ public class Asylum extends GameDescription implements Serializable {
       //Rooms
 
         Room room1 = new Room("Sei nel dormitorio n°1, una stanza piccola e puzzolente",
-			   	               "In un angolo giace un cadavere, accanto a te c'è un letto in disordine. Vedi una porta che conduce nel corridoio 1.",
+			   	               "In un angolo giace un cadavere. Vedi una porta che conduce nel corridoio 1.",
 				               "dormitorio 1");
         m.insNode(room1);
         Room room2 = new Room("Sei nel dormitorio n°2",
