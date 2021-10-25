@@ -808,7 +808,7 @@ public class Asylum extends GameDescription implements Serializable {
 									}
 								}
 								chest.setPushed(true);
-							}
+							} 
 						}
 					};
 				case OPEN:
@@ -816,12 +816,14 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							if(!chest.isOpened() && !chest.isLocked()) {
-								System.out.println("Hai aperto la cassa!");
-								chest.setOpened(true);
-							}else if(chest.isLocked()) {
-								System.out.println("È bloccata! Probabilmente hai bisogno di una chiave...");
-							}
+							if(chest.isOpened()) {
+								System.out.println("Cassa già aperta");
+							}else if(!chest.isOpened() && !chest.isLocked()) {
+									System.out.println("Hai aperto la cassa!");
+									chest.setOpened(true);
+								  }else if(chest.isLocked()) {
+									System.out.println("È bloccata! Probabilmente hai bisogno di una chiave...");
+								  }
 						}
 					};
 				case CLOSE:
