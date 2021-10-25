@@ -385,7 +385,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Weapon screwdriver = new Weapon("cacciavite", "Un cacciavite che potrebbe tornare utile.", null, 15, 5, 15);
+		final Weapon screwdriver = new Weapon("cacciavite", "Un cacciavite che potrebbe tornare utile.", null, 10, 5, 15);
 		screwdriver.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -405,10 +405,25 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							if(t.getCurrentEnemy()!=null) {
-								t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-screwdriver.getDamage());
-							}else {
-								System.out.println("Non sembra esserci nessuno da colpire!");
-							}
+								if(screwdriver.getShots() != 0) {
+									t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-screwdriver.getDamage());
+									screwdriver.setShots(screwdriver.getShots() - 1);
+									switch(screwdriver.getShots()) {
+									case 0:
+										System.out.println("E' andato, ormai è inutilizzabile");
+										break;
+									case 1:
+										System.out.println("E' quasi totalmente distrutto il cacciavite");
+										break;
+									case 4:
+										System.out.println("Ti rimangono un altro paio di colpi prima che si rompa");
+										break;
+									case 7:
+										System.out.println("Il cacciavite si sta iniziando a dannegiare");
+										break;
+									}
+								} else System.out.println("Il cacciavite è ormai distrutto, non farebbe nessun danno"); 
+							} else System.out.println("Non sembra esserci nessuno da colpire!");
 						}
 					};
 				case DROP:
@@ -853,7 +868,7 @@ public class Asylum extends GameDescription implements Serializable {
 			}
 		});
 
-		final Weapon scalpel = new Weapon("bisturi", "Un bisturi utilizzato negli esperimenti.", null, 15, 10, 30);
+		final Weapon scalpel = new Weapon("bisturi", "Un bisturi utilizzato negli esperimenti.", null, 5, 10, 30);
 		scalpel.setHandler(new CommandHandler() {
 			@Override
 			public EventHandler apply(CommandType t) {
@@ -872,7 +887,23 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-scalpel.getDamage());
+							if(t.getCurrentEnemy()!=null) {
+								if(scalpel.getShots() != 0) {
+									t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-scalpel.getDamage());
+									scalpel.setShots(scalpel.getShots() - 1);
+									switch(scalpel.getShots()) {
+									case 0:
+										System.out.println("Noo! la lama del bisturi si è rotta");
+										break;
+									case 1:
+										System.out.println("La lama se ne sta venendo");
+										break;
+									case 4:
+										System.out.println("IL bisturi è molto fragile si danneggia molto facilmente");
+										break;
+									}
+								} else System.out.println("Questo bisturi ha perso la lama, non ti potrà più essere d'aiuto"); 
+							}else System.out.println("Non sembra esserci nessuno da colpire!");
 						}
 					};
 				case DROP:
@@ -924,12 +955,23 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							if(gun.getShots()>0) {
-								t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-gun.getDamage());
-								gun.setShots(gun.getShots()-1);
-							}else {
-								System.out.println("Ops...Hai esaurito le munizioni!!");
-							}
+							if(t.getCurrentEnemy()!=null) {
+								if(gun.getShots() != 0) {
+									t.getCurrentEnemy().setHealth(t.getCurrentEnemy().getHealth()-gun.getDamage());
+									gun.setShots(gun.getShots() - 1);
+									switch(gun.getShots()) {
+									case 0:
+										System.out.println("Il caricatore è finito, munizioni esaurite");
+										break;
+									case 1:
+										System.out.println("Ultimo colpo usalo bene");
+										break;
+									case 5:
+										System.out.println("Hai solo un caricatore ti restano quindi 5 colpi");
+										break;
+									}
+								} else System.out.println("Ops... hai finito le munizioni"); 
+							}else System.out.println("Non sembra esserci nessuno da colpire!");
 						}
 					};
 				case DROP:
