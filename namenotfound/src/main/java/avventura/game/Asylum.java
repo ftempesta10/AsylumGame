@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Scanner;
 
+import org.h2.util.CacheTQ;
+
 import engine.AdventureCharacter;
 import engine.Command;
 import engine.CommandHandler;
@@ -288,81 +290,7 @@ public class Asylum extends GameDescription implements Serializable {
   				              "uscita");
 
 
-		final Item key = new Item("chiave", "Una chiave che potrebbe tornare utile per aprire qualcosa.", null);
-		key.setHandler(new CommandHandler() {
-
-			@Override
-			public EventHandler apply(CommandType t) {
-				switch(t) {
-				case LOOK_AT:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							System.out.println(key.getDescription());
-						}
-					};
-				case USE:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							WeightedHashedGraph<Room, Gateway> m = t.getMap();
-							if(t.getCurrentRoom().getName().equals("dormitorio 1")) {
-								try {
-									Boolean in_inv=false;
-									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
-										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==key.getId()) {
-											for (Item i : t.getInventory().getList()) {
-												if (i.equals(key)) {
-													m.readArc(t.getCurrentRoom(), a).setLocked(false);
-													System.out.println("La chiave sembra entrare perfettamente nella serratura della porta che conduce nel corridoio 1!");
-													EventHandler.drop(key, t);
-													in_inv=true;
-													break;
-												}
-											}
-										}
-									}
-									if(!in_inv) {
-										System.out.println("L'oggetto non è presente nell'inventario!");
-									}
-								} catch (Exception e) {
-									System.out.println(e.getMessage());
-								}
-							}else {
-								System.out.println("Non c'è niente da aprire con questa chiave nella stanza!");
-							}
-						}
-					};
-				case PICK_UP:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							try {
-								EventHandler.pickUp(key, t);
-								System.out.println("Hai preso la chiave!");
-							} catch (InvalidCommandException e) {
-								// TODO Auto-generated catch block
-								System.out.println("Oggetto non presente nella stanza");
-							}
-
-						}
-					};
-				case DROP:
-					return new EventHandler() {
-						@Override
-						public void accept(GameDescription t) {
-							// TODO Auto-generated method stub
-							EventHandler.drop(key, t);
-							System.out.println("Hai lasciato la chiave!");
-						}
-					};
-				default:
-					return invalidCommand;
-				}};
-		});
+		
 
 		final Item bed = new Item("letto", "Un letto nel quale dormono i pazienti.", null);
 		bed.setHandler(new CommandHandler() {
@@ -641,8 +569,9 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("L'effetto dell'adrenalina incrementa la tua salute!");
+							System.out.println("L'effetto dell'adrenalina incrementa la tua salute:");							
 							health = health + 20;
+							System.out.println("+20 salute");
 						}
 					};
 				case LOOK_AT:
@@ -831,11 +760,15 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-								chest.setOpened(false);
-								if(chest.getLockedBy()!=null)
-									System.out.println("Hai chiuso la cassa!");
-									chest.setLocked(true);
-						}
+								if (!chest.isOpened()) {
+									System.out.println("La cassa e' già chiusa!");}
+									else {
+										System.out.println("Hai chiuso la cassa!");
+										chest.setOpened(false);
+									}
+									
+								}
+						
 					};
 				default:
 					return invalidCommand;
@@ -1122,7 +1055,7 @@ public class Asylum extends GameDescription implements Serializable {
 				}};
 		});
 
-		final Item keypad = new Item("tastierino", "Un tastierino numerico in cui inserire un codice.", null);
+		final Item keypad = new Item("tastierino", "Un tastierino numerico in cui inserire un codice situato accanto alla porta per il corridoio 3.", null);
 		keypad.setHandler(new CommandHandler() {
 
 			@Override
@@ -1156,18 +1089,99 @@ public class Asylum extends GameDescription implements Serializable {
 				}};
 		});
 
+		
 		Inventory corpseInv = new Inventory();
-		corpseInv.add(key);
+
 		final AdventureCharacter corpse = new AdventureCharacter(0, "cadavere", "Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo. Dalla tasca della sua giacca sembra spuntare una chiave.", null, corpseInv, null);
 		final Enemy mutant = new Enemy(55, "mutante", "Un mutante dal viso fortemente sfigurato. Sarà mica Deadpool?", "Anche tu sei uno di loro?! Non ti lascerò farmi del male!", null, codePaper,5,20);
-		final Enemy assistant = new Enemy(100, "assistente", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.",
-				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
-				new Inventory(), null,5,20);
-		final Enemy director = new Enemy(100, "direttore", "È il direttore, nonchè la mente contorta dietro tutto questo. I segni del virus sembrano meno evidenti su di lui. Avrà furbamente aspettato più miglioramenti possibili al virus prima di sottoporsi lui stesso ad esso. Eppure ti è sempre sembrato un tipo perbene...",
-				"Muahahah! Eccoti qua agente. Dopo aver sentito gli spari dalla cella, ti aspettavo. Sei sopreso dopo aver scoperto i miei piani? Lo sarai di più dopo aver visto i poteri che acquisirai tramite il virus! Non prendermi per pazzo, grazie a questo virus non esisteranno mai più deboli in questo mondo. Io renderò l'essere umano la creatura più potente che sia mai esistita sulla Terra! Si parlerà di me per milioni e milioni di anni! Ma se non vuoi aiutarmi, non preoccuparti. Ci servono delle vittime sacrificali in onore della Santa Muerte che ci supporta in tutto questo. Dunque preparati a morire!",
-				null, null,5,20);
+		
+		
+		final Item key = new Item("chiave", "Una chiave che potrebbe tornare utile per aprire qualcosa.", null);
+		key.setHandler(new CommandHandler() {
 
-		Item key_1= new Item("Chiave assistente", "Sembra la chiave di una porta...", null);
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(key.getDescription());
+						}
+					};
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							WeightedHashedGraph<Room, Gateway> m = t.getMap();
+							if(t.getCurrentRoom().getName().equals("dormitorio 1")) {
+								try {
+									Boolean in_inv=false;
+									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
+										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==key.getId()) {
+											for (Item i : t.getInventory().getList()) {
+												if (i.equals(key)) {
+													if (!m.readArc(t.getCurrentRoom(), a).isLocked()) {
+														System.out.println("La porta e' gia' aperta!");
+													}
+													else {
+													m.readArc(t.getCurrentRoom(), a).setLocked(false);
+													System.out.println("La chiave sembra entrare perfettamente nella serratura della porta che conduce nel corridoio 1!");
+													EventHandler.drop(key, t);
+													in_inv=true;
+													break;
+													}
+												}
+											}
+										}
+									}
+									//if(!in_inv) {
+									//	System.out.println("L'oggetto non è presente nell'inventario!");
+									//}
+								} catch (Exception e) {
+									System.out.println(e.getMessage());
+								}
+							}else {
+								System.out.println("Non c'è niente da aprire con questa chiave nella stanza!");
+							}
+						}
+					};
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							try {
+								EventHandler.pickUp(key, t);
+								corpse.setDescription("Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo.");
+								System.out.println("Hai preso la chiave!");
+							} catch (InvalidCommandException e) {
+								// TODO Auto-generated catch block
+								System.out.println("Oggetto non presente nella stanza");
+							}
+
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.drop(key, t);
+							System.out.println("Hai lasciato la chiave!");
+						}
+					};
+				default:
+					return invalidCommand;
+				}};
+		});
+		
+		corpseInv.add(key);
+
+		
+		Item key_1= new Item("chiave-assistente", "Sembra la chiave di una porta...", null);
 		key_1.setHandler(new CommandHandler() {
 
 			@Override
@@ -1230,8 +1244,84 @@ public class Asylum extends GameDescription implements Serializable {
 					return invalidCommand;
 				}};
 		});
+		
+		Item key_2= new Item("chiave-direttore", "Sembra la chiave di una porta...", null);
+		key_2.setHandler(new CommandHandler() {
+
+			@Override
+			public EventHandler apply(CommandType t) {
+				switch(t) {
+				case LOOK_AT:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							System.out.println(key.getDescription());
+						}
+					};
+				case USE:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							WeightedHashedGraph<Room, Gateway> m = t.getMap();
+							if(t.getCurrentRoom().equals(office)) {
+								try {
+									for(Room a : m.getAdjacents(t.getCurrentRoom())) {
+										if(m.readArc(t.getCurrentRoom(), a).getLockedBy()==key_2.getId()) {
+											m.readArc(t.getCurrentRoom(), a).setLocked(false);
+										}
+									}
+									System.out.println("La chiave sembra entrare perfettamente nella serratura della porta che conduce nell'ufficio del direttore!");
+								} catch (Exception e) {
+									System.out.println(e.getMessage());
+								}
+							}else {
+								System.out.println("Non c'è niente da aprire con questa chiave!");
+							}
+						}
+					};
+				case PICK_UP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							try {
+								EventHandler.pickUp(key, t);
+								System.out.println("Hai preso la chiave!");
+							} catch (InvalidCommandException e) {
+								// TODO Auto-generated catch block
+								System.out.println("Oggetto non presente nella stanza");
+							}
+						}
+					};
+				case DROP:
+					return new EventHandler() {
+						@Override
+						public void accept(GameDescription t) {
+							// TODO Auto-generated method stub
+							EventHandler.drop(key, t);
+							System.out.println("Hai lasciato la chiave!");
+						}
+					};
+				default:
+					return invalidCommand;
+				}};
+		});
+		
+		
+		final Enemy assistant = new Enemy(100, "assistente", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.",
+				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
+				new Inventory(), key_1,5,20);
+		final Enemy director = new Enemy(100, "direttore", "È il direttore, nonchè la mente contorta dietro tutto questo. I segni del virus sembrano meno evidenti su di lui. Avrà furbamente aspettato più miglioramenti possibili al virus prima di sottoporsi lui stesso ad esso. Eppure ti è sempre sembrato un tipo perbene...",
+				"Muahahah! Eccoti qua agente. Dopo aver sentito gli spari dalla cella, ti aspettavo. Sei sopreso dopo aver scoperto i miei piani? Lo sarai di più dopo aver visto i poteri che acquisirai tramite il virus! Non prendermi per pazzo, grazie a questo virus non esisteranno mai più deboli in questo mondo. Io renderò l'essere umano la creatura più potente che sia mai esistita sulla Terra! Si parlerà di me per milioni e milioni di anni! Ma se non vuoi aiutarmi, non preoccuparti. Ci servono delle vittime sacrificali in onore della Santa Muerte che ci supporta in tutto questo. Dunque preparati a morire!",
+				new Inventory(), key_2,5,20);	
+	
+	
+
 
 		assistant.getInv().add(key_1);
+		director.getInv().add(key_2);;
 		chest.add(compass);
 		chest.add(torch);
 		chest.add(blockNotes);
@@ -1306,6 +1396,8 @@ public class Asylum extends GameDescription implements Serializable {
 
 		m.insArc(surveillance, paddedCell, new Gateway(Direction.SOUTH));
 		m.insArc(paddedCell, surveillance, new Gateway(Direction.NORTH));
+		m.insArc(office, exit, new Gateway(Direction.SOUTH, key_2.getId(), true));
+
 
 		//traps
 		EventHandler gasTrap = new EventHandler() {
@@ -1541,7 +1633,12 @@ public class Asylum extends GameDescription implements Serializable {
 		} else if(p.getEnemy()!=null && p.getTarget()==null) {
 			switch (p.getCommand().getType()) {
 			case TALK_TO:
+				if (p.getEnemy().getHealth()>0 && p.getEnemy() instanceof Enemy) {
 				out.println(p.getEnemy().getTalk());
+				}
+				else {
+					out.println("Il nemico è ormai deceduto, potrai parlargli con calma al cimitero...");
+				}
 				break;
 			case BREAK:
 				if(p.getEnemy().getHealth()>0 && p.getEnemy() instanceof Enemy) {
@@ -1557,6 +1654,7 @@ public class Asylum extends GameDescription implements Serializable {
 					for(Item i: p.getEnemy().getInv().getList()) {
 						getCurrentRoom().getObjects().add(i);
 					}
+					p.getEnemy().getInv().getList().clear();
 				}
 				break;
 			default:
