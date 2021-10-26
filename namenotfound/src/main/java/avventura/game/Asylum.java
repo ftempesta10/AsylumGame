@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Scanner;
 
-import org.h2.util.CacheTQ;
-
 import engine.AdventureCharacter;
 import engine.Command;
 import engine.CommandHandler;
@@ -290,7 +288,7 @@ public class Asylum extends GameDescription implements Serializable {
   				              "uscita");
 
 
-		
+
 
 		final Item bed = new Item("letto", "Un letto nel quale dormono i pazienti.", null);
 		bed.setHandler(new CommandHandler() {
@@ -350,7 +348,7 @@ public class Asylum extends GameDescription implements Serializable {
 										System.out.println("Il cacciavite si sta iniziando a dannegiare");
 										break;
 									}
-								} else System.out.println("Il cacciavite è ormai distrutto, non farebbe nessun danno"); 
+								} else System.out.println("Il cacciavite è ormai distrutto, non farebbe nessun danno");
 							} else System.out.println("Non sembra esserci nessuno da colpire!");
 						}
 					};
@@ -402,7 +400,7 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							System.out.println("Stai indossando correttamente la maschera!");
-							gasVuln = false;
+							((Asylum) t).gasVuln = false;
 							bathroom.setDescription("Non appena entri nella stanza, i gas tossici iniziano a circolare nell'aria, ma la maschera ti protegge.");
 					     	if(!compassUsed) bathroom.setLook("Potresti sfruttare il gabinetto  per...no, meglio evitare. Puoi solo tornare indietro nel corridoio 3.");
 					     	else bathroom.setLook("Potresti sfruttare il gabinetto per...no, meglio evitare. Puoi solo tornare indietro a sud nel corridoio 3.");
@@ -430,7 +428,7 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							EventHandler.drop(gasmask, t);
-							gasVuln = true;
+							((Asylum) t).gasVuln = true;
 							System.out.println("Hai lasciato la maschera!");
 						}
 					};
@@ -569,8 +567,8 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("L'effetto dell'adrenalina incrementa la tua salute:");							
-							health = health + 20;
+							System.out.println("L'effetto dell'adrenalina incrementa la tua salute:");
+							((Asylum) t).health += 20;
 							System.out.println("+20 salute");
 						}
 					};
@@ -680,7 +678,7 @@ public class Asylum extends GameDescription implements Serializable {
 							surveillance.setLook("Puoi tornare nel corridoio 4 ad est o proseguire a sud verso la cella imbottita.");
 							paddedCell.setLook("Apparentemente, puoi solo tornare indietro nella sorveglianza a nord.");
 							office.setLook("Vedi delle scale a sud che conducono all'esterno della struttura, ma il passaggio è bloccato dal direttore. Puoi tornare indietro a nord nella cella imbottita.");
-							compassUsed=true;
+							((Asylum) t).compassUsed = true;
 
 						}
 					};
@@ -691,6 +689,7 @@ public class Asylum extends GameDescription implements Serializable {
 							// TODO Auto-generated method stub
 							EventHandler.drop(compass, t);
 							System.out.println("Hai lasciato la bussola!");
+							((Asylum) t).compassUsed = false;
 						}
 					};
 				case PICK_UP:
@@ -737,7 +736,7 @@ public class Asylum extends GameDescription implements Serializable {
 									}
 								}
 								chest.setPushed(true);
-							} 
+							}
 						}
 					};
 				case OPEN:
@@ -766,9 +765,9 @@ public class Asylum extends GameDescription implements Serializable {
 										System.out.println("Hai chiuso la cassa!");
 										chest.setOpened(false);
 									}
-									
+
 								}
-						
+
 					};
 				default:
 					return invalidCommand;
@@ -837,7 +836,7 @@ public class Asylum extends GameDescription implements Serializable {
 										System.out.println("IL bisturi è molto fragile si danneggia molto facilmente");
 										break;
 									}
-								} else System.out.println("Questo bisturi ha perso la lama, non ti potrà più essere d'aiuto"); 
+								} else System.out.println("Questo bisturi ha perso la lama, non ti potrà più essere d'aiuto");
 							}else System.out.println("Non sembra esserci nessuno da colpire!");
 						}
 					};
@@ -905,7 +904,7 @@ public class Asylum extends GameDescription implements Serializable {
 										System.out.println("Hai solo un caricatore ti restano quindi 5 colpi");
 										break;
 									}
-								} else System.out.println("Ops... hai finito le munizioni"); 
+								} else System.out.println("Ops... hai finito le munizioni");
 							}else System.out.println("Non sembra esserci nessuno da colpire!");
 						}
 					};
@@ -1089,13 +1088,13 @@ public class Asylum extends GameDescription implements Serializable {
 				}};
 		});
 
-		
+
 		Inventory corpseInv = new Inventory();
 
 		final AdventureCharacter corpse = new AdventureCharacter(0, "cadavere", "Un corpo esanime dall'odore stomacevole. Deve essere lì da tanto tempo. Dalla tasca della sua giacca sembra spuntare una chiave.", null, corpseInv, null);
 		final Enemy mutant = new Enemy(55, "mutante", "Un mutante dal viso fortemente sfigurato. Sarà mica Deadpool?", "Anche tu sei uno di loro?! Non ti lascerò farmi del male!", null, codePaper,5,20);
-		
-		
+
+
 		final Item key = new Item("chiave", "Una chiave che potrebbe tornare utile per aprire qualcosa.", null);
 		key.setHandler(new CommandHandler() {
 
@@ -1177,10 +1176,10 @@ public class Asylum extends GameDescription implements Serializable {
 					return invalidCommand;
 				}};
 		});
-		
+
 		corpseInv.add(key);
 
-		
+
 		Item key_1= new Item("chiave-assistente", "Sembra la chiave di una porta...", null);
 		key_1.setHandler(new CommandHandler() {
 
@@ -1244,7 +1243,7 @@ public class Asylum extends GameDescription implements Serializable {
 					return invalidCommand;
 				}};
 		});
-		
+
 		Item key_2= new Item("chiave-direttore", "Sembra la chiave di una porta...", null);
 		key_2.setHandler(new CommandHandler() {
 
@@ -1308,16 +1307,16 @@ public class Asylum extends GameDescription implements Serializable {
 					return invalidCommand;
 				}};
 		});
-		
-		
+
+
 		final Enemy assistant = new Enemy(100, "assistente", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.",
 				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
 				new Inventory(), key_1,5,20);
 		final Enemy director = new Enemy(100, "direttore", "È il direttore, nonchè la mente contorta dietro tutto questo. I segni del virus sembrano meno evidenti su di lui. Avrà furbamente aspettato più miglioramenti possibili al virus prima di sottoporsi lui stesso ad esso. Eppure ti è sempre sembrato un tipo perbene...",
 				"Muahahah! Eccoti qua agente. Dopo aver sentito gli spari dalla cella, ti aspettavo. Sei sopreso dopo aver scoperto i miei piani? Lo sarai di più dopo aver visto i poteri che acquisirai tramite il virus! Non prendermi per pazzo, grazie a questo virus non esisteranno mai più deboli in questo mondo. Io renderò l'essere umano la creatura più potente che sia mai esistita sulla Terra! Si parlerà di me per milioni e milioni di anni! Ma se non vuoi aiutarmi, non preoccuparti. Ci servono delle vittime sacrificali in onore della Santa Muerte che ci supporta in tutto questo. Dunque preparati a morire!",
-				new Inventory(), key_2,5,20);	
-	
-	
+				new Inventory(), key_2,5,20);
+
+
 
 
 		assistant.getInv().add(key_1);
