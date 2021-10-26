@@ -514,8 +514,12 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("L'effetto delle pillole ti rende temporaneamente immune ai gas tossici!");
-							breathedGas=false;					}
+							if(t.getInventory().getList().contains(pills)) {
+								System.out.println("L'effetto delle pillole ti rende temporaneamente immune ai gas tossici!");
+								breathedGas=false;	
+								t.getInventory().remove(pills);
+							} else System.out.println("L'oggetto non è presente nell'inventario!");
+						}
 					};
 				case LOOK_AT:
 					return new EventHandler() {
@@ -565,9 +569,12 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println("L'effetto dell'adrenalina incrementa la tua salute:");
-							((Asylum) t).health += 20;
-							System.out.println("+20 salute");
+							if(t.getInventory().getList().contains(adrenaline)) {
+								System.out.println("L'effetto dell'adrenalina incrementa la tua salute:");
+								((Asylum) t).health += 20;
+								System.out.println("+20 salute");	
+								t.getInventory().remove(adrenaline);
+							} else System.out.println("L'oggetto non è presente nell'inventario!");
 						}
 					};
 				case LOOK_AT:
