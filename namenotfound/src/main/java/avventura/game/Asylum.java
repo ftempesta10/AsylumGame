@@ -1253,7 +1253,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println(key.getDescription());
+							System.out.println(key_2.getDescription());
 						}
 					};
 				case USE:
@@ -1284,7 +1284,7 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								EventHandler.pickUp(key, t);
+								EventHandler.pickUp(key_2, t);
 								System.out.println("Hai preso la chiave!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
@@ -1297,7 +1297,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							EventHandler.drop(key, t);
+							EventHandler.drop(key_2, t);
 							System.out.println("Hai lasciato la chiave!");
 						}
 					};
