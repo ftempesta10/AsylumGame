@@ -54,10 +54,10 @@ public class HandleDB {
 	public void updateTuple(String player, Object obj) throws SQLException {
 		PreparedStatement pstm = conn.prepareStatement(
 				"UPDATE saves "
-				+ "SET day = ?, obj = ? WHERE player = ?");
-		pstm.setString(1, player);
-		pstm.setString(2, LocalDate.now().toString());
-		pstm.setObject(3, obj);
+				+ "SET day = ?, game = ? WHERE player = ?");
+		pstm.setString(1, LocalDate.now().toString());
+		pstm.setObject(2, obj);
+		pstm.setString(3, player);
 		pstm.executeUpdate();
 		pstm.close();
 	}

@@ -273,7 +273,7 @@ public class Asylum extends GameDescription implements Serializable {
 					                  "sorveglianza");
   		m.insNode(surveillance);
   		Room paddedCell = new Room("La scarsa illuminazione della stanza non ti permette di vedere bene. Dovresti utilizzare qualcosa per illuminare.", "Non riesci a vedere nulla, è troppo buio", "cella imbottita");
-
+  		paddedCell.setLight(false);
   		/*Room paddedCell = new Room("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi.",
 					                "In fondo alla stanza vedi uno specchio. Apparentemente, puoi solo tornare indietro nella sorveglianza.",
 					                "Cella imbottita");*/
@@ -451,11 +451,9 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							System.out.println("Hai acceso la torcia!");
-							t.getCurrentRoom().setVisible(true);
+							t.getCurrentRoom().setLight(true);
 							if (t.getCurrentRoom().equals(paddedCell) && t.getCurrentRoom().getTrap()!= null) {
 								t.getCurrentRoom().getTrap().accept(t);
-								paddedCell.setDescription("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi. Davanti a te vedi un essere mastodontico, è l'assistente del direttore.");
-								paddedCell.setLook("Apparentemente, puoi solo tornare indietro nella sorveglianza.");
 							}
 						}
 					};
@@ -1191,7 +1189,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							System.out.println(key.getDescription());
+							System.out.println(key_1.getDescription());
 						}
 					};
 				case USE:
@@ -1222,7 +1220,7 @@ public class Asylum extends GameDescription implements Serializable {
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
 							try {
-								EventHandler.pickUp(key, t);
+								EventHandler.pickUp(key_1, t);
 								System.out.println("Hai preso la chiave!");
 							} catch (InvalidCommandException e) {
 								// TODO Auto-generated catch block
@@ -1235,7 +1233,7 @@ public class Asylum extends GameDescription implements Serializable {
 						@Override
 						public void accept(GameDescription t) {
 							// TODO Auto-generated method stub
-							EventHandler.drop(key, t);
+							EventHandler.drop(key_1, t);
 							System.out.println("Hai lasciato la chiave!");
 						}
 					};
@@ -1311,7 +1309,7 @@ public class Asylum extends GameDescription implements Serializable {
 
 		final Enemy assistant = new Enemy(100, "assistente", "È l'assistente del direttore, o per lo meno ciò che rimane di lui, visto il suo corpo sensibilmente ingigantito dopo le mutazioni a cui si è sottoposto. Deve aver aiutato il direttore nel portare avanti questi folli esperimenti.",
 				"Ancora tu? Pensavo che dopo quel forte colpo alla testa non ti saresti svegliato per un po'. Beh, il prossimo paziente sei proprio tu, quindi ti ringrazio per avermi risparmiato la fatica di salire al pieno superiore per prenderti. Non opporre resistenza e preparati ad accogliere nel tuo corpo i poteri del virus!",
-				new Inventory(), key_1,5,20);
+				new Inventory(), null,5,20);
 		final Enemy director = new Enemy(100, "direttore", "È il direttore, nonchè la mente contorta dietro tutto questo. I segni del virus sembrano meno evidenti su di lui. Avrà furbamente aspettato più miglioramenti possibili al virus prima di sottoporsi lui stesso ad esso. Eppure ti è sempre sembrato un tipo perbene...",
 				"Muahahah! Eccoti qua agente. Dopo aver sentito gli spari dalla cella, ti aspettavo. Sei sopreso dopo aver scoperto i miei piani? Lo sarai di più dopo aver visto i poteri che acquisirai tramite il virus! Non prendermi per pazzo, grazie a questo virus non esisteranno mai più deboli in questo mondo. Io renderò l'essere umano la creatura più potente che sia mai esistita sulla Terra! Si parlerà di me per milioni e milioni di anni! Ma se non vuoi aiutarmi, non preoccuparti. Ci servono delle vittime sacrificali in onore della Santa Muerte che ci supporta in tutto questo. Dunque preparati a morire!",
 				new Inventory(), key_2,5,20);
@@ -1399,6 +1397,17 @@ public class Asylum extends GameDescription implements Serializable {
 
 
 		//traps
+
+		hallway2.setTrap(new EventHandler() {
+
+			@Override
+			public void accept(GameDescription t) {
+				// TODO Auto-generated method stub
+				if(getCurrentEnemy()!=null) {
+					System.out.println("Un mutante insanguinato con la faccia sfigurata si scaglia contro di te!");
+				}
+			}
+		});
 		EventHandler gasTrap = new EventHandler() {
 
 			@Override
@@ -1436,11 +1445,14 @@ public class Asylum extends GameDescription implements Serializable {
 			@Override
 			public void accept(GameDescription t) {
 				// TODO Auto-generated method stub
-				if (getCurrentRoom().hasLight()) {
+				if (t.getCurrentRoom().hasLight() && getCurrentEnemy()!=null) {
 					try {
 						t.getMap().readArc(paddedCell, surveillance).setLockedBy(key_1.getId());
+						t.getMap().readArc(paddedCell, surveillance).setLocked(true);
+						paddedCell.setDescription("Sei nella stanza imbottita. Questa è usata per rinchiudere i pazienti in preda a forti crisi, in modo che non danneggino sè stessi. Davanti a te vedi un essere mastodontico, è l'assistente del direttore.");
+						paddedCell.setLook("Apparentemente, puoi solo tornare indietro nella sorveglianza.");
+						System.out.println("Sei in trappola! ......");
 					} catch (Exception e) {}
-					System.out.println("Sei in trappola! ......");
 				}
 			}
 		});
@@ -1514,16 +1526,16 @@ public class Asylum extends GameDescription implements Serializable {
 					out.println("La porta sembra esser bloccata...");
 				} else {
 					setCurrentRoom(next);
-					//gestione trappola
-					if(getCurrentRoom().hasTrap()) {
-						getCurrentRoom().getTrap().accept(this);
-					}
 					setCurrentEnemy(null);
 					for(AdventureCharacter a: getCurrentRoom().getEnemies()) {
 						if(a instanceof Enemy && a.getHealth()>0) {
 							setCurrentEnemy((Enemy)a);
 							break;
 						}
+					}
+					//gestione trappola
+					if(getCurrentRoom().hasTrap()) {
+						getCurrentRoom().getTrap().accept(this);
 					}
 					out.println(getCurrentRoom().getDescription());
 				}
@@ -1649,7 +1661,7 @@ public class Asylum extends GameDescription implements Serializable {
 				break;
 			case LOOK_AT:
 				out.println(p.getEnemy().getDescription());
-				if(p.getEnemy().getHealth() == 0) {
+				if(p.getEnemy().getHealth() <= 0) {
 					for(Item i: p.getEnemy().getInv().getList()) {
 						getCurrentRoom().getObjects().add(i);
 					}
@@ -1709,7 +1721,7 @@ public class Asylum extends GameDescription implements Serializable {
 				maxMoves--;
 			}
 
-		if(getCurrentEnemy()!=null && getCurrentEnemy().getHealth()>0) {
+		if(getCurrentEnemy()!=null && getCurrentEnemy().getHealth()>0 && getCurrentRoom().hasLight()) {
 			health = health - getCurrentEnemy().getDamage();
 			if(health<0) health=0;
 			out.println(getCurrentEnemy().getName()+" ti ha attaccato! Salute: "+ health);
@@ -1723,6 +1735,14 @@ public class Asylum extends GameDescription implements Serializable {
 				getCurrentEnemy().setDroppable(null);
 			}
 			setCurrentEnemy(null);
+			try {
+				db = new HandleDB();
+				db.updateTuple(player, this);
+				db.closeConnection();
+				out.println("Partita salvata!");
+			} catch (Exception e) {
+				out.println(e.getMessage());
+			}
 		}
 
 		if(health==0) {
