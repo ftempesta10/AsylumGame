@@ -35,7 +35,6 @@ public class Engine {
     }
 
     public void run() throws Exception {
-        System.out.println(game.getCurrentRoom().getName());
         System.out.println("================================================");
         System.out.println(game.getCurrentRoom().getDescription());
         Scanner scanner = new Scanner(System.in);
