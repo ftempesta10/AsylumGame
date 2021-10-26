@@ -735,12 +735,9 @@ public class Asylum extends GameDescription implements Serializable {
 								for(Item i: chest.getContent()) {
 									System.out.println(i.getName());
 								}
-								if(!chest.isPushed()) {
-									for(Item i: chest.getContent()) {
-										t.getCurrentRoom().getObjects().add(i);
-									}
+								for(Item i: chest.getContent()) {
+									if(!t.getCurrentRoom().getObjects().contains(i)) t.getCurrentRoom().getObjects().add(i);
 								}
-								chest.setPushed(true);
 							}
 						}
 					};
@@ -768,11 +765,11 @@ public class Asylum extends GameDescription implements Serializable {
 									System.out.println("La cassa e' già chiusa!");}
 									else {
 										System.out.println("Hai chiuso la cassa!");
+										for(Item i: chest.getContent()) t.getCurrentRoom().getObjects().remove(i);
 										chest.setOpened(false);
 									}
-
 								}
-
+								
 					};
 				default:
 					return invalidCommand;
